@@ -19,7 +19,7 @@ public class MetamodelService {
 
     private EntityObjService entityObjService;
 
-    Optional<EntityType> getEntityTypeByEntId(Long entObjId) {
+    public Optional<EntityType> getEntityTypeByEntId(Long entObjId) {
         Optional<EntityObj> optionalEntityObj = entityObjService.getEntityObjById(entObjId);
         if (!optionalEntityObj.isPresent()) {
             return Optional.empty();
@@ -29,9 +29,11 @@ public class MetamodelService {
         return entityTypeRepo.findById(entObj.getEntTypeId());
     }
 
-    List<Attribute> getAttributesByEntTypeId(Long entTypeId) {
+    public List<Attribute> getAttributesByEntTypeId(Long entTypeId) {
+        System.out.println("Hello from the beginning of a service method!");
         List<Long> attrIds = entTypeAttrRepo.getAttrIdByEntTypeId(entTypeId);
-
+        //System.out.println(attrIds);
+        System.out.println("Hello from the end of a service method!");
         return attributeRepo.findAllById(attrIds);
     }
 }

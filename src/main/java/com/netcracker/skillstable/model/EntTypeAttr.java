@@ -2,7 +2,7 @@ package com.netcracker.skillstable.model;
 
 import javax.persistence.*;
 
-@Entity(name="EntityTypeAttr")
+@Entity(name="EntTypeAttr")
 @Table (name = "entity_type_attr")
 public class EntTypeAttr {
     @Id

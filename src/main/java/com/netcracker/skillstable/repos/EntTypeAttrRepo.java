@@ -10,7 +10,7 @@ import java.util.List;
 
 @RepositoryRestResource(collectionResourceRel = "entTypeAttr", path = "entTypeAttr")
 public interface EntTypeAttrRepo extends JpaRepository<EntTypeAttr, Long> {
-    @Query("SELECT eta.attrId FROM EntityTypeAttr eta WHERE eta.entTypeId = :entTypeId")
+    @Query("SELECT eta.attrId FROM EntTypeAttr eta WHERE eta.entTypeId = :entTypeId")
     List<Long> getAttrIdByEntTypeId(@Param("entTypeId") Long entTypeId);
 }
 

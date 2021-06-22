@@ -46,8 +46,8 @@ public class EAVObject {
     }
 
 
-    public EAVObject(Long entTypeId, Long attrId, String attrValueTxt, Integer attrValueInt) {
-        this.entId = entTypeId;
+    public EAVObject(Long entId, Long attrId, String attrValueTxt, Integer attrValueInt) {
+        this.entId = entId;
         this.attrId = attrId;
         this.attrValueTxt = attrValueTxt;
         this.attrValueInt = attrValueInt;
@@ -62,12 +62,12 @@ public class EAVObject {
         this.id = id;
     }
 
-    public Long getEntTypeId() {
+    public Long getEntId() {
         return entId;
     }
 
-    public void setEntTypeId(Long entTypeId) {
-        this.entId = entTypeId;
+    public void setEntId(Long entId) {
+        this.entId = entId;
     }
 
     public Long getAttrId() {

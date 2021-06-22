@@ -10,8 +10,9 @@
 <body ng-app="skillsApp">
     <div class="container" ng-controller="AppCtrl">
         <div class="col-md-12">
+
             <div class="panel panel-default">
-                <div class="panel-heading"></div>
+                <div class="panel-heading"> Entities </div>
                 <div class="panel-body">
                     <table class="table table-striped">
                         <thead>
@@ -30,10 +31,56 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
 
+            <div class="panel panel-default">
+                <div class="panel-heading"> EAV Table </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th> Id </th>
+                            <th> Entity Id </th>
+                            <th> Attribute Id </th>
+                            <th> Attribute Value Text </th>
+                            <th> Attribute Value Int </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="eavObj in eavObjects">
+                            <td> {{eavObj.id}} </td>
+                            <td> {{eavObj.entId}} </td>
+                            <td> {{eavObj.attrId}} </td>
+                            <td> {{eavObj.attrValueTxt}} </td>
+                            <td> {{eavObj.attrValueInt}} </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading"> User Attributes </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th> Role </th>
+                            <th ng-repeat="attr in attributes"> Attr {{$index}}} </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td> User </td>
+                            <th ng-repeat="attr in attributes"> Attr {{attr.name}}} </th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
