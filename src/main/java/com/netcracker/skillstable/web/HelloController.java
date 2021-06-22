@@ -1,7 +1,9 @@
 package com.netcracker.skillstable.web;
 
-import com.netcracker.skillstable.Person;
-import com.netcracker.skillstable.PersonRepo;
+import com.netcracker.skillstable.model.EntityObj;
+import com.netcracker.skillstable.service.EAVService;
+import com.netcracker.skillstable.service.EntityObjService;
+import com.netcracker.skillstable.service.MetamodelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +15,15 @@ import java.util.List;
 @RequestMapping("/data")
 public class HelloController {
     @Autowired
-    private PersonRepo personRepo;
+    private EAVService eavService;
+    @Autowired
+    private EntityObjService entityObjService;
+    @Autowired
+    private MetamodelService metamodelService;
 
-    @GetMapping("/people")
-    public List<Person> getAll() {
-        return (List<Person>) personRepo.findAll();
+
+    @GetMapping("/entities")
+    public List<EntityObj> getEntities(){
+        return entityObjService.getAll();
     }
 }
