@@ -3,7 +3,7 @@ package com.netcracker.skillstable.model;
 import javax.persistence.*;
 
 @Entity(name="Attribute")
-@Table (name = "attribute")
+@Table (name = "attributes")
 public class Attribute {
     @Id
     @Column(

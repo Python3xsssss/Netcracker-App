@@ -1,38 +1,43 @@
 package com.netcracker.skillstable.service;
 
 import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.repos.EAVRepo;
+import com.netcracker.skillstable.model.Parameter;
+import com.netcracker.skillstable.repos.EAVObjectRepo;
+import com.netcracker.skillstable.repos.ParameterRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EAVService {
     @Autowired
-    private EAVRepo eavRepo;
+    private ParameterRepo parameterRepo;
+    @Autowired
+    private EAVObjectRepo eavRepo;
 
     public EAVObject createEAVObj(EAVObject eavObj) {
-        return eavRepo.saveAndFlush(eavObj);
+        return eavRepo.save(eavObj);
     }
 
     public List<EAVObject> getAll() {
         return eavRepo.findAll();
     }
 
-    public List<EAVObject> getAllByEntId(Long entId) {
-        return eavRepo.findAllByEntId(entId);
+    /*public List<Parameter> getAllParametersById(Long entId) {
+        return eavRepo.findAll();
+    }*/
+
+    public Optional<EAVObject> getEAVObjById(Long entId) {
+        return eavRepo.findById(entId);
     }
 
-    public List<EAVObject> getEAVObjById(Long entObjId, Long attrId) {
-        return eavRepo.getByEntIdAndAttrId(entObjId, attrId);
+    public void deleteEAVObj(Long entId) {
+        eavRepo.deleteById(entId);
     }
 
-    public EAVObject updateEAVObj(EAVObject eavObj) {
-        return eavRepo.saveAndFlush(eavObj);
-    }
-
-    public void deleteEAVObj(Long entObjId, Long attrId) {
-        eavRepo.deleteByEntIdAndAttrId(entObjId, attrId);
+    public void persist() {
+        eavRepo.flush();
     }
 }

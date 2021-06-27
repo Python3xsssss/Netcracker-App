@@ -1,7 +1,7 @@
 package com.netcracker.skillstable.service;
 
 import com.netcracker.skillstable.model.Attribute;
-import com.netcracker.skillstable.model.EntityObj;
+import com.netcracker.skillstable.model.OldEntityObj;
 import com.netcracker.skillstable.model.EntityType;
 import com.netcracker.skillstable.repos.AttributeRepo;
 import com.netcracker.skillstable.repos.EntTypeAttrRepo;
@@ -17,15 +17,15 @@ public class MetamodelService {
     private AttributeRepo attributeRepo;
     private EntTypeAttrRepo entTypeAttrRepo;
 
-    private EntityObjService entityObjService;
+    private OldEntityObjService entityObjService;
 
     public Optional<EntityType> getEntityTypeByEntId(Long entObjId) {
-        Optional<EntityObj> optionalEntityObj = entityObjService.getEntityObjById(entObjId);
+        Optional<OldEntityObj> optionalEntityObj = entityObjService.getEntityObjById(entObjId);
         if (!optionalEntityObj.isPresent()) {
             return Optional.empty();
         }
 
-        EntityObj entObj = optionalEntityObj.get();
+        OldEntityObj entObj = optionalEntityObj.get();
         return entityTypeRepo.findById(entObj.getEntTypeId());
     }
 

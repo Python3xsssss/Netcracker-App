@@ -33,51 +33,25 @@
                 </div>
             </div>
 
-            <div class="panel panel-default">
-                <div class="panel-heading"> EAV Table </div>
-                <div class="panel-body">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th> Id </th>
-                            <th> Entity Id </th>
-                            <th> Attribute Id </th>
-                            <th> Attribute Value Text </th>
-                            <th> Attribute Value Int </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="eavObj in eavObjects">
-                            <td> {{eavObj.id}} </td>
-                            <td> {{eavObj.entId}} </td>
-                            <td> {{eavObj.attrId}} </td>
-                            <td> {{eavObj.attrValueTxt}} </td>
-                            <td> {{eavObj.attrValueInt}} </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading"> User Attributes </div>
-                <div class="panel-body">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th> Role </th>
-                            <th ng-repeat="attr in attributes"> Attr {{$index}}} </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td> User </td>
-                            <th ng-repeat="attr in attributes"> Attr {{attr.name}}} </th>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+<!--            <div class="panel panel-default">-->
+<!--                <div class="panel-heading"> User Attributes </div>-->
+<!--                <div class="panel-body">-->
+<!--                    <table class="table table-striped">-->
+<!--                        <thead>-->
+<!--                        <tr>-->
+<!--                            <th> Role </th>-->
+<!--                            <th ng-repeat="i in [].constructor(max) track by $index"> Attr {{$index + 1}}} </th>-->
+<!--                        </tr>-->
+<!--                        </thead>-->
+<!--                        <tbody>-->
+<!--                        <tr>-->
+<!--                            <td> User </td>-->
+<!--                            <th ng-repeat="user in users"> Attr {{attr.name}}} </th>-->
+<!--                        </tr>-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </div>
 

@@ -3,7 +3,7 @@ package com.netcracker.skillstable.model;
 import javax.persistence.*;
 
 @Entity(name="EntityType")
-@Table (name = "entity_type")
+@Table (name = "entity_types")
 public class EntityType {
     @Id
     @Column(

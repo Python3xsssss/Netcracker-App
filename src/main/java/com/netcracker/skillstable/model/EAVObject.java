@@ -1,13 +1,15 @@
 package com.netcracker.skillstable.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name="EAVObject")
-@Table (name = "eav")
+@Table (name = "entities")
 public class EAVObject {
     @Id
     @Column(
-            name = "id_pk",
+            name = "ent_id",
             updatable = false,
             nullable = false,
             columnDefinition = "SERIAL"
@@ -15,42 +17,29 @@ public class EAVObject {
     private Long id;
 
     @Column(
-            name = "ent_id",
+            name = "ent_type_id",
             nullable = false,
             columnDefinition = "INT"
     )
-    private Long entId;
+    private Long entTypeId;
 
     @Column(
-            name = "attr_id",
+            name = "ent_name",
             nullable = false,
-            columnDefinition = "INT"
-    )
-    private Long attrId;
-
-    @Column(
-            name = "attr_value_txt",
             columnDefinition = "TEXT"
     )
-    private String attrValueTxt;
+    private String entName;
 
-    @Column(
-            name = "attr_value_int",
-            columnDefinition = "INT"
-    )
-    private Integer attrValueInt;
-
+    @OneToMany(mappedBy="eavObject", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+    private List<Parameter> parameters = new ArrayList<>();
 
     public EAVObject() {
 
     }
 
-
-    public EAVObject(Long entId, Long attrId, String attrValueTxt, Integer attrValueInt) {
-        this.entId = entId;
-        this.attrId = attrId;
-        this.attrValueTxt = attrValueTxt;
-        this.attrValueInt = attrValueInt;
+    public EAVObject(Long entTypeId, String entName) {
+        this.entTypeId = entTypeId;
+        this.entName = entName;
     }
 
 
@@ -62,35 +51,54 @@ public class EAVObject {
         this.id = id;
     }
 
-    public Long getEntId() {
-        return entId;
+    public Long getEntTypeId() {
+        return entTypeId;
     }
 
-    public void setEntId(Long entId) {
-        this.entId = entId;
+    public void setEntTypeId(Long entTypeId) {
+        this.entTypeId = entTypeId;
     }
 
-    public Long getAttrId() {
-        return attrId;
+    public String getEntName() {
+        return entName;
     }
 
-    public void setAttrId(Long attrId) {
-        this.attrId = attrId;
+    public void setEntName(String entName) {
+        this.entName = entName;
     }
 
-    public String getAttrValueTxt() {
-        return attrValueTxt;
+    public void addParameters(List<Parameter> inputParams) {
+        parameters.addAll(inputParams);
     }
 
-    public void setAttrValueTxt(String attrValueTxt) {
-        this.attrValueTxt = attrValueTxt;
+    public List<Parameter> getParameters() {
+        return parameters;
     }
 
-    public Integer getAttrValueInt() {
-        return attrValueInt;
+    public List<ParameterValue> getParameterByAttrId(Long attrId) { // id exception?
+        List<ParameterValue> listOfValues = new ArrayList<>();
+        for (Parameter parameter : parameters) {
+            if (attrId.equals(parameter.getAttrId())) {
+                listOfValues.add(new ParameterValue(
+                        parameter.getAttrValueInt(),
+                        parameter.getAttrValueTxt()
+                ));
+            }
+        }
+
+        return listOfValues;
     }
 
-    public void setAttrValueInt(Integer attrValueInt) {
-        this.attrValueInt = attrValueInt;
+    public void setParameter(Long attrId, ParameterValue value) {
+        for (Parameter parameter : parameters) {
+            if (attrId.equals(parameter.getAttrId())) {  // multiple?
+                parameter.setAttrValueInt(value.getValueInt());
+                parameter.setAttrValueTxt(value.getValueStr());
+            }
+        }
+    }
+
+    public void deleteParameter(Long attrId) {
+        parameters.removeIf(parameter -> attrId.equals(parameter.getAttrId()));
     }
 }

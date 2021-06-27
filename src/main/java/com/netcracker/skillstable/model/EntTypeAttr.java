@@ -1,6 +1,8 @@
 package com.netcracker.skillstable.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name="EntTypeAttr")
 @Table (name = "entity_type_attr")
@@ -27,6 +29,9 @@ public class EntTypeAttr {
             columnDefinition = "INT"
     )
     private Long attrId;
+
+    @OneToMany(mappedBy="", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+    private List<Parameter> parameters = new ArrayList<>();
 
 
     public EntTypeAttr() {

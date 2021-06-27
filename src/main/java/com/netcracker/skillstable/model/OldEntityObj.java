@@ -1,10 +1,11 @@
 package com.netcracker.skillstable.model;
 
 import javax.persistence.*;
+import java.util.Map;
 
 @Entity(name="EntityObj")
-@Table (name = "entity")
-public class EntityObj {
+@Table (name = "entities")
+public class OldEntityObj {
     @Id
     @Column(
             name = "ent_id",
@@ -28,12 +29,11 @@ public class EntityObj {
     )
     private String entName;
 
-
-    public EntityObj() {
+    public OldEntityObj() {
 
     }
 
-    public EntityObj(Long entTypeId, String entName) {
+    public OldEntityObj(Long entTypeId, String entName) {
         this.entTypeId = entTypeId;
         this.entName = entName;
     }
