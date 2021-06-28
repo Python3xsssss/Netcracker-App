@@ -1,6 +1,8 @@
 package com.netcracker.skillstable.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name="Attribute")
 @Table (name = "attributes")
@@ -33,6 +35,9 @@ public class Attribute {
             columnDefinition = "TEXT"
     )
     private String descr;
+
+    @OneToMany(mappedBy="attribute", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+    private List<EntTypeAttr> entTypeAttrs = new ArrayList<>();
 
 
     public Attribute() {
@@ -75,5 +80,9 @@ public class Attribute {
 
     public void setDescr(String descr) {
         this.descr = descr;
+    }
+
+    public List<EntTypeAttr> getEntTypeAttrs() {
+        return entTypeAttrs;
     }
 }

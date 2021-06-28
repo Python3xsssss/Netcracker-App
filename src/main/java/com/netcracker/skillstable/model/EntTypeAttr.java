@@ -16,32 +16,16 @@ public class EntTypeAttr {
     )
     private Long id;
 
-    @Column(
-            name = "ent_type_id",
-            nullable = false,
-            columnDefinition = "INT"
-    )
-    private Long entTypeId;
+    @ManyToOne(targetEntity = EntityType.class)
+    @JoinColumn(name = "ent_type_id")
+    private EntityType entType;
 
-    @Column(
-            name = "attr_id",
-            nullable = false,
-            columnDefinition = "INT"
-    )
-    private Long attrId;
-
-    @OneToMany(mappedBy="", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
-    private List<Parameter> parameters = new ArrayList<>();
-
+    @OneToOne(targetEntity = EntityType.class)
+    @JoinColumn(name = "attr_id")
+    private EntityType attribute;
 
     public EntTypeAttr() {
     }
-
-    public EntTypeAttr(Long entTypeId, Long attrId) {
-        this.entTypeId = entTypeId;
-        this.attrId = attrId;
-    }
-
 
     public Long getId() {
         return id;
@@ -49,21 +33,5 @@ public class EntTypeAttr {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getEntTypeId() {
-        return entTypeId;
-    }
-
-    public void setEntTypeId(Long entTypeId) {
-        this.entTypeId = entTypeId;
-    }
-
-    public Long getAttrId() {
-        return attrId;
-    }
-
-    public void setAttrId(Long attrId) {
-        this.attrId = attrId;
     }
 }

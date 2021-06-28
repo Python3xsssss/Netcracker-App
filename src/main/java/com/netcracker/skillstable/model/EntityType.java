@@ -1,6 +1,8 @@
 package com.netcracker.skillstable.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name="EntityType")
 @Table (name = "entity_types")
@@ -32,6 +34,11 @@ public class EntityType {
     )
     private Long entParentId;
 
+    @OneToMany(mappedBy="entType", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+    private List<EntTypeAttr> entTypeAttrs = new ArrayList<>();
+
+    @OneToMany(mappedBy="entType", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+    private List<EAVObject> eavObjs = new ArrayList<>();
 
     public EntityType() {
 

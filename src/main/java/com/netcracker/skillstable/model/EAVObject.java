@@ -16,12 +16,9 @@ public class EAVObject {
     )
     private Long id;
 
-    @Column(
-            name = "ent_type_id",
-            nullable = false,
-            columnDefinition = "INT"
-    )
-    private Long entTypeId;
+    @ManyToOne(targetEntity = EntityType.class)
+    @JoinColumn(name = "ent_type_id")
+    private EntityType entType;
 
     @Column(
             name = "ent_name",
@@ -30,7 +27,7 @@ public class EAVObject {
     )
     private String entName;
 
-    @OneToMany(mappedBy="eavObject", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy="eavObject", fetch=FetchType.LAZY, cascade=CascadeType.PERSIST, orphanRemoval = true)
     private List<Parameter> parameters = new ArrayList<>();
 
     public EAVObject() {
@@ -38,7 +35,6 @@ public class EAVObject {
     }
 
     public EAVObject(Long entTypeId, String entName) {
-        this.entTypeId = entTypeId;
         this.entName = entName;
     }
 
@@ -51,12 +47,8 @@ public class EAVObject {
         this.id = id;
     }
 
-    public Long getEntTypeId() {
-        return entTypeId;
-    }
-
-    public void setEntTypeId(Long entTypeId) {
-        this.entTypeId = entTypeId;
+    public EntityType getEntType() {
+        return entType;
     }
 
     public String getEntName() {

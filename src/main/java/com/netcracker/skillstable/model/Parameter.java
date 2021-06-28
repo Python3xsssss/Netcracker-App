@@ -49,8 +49,7 @@ public class Parameter {
     }
 
 
-    public Parameter(Long entId, Long attrId, String attrValueTxt, Integer attrValueInt) {
-        //this.entId = entId;
+    public Parameter(Long attrId, String attrValueTxt, Integer attrValueInt) {
         this.attrId = attrId;
         this.attrValueTxt = attrValueTxt;
         this.attrValueInt = attrValueInt;
