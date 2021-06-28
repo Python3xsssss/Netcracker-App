@@ -3,7 +3,6 @@ package com.netcracker.skillstable.web;
 import com.netcracker.skillstable.model.*;
 import com.netcracker.skillstable.repos.ParameterRepo;
 import com.netcracker.skillstable.service.EAVService;
-import com.netcracker.skillstable.service.OldEntityObjService;
 import com.netcracker.skillstable.service.MetamodelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

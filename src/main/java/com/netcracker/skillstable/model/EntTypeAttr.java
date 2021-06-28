@@ -1,8 +1,6 @@
 package com.netcracker.skillstable.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity(name="EntTypeAttr")
 @Table (name = "entity_type_attr")

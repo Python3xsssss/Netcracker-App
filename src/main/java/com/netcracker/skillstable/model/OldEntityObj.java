@@ -1,7 +1,6 @@
 package com.netcracker.skillstable.model;
 
 import javax.persistence.*;
-import java.util.Map;
 
 @Entity(name="EntityObj")
 @Table (name = "entities")
