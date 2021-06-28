@@ -18,14 +18,14 @@
                         <thead>
                         <tr>
                             <th> Id </th>
-                            <th> Type Id </th>
+                            <th> Type </th>
                             <th> Name of Entity </th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="entityObj in entities">
                             <td>{{entityObj.id}} </td>
-                            <td> {{entityObj.entTypeId}} </td>
+                            <td> {{entityObj.entType.name}} </td>
                             <td> {{entityObj.entName}} </td>
                         </tr>
                         </tbody>
@@ -40,13 +40,13 @@
 <!--                        <thead>-->
 <!--                        <tr>-->
 <!--                            <th> Role </th>-->
-<!--                            <th ng-repeat="i in [].constructor(max) track by $index"> Attr {{$index + 1}}} </th>-->
+<!--                            <th ng-repeat="attr in attributes track by $index"> Attr #{{$index + 1}}} </th>-->
 <!--                        </tr>-->
 <!--                        </thead>-->
 <!--                        <tbody>-->
 <!--                        <tr>-->
 <!--                            <td> User </td>-->
-<!--                            <th ng-repeat="user in users"> Attr {{attr.name}}} </th>-->
+<!--                            <td ng-repeat="attr in attributes"> {{attr.name}}} </td>-->
 <!--                        </tr>-->
 <!--                        </tbody>-->
 <!--                    </table>-->

@@ -18,11 +18,11 @@ public class EntTypeAttr {
 
     @ManyToOne(targetEntity = EntityType.class)
     @JoinColumn(name = "ent_type_id")
-    private EntityType entType;
+    private EntityType entityType;
 
-    @OneToOne(targetEntity = EntityType.class)
+    @ManyToOne(targetEntity = Attribute.class)
     @JoinColumn(name = "attr_id")
-    private EntityType attribute;
+    private Attribute attribute;
 
     public EntTypeAttr() {
     }
@@ -33,5 +33,13 @@ public class EntTypeAttr {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public EntityType getEntType() {
+        return entityType;
+    }
+
+    public Attribute getAttribute() {
+        return attribute;
     }
 }

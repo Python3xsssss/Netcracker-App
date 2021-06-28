@@ -12,20 +12,21 @@ function addColumn(columnName) {
 
 app.controller("AppCtrl", function($scope, $http) {
     $scope.entities = [];
-    $http.get('http://localhost:8080/data/entities').then(async function (entResponse) {
-        $scope.entities = entResponse.data;
+    $http.get('http://localhost:8080/data/entities').then(async function (response) {
+        $scope.entities = response.data;
     });
 
-    $scope.max = 0;
-    for (let i = 0; i < $scope.entities.length; i++) {
-        if ($scope.entities[i].parameters.length > $scope.max) {
-            $scope.max = $scope.entities[i].parameters.length;
-        }
-    }
-
-    $scope.users = jQuery.grep($scope.entities = [], function(item) {
-        return ( item.id === 1 );
-    });
+    $scope.attributes = [
+        {"id":1,"name":"first_name","type":"text","descr":null},
+        {"id":2,"name":"last_name","type":"text","descr":null},
+        {"id":14,"name":"role","type":"text","descr":null},
+        {"id":15,"name":"picture","type":"text","descr":null},
+        {"id":16,"name":"email","type":"text","descr":null},
+        {"id":24,"name":"age","type":"integer","descr":null}
+    ];
+    // $http.get('http://localhost:8080/data/entities/1/attributes').then(async function (response) {
+    //     $scope.attributes = response.data;
+    // });
 
 
 });

@@ -36,9 +36,6 @@ public class Attribute {
     )
     private String descr;
 
-    @OneToMany(mappedBy="attribute", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
-    private List<EntTypeAttr> entTypeAttrs = new ArrayList<>();
-
 
     public Attribute() {
 
@@ -80,9 +77,5 @@ public class Attribute {
 
     public void setDescr(String descr) {
         this.descr = descr;
-    }
-
-    public List<EntTypeAttr> getEntTypeAttrs() {
-        return entTypeAttrs;
     }
 }

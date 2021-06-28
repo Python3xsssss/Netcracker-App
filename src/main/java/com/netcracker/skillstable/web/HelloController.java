@@ -1,8 +1,6 @@
 package com.netcracker.skillstable.web;
 
-import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.Parameter;
-import com.netcracker.skillstable.model.ParameterValue;
+import com.netcracker.skillstable.model.*;
 import com.netcracker.skillstable.repos.ParameterRepo;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.OldEntityObjService;
@@ -37,18 +35,39 @@ public class HelloController {
     }
 
     @GetMapping("/entities/{entId}/parameters")
-    public List<Parameter> getParametersByEAVObject(
+    public List<Parameter> getAllParametersByEAVObject(
             @PathVariable(value="entId") Long entId
     ) {
         return parameterRepo.findByEavObjectId(entId);
     }
 
     @GetMapping("/entities/{entId}/parameters/{attrId}")
-    public List<ParameterValue> testGetParametersByEAVObject(
+    public List<ParameterValue> getParameterByEAVObject(
             @PathVariable(value="entId") Long entId,
             @PathVariable(value="attrId") Long attrId
     ) {
         Optional<EAVObject> optEntity = eavService.getEAVObjById(entId);
         return optEntity.map(eavObject -> eavObject.getParameterByAttrId(attrId)).orElse(null);
+    }
+
+    @GetMapping("/entities/{entId}/attributes")
+    public List<Attribute> getAllAttributesByEAVObject(
+            @PathVariable(value="entId") Long entId
+    ) {
+        EntityType entityType = metamodelService.getEntityTypeByEntId(entId);
+
+        return (entityType != null) ? metamodelService.getAttributesByEntTypeId(entityType.getId()) : null;
+    }
+
+    @GetMapping("/entities/{entId}/attributes/{entAttrId}")
+    public Attribute getAttributeByEAVObject(
+            @PathVariable(value="entId") Long entId,
+            @PathVariable(value="entAttrId") Long entAttrId
+    ) {
+        EntityType entityType = metamodelService.getEntityTypeByEntId(entId);
+
+        return (entityType != null) ?
+                metamodelService.getAttributeByEntTypeIdAndAttrId(entityType.getId(), entAttrId) :
+                null;
     }
 }

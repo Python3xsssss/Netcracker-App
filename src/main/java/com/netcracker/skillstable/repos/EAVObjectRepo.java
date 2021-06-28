@@ -6,4 +6,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(collectionResourceRel = "eavObjects", path = "eavObjects")
 public interface EAVObjectRepo extends JpaRepository<EAVObject, Long> {
+
 }

@@ -34,7 +34,7 @@ public class EAVObject {
 
     }
 
-    public EAVObject(Long entTypeId, String entName) {
+    public EAVObject(String entName) {
         this.entName = entName;
     }
 
@@ -49,6 +49,10 @@ public class EAVObject {
 
     public EntityType getEntType() {
         return entType;
+    }
+
+    public void setEntType(EntityType entType) {
+        this.entType = entType;
     }
 
     public String getEntName() {
