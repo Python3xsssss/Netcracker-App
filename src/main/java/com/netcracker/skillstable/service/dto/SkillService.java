@@ -1,4 +1,4 @@
-package com.netcracker.skillstable.service;
+package com.netcracker.skillstable.service.dto;
 
 import org.springframework.stereotype.Service;
 
