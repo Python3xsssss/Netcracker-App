@@ -30,11 +30,17 @@ public class EAVObject {
     @OneToMany(mappedBy="eavObject", fetch=FetchType.LAZY, cascade=CascadeType.PERSIST, orphanRemoval = true)
     private List<Parameter> parameters = new ArrayList<>();
 
+
     public EAVObject() {
 
     }
 
     public EAVObject(String entName) {
+        this.entName = entName;
+    }
+
+    public EAVObject(EntityType entType, String entName) {
+        this.entType = entType;
         this.entName = entName;
     }
 

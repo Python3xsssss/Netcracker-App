@@ -28,17 +28,19 @@ public class User {
     }
 
 
-    public User(String username,
-                String password,
-                String firstName,
-                String lastName,
-                Integer age,
-                String email,
-                String about,
-                Department department,
-                Team team,
-                Position position,
-                Set<Skill> skills) {
+    public User(
+            String username,
+            String password,
+            String firstName,
+            String lastName,
+            Integer age,
+            String email,
+            String about,
+            Department department,
+            Team team,
+            Position position,
+            Set<Skill> skills
+    ) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;

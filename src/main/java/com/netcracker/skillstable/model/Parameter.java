@@ -17,12 +17,6 @@ public class Parameter {
     @ManyToOne(targetEntity = EAVObject.class)
     @JoinColumn(name = "ent_id")
     private EAVObject eavObject;
-    /*@Column(
-            name = "ent_id",
-            nullable = false,
-            columnDefinition = "INT"
-    )
-    private Long entId;*/
 
     @Column(
             name = "attr_id",
@@ -50,6 +44,13 @@ public class Parameter {
 
 
     public Parameter(Long attrId, String attrValueTxt, Integer attrValueInt) {
+        this.attrId = attrId;
+        this.attrValueTxt = attrValueTxt;
+        this.attrValueInt = attrValueInt;
+    }
+
+    public Parameter(EAVObject eavObject, Long attrId, String attrValueTxt, Integer attrValueInt) {
+        this.eavObject = eavObject;
         this.attrId = attrId;
         this.attrValueTxt = attrValueTxt;
         this.attrValueInt = attrValueInt;

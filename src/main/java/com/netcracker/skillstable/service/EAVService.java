@@ -24,10 +24,6 @@ public class EAVService {
         return eavRepo.findAll();
     }
 
-    /*public List<Parameter> getAllParametersById(Long entId) {
-        return eavRepo.findAll();
-    }*/
-
     public Optional<EAVObject> getEAVObjById(Long entId) {
         return eavRepo.findById(entId);
     }
