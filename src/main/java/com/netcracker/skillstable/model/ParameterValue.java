@@ -1,24 +1,24 @@
 package com.netcracker.skillstable.model;
 
 public class ParameterValue {
-    private Integer valueInt;
+    private Long valueInt;
     private String valueStr;
 
 
     public ParameterValue() {
     }
 
-    public ParameterValue(Integer valueInt, String valueStr) {
+    public ParameterValue(Long valueInt, String valueStr) {
         this.valueInt = valueInt;
         this.valueStr = valueStr;
     }
 
 
-    public Integer getValueInt() {
+    public Long getValueInt() {
         return valueInt;
     }
 
-    public void setValueInt(Integer valueInt) {
+    public void setValueInt(Long valueInt) {
         this.valueInt = valueInt;
     }
 

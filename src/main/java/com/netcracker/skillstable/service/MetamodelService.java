@@ -42,4 +42,8 @@ public class MetamodelService {
     public Attribute getAttributeByEntTypeIdAndAttrId(Long entTypeId, Long attrId) {
         return entTypeAttrRepo.findByEntityTypeIdAndAttributeId(entTypeId, attrId).getAttribute();
     }
+
+    public Attribute getAttributeByAttrName(String attrName) {
+        return attributeRepo.findByName(attrName);
+    }
 }

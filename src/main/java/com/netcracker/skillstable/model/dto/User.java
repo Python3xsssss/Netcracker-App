@@ -7,21 +7,41 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class User {
+    // General
     private Long id;
+    private static final Long entTypeId = 1L;
     private String username;
+
     private String password;
+
     private Set<Role> roles = new HashSet<>();
+    private static final Long roleId = 14L;
 
+    // Personal info
     private String firstName, lastName;
-    private Integer age;
-    private String email;
-    private String about;
+    private static final Long firstNameId = 1L, lastNameId = 2L;
 
+    private Integer age;
+    private static final Long ageId = 24L;
+
+    private String email;
+    private static final Long emailId = 16L;
+
+    private String about;
+    private static final Long aboutId = 25L;
+
+    // Work info
     private Department department;
+    private static final Long departmentRefId = 18L;
+
     private Team team;
+    private static final Long teamRefId = 4L;
+
     private Position position;
+    private static final Long positionId = 26L;
 
     private Set<Skill> skills = new HashSet<>();
+    private static final Long skillRefId = 5L;
 
 
     public User() {
@@ -54,6 +74,88 @@ public class User {
         this.skills = skills;
 
         roles.add(Role.STAFF);
+    }
+
+    public User(
+            Long id,
+            String username,
+            String password,
+            Set<Role> roles,
+            String firstName,
+            String lastName,
+            Integer age,
+            String email,
+            String about,
+            Department department,
+            Team team,
+            Position position,
+            Set<Skill> skills
+    ) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.email = email;
+        this.about = about;
+        this.department = department;
+        this.team = team;
+        this.position = position;
+        this.skills = skills;
+    }
+
+    public static Long getEntTypeId() {
+        return entTypeId;
+    }
+
+    public static Long getRoleId() {
+        return roleId;
+    }
+
+    public static Long getFirstNameId() {
+        return firstNameId;
+    }
+
+    public static Long getLastNameId() {
+        return lastNameId;
+    }
+
+    public static Long getAgeId() {
+        return ageId;
+    }
+
+    public static Long getEmailId() {
+        return emailId;
+    }
+
+    public static Long getAboutId() {
+        return aboutId;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public static Long getDepartmentRefId() {
+        return departmentRefId;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public static Long getTeamRefId() {
+        return teamRefId;
+    }
+
+    public static Long getPositionId() {
+        return positionId;
+    }
+
+    public static Long getSkillRefId() {
+        return skillRefId;
     }
 
 

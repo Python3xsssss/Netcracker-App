@@ -77,7 +77,7 @@ public class EAVObject {
         return parameters;
     }
 
-    public List<ParameterValue> getParameterByAttrId(Long attrId) { // id exception?
+    public List<ParameterValue> getParametersByAttrId(Long attrId) { // id exception?
         List<ParameterValue> listOfValues = new ArrayList<>();
         for (Parameter parameter : parameters) {
             if (attrId.equals(parameter.getAttrId())) {

@@ -35,25 +35,44 @@ public class Parameter {
             name = "attr_value_int",
             columnDefinition = "INT"
     )
-    private Integer attrValueInt;
+    private Long attrValueInt;
 
 
     public Parameter() {
 
     }
 
+    public Parameter(Long attrId, String attrValueTxt) {
+        this.attrId = attrId;
+        this.attrValueTxt = attrValueTxt;
+        this.attrValueInt = null;
+    }
 
-    public Parameter(Long attrId, String attrValueTxt, Integer attrValueInt) {
+    public Parameter(Long attrId, Long attrValueInt) {
+        this.attrId = attrId;
+        this.attrValueTxt = null;
+        this.attrValueInt = attrValueInt;
+    }
+
+    public Parameter(Long attrId, String attrValueTxt, Long attrValueInt) {
         this.attrId = attrId;
         this.attrValueTxt = attrValueTxt;
         this.attrValueInt = attrValueInt;
     }
 
-    public Parameter(EAVObject eavObject, Long attrId, String attrValueTxt, Integer attrValueInt) {
+    public Parameter(EAVObject eavObject, Long attrId, String attrValueTxt) {
+        this(attrId, attrValueTxt);
         this.eavObject = eavObject;
-        this.attrId = attrId;
-        this.attrValueTxt = attrValueTxt;
-        this.attrValueInt = attrValueInt;
+    }
+
+    public Parameter(EAVObject eavObject, Long attrId, Long attrValueInt) {
+        this(attrId, attrValueInt);
+        this.eavObject = eavObject;
+    }
+
+    public Parameter(EAVObject eavObject, Long attrId, String attrValueTxt, Long attrValueInt) {
+        this(attrId, attrValueTxt, attrValueInt);
+        this.eavObject = eavObject;
     }
 
 
@@ -89,11 +108,11 @@ public class Parameter {
         this.attrValueTxt = attrValueTxt;
     }
 
-    public Integer getAttrValueInt() {
+    public Long getAttrValueInt() {
         return attrValueInt;
     }
 
-    public void setAttrValueInt(Integer attrValueInt) {
+    public void setAttrValueInt(Long attrValueInt) {
         this.attrValueInt = attrValueInt;
     }
 }

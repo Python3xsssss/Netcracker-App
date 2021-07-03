@@ -46,7 +46,7 @@ public class HelloController {
             @PathVariable(value="attrId") Long attrId
     ) {
         Optional<EAVObject> optEntity = eavService.getEAVObjById(entId);
-        return optEntity.map(eavObject -> eavObject.getParameterByAttrId(attrId)).orElse(null);
+        return optEntity.map(eavObject -> eavObject.getParametersByAttrId(attrId)).orElse(null);
     }
 
     @GetMapping("/entities/{entId}/attributes")

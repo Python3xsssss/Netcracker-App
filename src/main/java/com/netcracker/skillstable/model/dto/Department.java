@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Department extends OrgItem {
+    private static final Long entTypeId = 4L;
     private Set<Team> teams = new HashSet<>();
+    private static final Long teamRefId = 4L;
 
 
     public Department() {
@@ -19,6 +21,14 @@ public class Department extends OrgItem {
         this.teams = teams;
     }
 
+
+    public static Long getEntTypeId() {
+        return entTypeId;
+    }
+
+    public static Long getTeamRefId() {
+        return teamRefId;
+    }
 
     public Set<Team> getTeams() {
         return teams;

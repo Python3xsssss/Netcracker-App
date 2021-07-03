@@ -1,35 +1,51 @@
 package com.netcracker.skillstable.model.dto;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class OrgItem {
     protected Long id;
+    private static final Long entTypeId = 3L;
     protected String name;
-    protected String description;
+
+    protected String about;
+    private static final Long aboutId = 25L;
 
     protected User leader;
+    private static final Long leaderRefId = 17L;
 
     protected Object superior;
+    private static final Long superiorRefId = 19L;
 
 
     public OrgItem() {
     }
 
-
-
-    public OrgItem(String name, String description) {
+    public OrgItem(String name, String about) {
         this.name = name;
-        this.description = description;
+        this.about = about;
     }
 
-    public OrgItem(String name, String description, User leader, Object superior) {
+    public OrgItem(String name, String about, User leader, Object superior) {
         this.name = name;
-        this.description = description;
+        this.about = about;
         this.leader = leader;
         this.superior = superior;
     }
 
+
+    public static Long getEntTypeId() {
+        return entTypeId;
+    }
+
+    public static Long getAboutId() {
+        return aboutId;
+    }
+
+    public static Long getLeaderRefId() {
+        return leaderRefId;
+    }
+
+    public static Long getSuperiorRefId() {
+        return superiorRefId;
+    }
 
     public Long getId() {
         return id;
@@ -47,12 +63,12 @@ public class OrgItem {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getAbout() {
+        return about;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAbout(String about) {
+        this.about = about;
     }
 
     public User getLeader() {
