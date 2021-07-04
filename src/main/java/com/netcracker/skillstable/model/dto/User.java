@@ -47,6 +47,10 @@ public class User {
     public User() {
     }
 
+    public User(Integer id, String username) {
+        this.id = id;
+        this.username = username;
+    }
 
     public User(
             String username,
@@ -91,8 +95,7 @@ public class User {
             Position position,
             Set<Skill> skills
     ) {
-        this.id = id;
-        this.username = username;
+        this(id, username);
         this.password = password;
         this.roles = roles;
         this.firstName = firstName;
@@ -134,16 +137,8 @@ public class User {
         return aboutId;
     }
 
-    public Department getDepartment() {
-        return department;
-    }
-
     public static Integer getDepartmentRefId() {
         return departmentRefId;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
     }
 
     public static Integer getTeamRefId() {
@@ -235,7 +230,7 @@ public class User {
         this.about = about;
     }
 
-    public Department getDepartmentId() {
+    public Department getDepartment() {
         return department;
     }
 
@@ -247,7 +242,7 @@ public class User {
         return team;
     }
 
-    public void setTeamId(Team team) {
+    public void setTeam(Team team) {
         this.team = team;
     }
 

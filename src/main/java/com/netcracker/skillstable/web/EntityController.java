@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/data")
-public class HelloController {
+public class EntityController {
     @Autowired
     private EAVService eavService;
     @Autowired

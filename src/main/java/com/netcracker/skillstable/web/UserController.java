@@ -16,6 +16,6 @@ public class UserController {
     @GetMapping("")
     @ResponseBody
     public Optional<User> getSpecificUser(@RequestParam(name = "id", required = true) Optional<Integer> id) {
-        return id.flatMap(aLong -> userService.getUserById(aLong));
+        return id.flatMap(inputId -> userService.getUserById(inputId));
     }
 }

@@ -16,13 +16,18 @@ public class Team extends OrgItem {
 
     }
 
-    public Team(String name, String description, User leader, Department department) {
-        super(name, description, leader, department);
+    public Team(String name, String about, User leader, Department department) {
+        super(name, about, leader, department);
     }
 
-    public Team(String name, String description, User leader, Department department, Set<User> members) {
-        super(name, description, leader, department);
+    public Team(String name, String about, User leader, Department department, Set<User> members) {
+        super(name, about, leader, department);
         this.members = members;
+    }
+
+    public Team(Integer id, String name, String about, User leader, Department department, Set<User> members) {
+        this(name, about, leader, department, members);
+        this.id = id;
     }
 
 

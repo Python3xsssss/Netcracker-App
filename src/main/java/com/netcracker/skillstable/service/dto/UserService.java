@@ -57,7 +57,7 @@ public class UserService {
 
     public Optional<User> getUserById(Integer userId) {
         Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(userId);
-        if (!optionalEavObj.isPresent()) {
+        if (!optionalEavObj.isPresent() || !User.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
             return Optional.empty();
         }
 
@@ -106,7 +106,7 @@ public class UserService {
             ));
         }
 
-        User user = new User(
+        return Optional.of(new User(
                 userId,
                 userEavObj.getEntName(),
                 null,
@@ -124,12 +124,10 @@ public class UserService {
                                 .orElse(Position.NEWCOMER.ordinal())
                         ],
                 skills
-                );
-
-        return Optional.of(user);
+                ));
     }
 
-    public void deleteUser(Long userId) {
+    public void deleteUser(Integer userId) {
         // todo
     }
 }
