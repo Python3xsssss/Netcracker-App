@@ -1,24 +1,24 @@
 package com.netcracker.skillstable.model.dto;
 
 public class OrgItem {
-    protected Long id;
-    private static final Long entTypeId = 3L;
+    protected Integer id;
+    private static final Integer entTypeId = 3;
     protected String name;
 
     protected String about;
-    private static final Long aboutId = 25L;
+    private static final Integer aboutId = 25;
 
     protected User leader;
-    private static final Long leaderRefId = 17L;
+    private static final Integer leaderRefId = 17;
 
     protected Object superior;
-    private static final Long superiorRefId = 19L;
+    private static final Integer superiorRefId = 19;
 
 
     public OrgItem() {
     }
 
-    public OrgItem(Long id, String name) {
+    public OrgItem(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -36,27 +36,27 @@ public class OrgItem {
     }
 
 
-    public static Long getEntTypeId() {
+    public static Integer getEntTypeId() {
         return entTypeId;
     }
 
-    public static Long getAboutId() {
+    public static Integer getAboutId() {
         return aboutId;
     }
 
-    public static Long getLeaderRefId() {
+    public static Integer getLeaderRefId() {
         return leaderRefId;
     }
 
-    public static Long getSuperiorRefId() {
+    public static Integer getSuperiorRefId() {
         return superiorRefId;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

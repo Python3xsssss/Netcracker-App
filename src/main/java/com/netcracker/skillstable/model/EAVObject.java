@@ -3,6 +3,7 @@ package com.netcracker.skillstable.model;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity(name="EAVObject")
 @Table (name = "entities")
@@ -14,7 +15,7 @@ public class EAVObject {
             nullable = false,
             columnDefinition = "SERIAL"
     )
-    private Long id;
+    private Integer id;
 
     @ManyToOne(targetEntity = EntityType.class)
     @JoinColumn(name = "ent_type_id")
@@ -45,11 +46,11 @@ public class EAVObject {
     }
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -77,7 +78,20 @@ public class EAVObject {
         return parameters;
     }
 
-    public List<ParameterValue> getParametersByAttrId(Long attrId) { // id exception?
+    public Optional<ParameterValue> getParameterByAttrId(Integer attrId) {
+        for (Parameter parameter : parameters) {
+            if (attrId.equals(parameter.getAttrId())) {
+                return Optional.of(new ParameterValue(
+                        parameter.getAttrValueInt(),
+                        parameter.getAttrValueTxt()
+                ));
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    public List<ParameterValue> getMultipleParametersByAttrId(Integer attrId) { // id exception?
         List<ParameterValue> listOfValues = new ArrayList<>();
         for (Parameter parameter : parameters) {
             if (attrId.equals(parameter.getAttrId())) {
@@ -91,7 +105,7 @@ public class EAVObject {
         return listOfValues;
     }
 
-    public void setParameter(Long attrId, ParameterValue value) {
+    public void setParameter(Integer attrId, ParameterValue value) {
         for (Parameter parameter : parameters) {
             if (attrId.equals(parameter.getAttrId())) {  // multiple?
                 parameter.setAttrValueInt(value.getValueInt());
@@ -100,7 +114,7 @@ public class EAVObject {
         }
     }
 
-    public void deleteParameter(Long attrId) {
+    public void deleteParameter(Integer attrId) {
         parameters.removeIf(parameter -> attrId.equals(parameter.getAttrId()));
     }
 }

@@ -21,7 +21,7 @@ public class SkillService {
     @Autowired
     private MetamodelService metamodelService;
 
-    public Long createSkill(Skill skill) {
+    public Integer createSkill(Skill skill) {
         EAVObject eavObj = new EAVObject(
                 metamodelService.getEntityTypeByEntId(Skill.getEntTypeId()),
                 skill.getName()
@@ -29,7 +29,7 @@ public class SkillService {
 
         eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
                 new Parameter(eavObj, Skill.getAboutId(), skill.getAbout()),
-                new Parameter(eavObj, Skill.getLevelId(), (long) skill.getLevel())
+                new Parameter(eavObj, Skill.getLevelId(), skill.getLevel())
         )));
 
         return eavService.createEAVObj(eavObj).getId();

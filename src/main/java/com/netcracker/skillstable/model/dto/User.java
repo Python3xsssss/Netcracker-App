@@ -8,40 +8,40 @@ import java.util.Set;
 
 public class User {
     // General
-    private Long id;
-    private static final Long entTypeId = 1L;
+    private Integer id;
+    private static final Integer entTypeId = 1;
     private String username;
 
     private String password;
 
     private Set<Role> roles = new HashSet<>();
-    private static final Long roleId = 14L;
+    private static final Integer roleId = 14;
 
     // Personal info
     private String firstName, lastName;
-    private static final Long firstNameId = 1L, lastNameId = 2L;
+    private static final Integer firstNameId = 1, lastNameId = 2;
 
     private Integer age;
-    private static final Long ageId = 24L;
+    private static final Integer ageId = 24;
 
     private String email;
-    private static final Long emailId = 16L;
+    private static final Integer emailId = 16;
 
     private String about;
-    private static final Long aboutId = 25L;
+    private static final Integer aboutId = 25;
 
     // Work info
     private Department department;
-    private static final Long departmentRefId = 18L;
+    private static final Integer departmentRefId = 18;
 
     private Team team;
-    private static final Long teamRefId = 4L;
+    private static final Integer teamRefId = 4;
 
     private Position position;
-    private static final Long positionId = 26L;
+    private static final Integer positionId = 26;
 
     private Set<Skill> skills = new HashSet<>();
-    private static final Long skillRefId = 5L;
+    private static final Integer skillRefId = 5;
 
 
     public User() {
@@ -77,7 +77,7 @@ public class User {
     }
 
     public User(
-            Long id,
+            Integer id,
             String username,
             String password,
             Set<Role> roles,
@@ -106,31 +106,31 @@ public class User {
         this.skills = skills;
     }
 
-    public static Long getEntTypeId() {
+    public static Integer getEntTypeId() {
         return entTypeId;
     }
 
-    public static Long getRoleId() {
+    public static Integer getRoleId() {
         return roleId;
     }
 
-    public static Long getFirstNameId() {
+    public static Integer getFirstNameId() {
         return firstNameId;
     }
 
-    public static Long getLastNameId() {
+    public static Integer getLastNameId() {
         return lastNameId;
     }
 
-    public static Long getAgeId() {
+    public static Integer getAgeId() {
         return ageId;
     }
 
-    public static Long getEmailId() {
+    public static Integer getEmailId() {
         return emailId;
     }
 
-    public static Long getAboutId() {
+    public static Integer getAboutId() {
         return aboutId;
     }
 
@@ -138,7 +138,7 @@ public class User {
         return department;
     }
 
-    public static Long getDepartmentRefId() {
+    public static Integer getDepartmentRefId() {
         return departmentRefId;
     }
 
@@ -146,24 +146,24 @@ public class User {
         this.team = team;
     }
 
-    public static Long getTeamRefId() {
+    public static Integer getTeamRefId() {
         return teamRefId;
     }
 
-    public static Long getPositionId() {
+    public static Integer getPositionId() {
         return positionId;
     }
 
-    public static Long getSkillRefId() {
+    public static Integer getSkillRefId() {
         return skillRefId;
     }
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

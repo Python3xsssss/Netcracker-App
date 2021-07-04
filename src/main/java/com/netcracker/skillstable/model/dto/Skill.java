@@ -1,15 +1,15 @@
 package com.netcracker.skillstable.model.dto;
 
 public class Skill {
-    private static final Long entTypeId = 2L;
-    private Long id;
+    private static final Integer entTypeId = 2;
+    private Integer id;
     private String name;
 
     private String about;
-    private static final Long aboutId = 25L;
+    private static final Integer aboutId = 25;
 
     private Integer level;
-    private static final Long levelId = 21L;
+    private static final Integer levelId = 21;
 
 
     public Skill() {
@@ -21,29 +21,29 @@ public class Skill {
         this.level = level;
     }
 
-    public Skill(Long id, String name, String about, Integer level) {
+    public Skill(Integer id, String name, String about, Integer level) {
         this(name, about, level);
         this.id = id;
     }
 
 
-    public static Long getEntTypeId() {
+    public static Integer getEntTypeId() {
         return entTypeId;
     }
 
-    public static Long getAboutId() {
+    public static Integer getAboutId() {
         return aboutId;
     }
 
-    public static Long getLevelId() {
+    public static Integer getLevelId() {
         return levelId;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

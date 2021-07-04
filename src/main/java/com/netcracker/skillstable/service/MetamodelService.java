@@ -23,12 +23,12 @@ public class MetamodelService {
     @Autowired
     private EAVService eavService;
 
-    public EntityType getEntityTypeByEntId(Long entId) {
+    public EntityType getEntityTypeByEntId(Integer entId) {
         Optional<EAVObject> optionalEAVObject = eavService.getEAVObjById(entId);
         return optionalEAVObject.map(EAVObject::getEntType).orElse(null);
     }
 
-    public List<Attribute> getAttributesByEntTypeId(Long entTypeId) {
+    public List<Attribute> getAttributesByEntTypeId(Integer entTypeId) {
         List<EntTypeAttr> entTypeAttrList = entTypeAttrRepo.findByEntityTypeId(entTypeId);
 
         List<Attribute> attributes = new ArrayList<>();
@@ -39,7 +39,7 @@ public class MetamodelService {
         return attributes;
     }
 
-    public Attribute getAttributeByEntTypeIdAndAttrId(Long entTypeId, Long attrId) {
+    public Attribute getAttributeByEntTypeIdAndAttrId(Integer entTypeId, Integer attrId) {
         return entTypeAttrRepo.findByEntityTypeIdAndAttributeId(entTypeId, attrId).getAttribute();
     }
 

@@ -23,7 +23,7 @@ public class TeamService {
     @Autowired
     private UserService userService;
 
-    public Long createTeam(Team team) {
+    public Integer createTeam(Team team) {
         EAVObject eavObj = new EAVObject(
                 metamodelService.getEntityTypeByEntId(Team.getEntTypeId()),
                 team.getName()

@@ -8,9 +8,9 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.List;
 
 @RepositoryRestResource(collectionResourceRel = "entTypeAttr", path = "entTypeAttr")
-public interface EntTypeAttrRepo extends JpaRepository<EntTypeAttr, Long> {
-    List<EntTypeAttr> findByEntityTypeId(Long entTypeId);
+public interface EntTypeAttrRepo extends JpaRepository<EntTypeAttr, Integer> {
+    List<EntTypeAttr> findByEntityTypeId(Integer entTypeId);
 
-    EntTypeAttr findByEntityTypeIdAndAttributeId(Long entTypeId, Long attrId);
+    EntTypeAttr findByEntityTypeIdAndAttributeId(Integer entTypeId, Integer attrId);
 }
 

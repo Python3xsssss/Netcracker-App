@@ -24,11 +24,11 @@ public class EAVService {
         return eavRepo.findAll();
     }
 
-    public Optional<EAVObject> getEAVObjById(Long entId) {
+    public Optional<EAVObject> getEAVObjById(Integer entId) {
         return eavRepo.findById(entId);
     }
 
-    public void deleteEAVObj(Long entId) {
+    public void deleteEAVObj(Integer entId) {
         eavRepo.deleteById(entId);
     }
 

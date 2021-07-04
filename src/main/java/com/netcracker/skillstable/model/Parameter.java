@@ -12,7 +12,7 @@ public class Parameter {
             nullable = false,
             columnDefinition = "SERIAL"
     )
-    private Long id;
+    private Integer id;
 
     @ManyToOne(targetEntity = EAVObject.class)
     @JoinColumn(name = "ent_id")
@@ -23,7 +23,7 @@ public class Parameter {
             nullable = false,
             columnDefinition = "INT"
     )
-    private Long attrId;
+    private Integer attrId;
 
     @Column(
             name = "attr_value_txt",
@@ -35,52 +35,52 @@ public class Parameter {
             name = "attr_value_int",
             columnDefinition = "INT"
     )
-    private Long attrValueInt;
+    private Integer attrValueInt;
 
 
     public Parameter() {
 
     }
 
-    public Parameter(Long attrId, String attrValueTxt) {
+    public Parameter(Integer attrId, String attrValueTxt) {
         this.attrId = attrId;
         this.attrValueTxt = attrValueTxt;
         this.attrValueInt = null;
     }
 
-    public Parameter(Long attrId, Long attrValueInt) {
+    public Parameter(Integer attrId, Integer attrValueInt) {
         this.attrId = attrId;
         this.attrValueTxt = null;
         this.attrValueInt = attrValueInt;
     }
 
-    public Parameter(Long attrId, String attrValueTxt, Long attrValueInt) {
+    public Parameter(Integer attrId, String attrValueTxt, Integer attrValueInt) {
         this.attrId = attrId;
         this.attrValueTxt = attrValueTxt;
         this.attrValueInt = attrValueInt;
     }
 
-    public Parameter(EAVObject eavObject, Long attrId, String attrValueTxt) {
+    public Parameter(EAVObject eavObject, Integer attrId, String attrValueTxt) {
         this(attrId, attrValueTxt);
         this.eavObject = eavObject;
     }
 
-    public Parameter(EAVObject eavObject, Long attrId, Long attrValueInt) {
+    public Parameter(EAVObject eavObject, Integer attrId, Integer attrValueInt) {
         this(attrId, attrValueInt);
         this.eavObject = eavObject;
     }
 
-    public Parameter(EAVObject eavObject, Long attrId, String attrValueTxt, Long attrValueInt) {
+    public Parameter(EAVObject eavObject, Integer attrId, String attrValueTxt, Integer attrValueInt) {
         this(attrId, attrValueTxt, attrValueInt);
         this.eavObject = eavObject;
     }
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -92,11 +92,11 @@ public class Parameter {
         this.entId = entId;
     }*/
 
-    public Long getAttrId() {
+    public Integer getAttrId() {
         return attrId;
     }
 
-    public void setAttrId(Long attrId) {
+    public void setAttrId(Integer attrId) {
         this.attrId = attrId;
     }
 
@@ -108,11 +108,11 @@ public class Parameter {
         this.attrValueTxt = attrValueTxt;
     }
 
-    public Long getAttrValueInt() {
+    public Integer getAttrValueInt() {
         return attrValueInt;
     }
 
-    public void setAttrValueInt(Long attrValueInt) {
+    public void setAttrValueInt(Integer attrValueInt) {
         this.attrValueInt = attrValueInt;
     }
 }

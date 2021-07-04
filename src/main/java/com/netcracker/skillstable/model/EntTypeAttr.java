@@ -12,7 +12,7 @@ public class EntTypeAttr {
             nullable = false,
             columnDefinition = "SERIAL"
     )
-    private Long id;
+    private Integer id;
 
     @ManyToOne(targetEntity = EntityType.class)
     @JoinColumn(name = "ent_type_id")
@@ -25,11 +25,11 @@ public class EntTypeAttr {
     public EntTypeAttr() {
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
