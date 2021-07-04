@@ -12,6 +12,10 @@ public class Team extends OrgItem {
     public Team() {
     }
 
+    public Team(Long id, String name) {
+
+    }
+
     public Team(String name, String description, User leader, Department department) {
         super(name, description, leader, department);
     }

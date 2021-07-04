@@ -21,6 +21,11 @@ public class Skill {
         this.level = level;
     }
 
+    public Skill(Long id, String name, String about, Integer level) {
+        this(name, about, level);
+        this.id = id;
+    }
+
 
     public static Long getEntTypeId() {
         return entTypeId;

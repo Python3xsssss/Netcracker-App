@@ -3,10 +3,8 @@ package com.netcracker.skillstable.service.dto;
 import com.netcracker.skillstable.model.EAVObject;
 import com.netcracker.skillstable.model.Parameter;
 import com.netcracker.skillstable.model.ParameterValue;
-import com.netcracker.skillstable.model.dto.Department;
-import com.netcracker.skillstable.model.dto.Skill;
-import com.netcracker.skillstable.model.dto.Team;
-import com.netcracker.skillstable.model.dto.User;
+import com.netcracker.skillstable.model.dto.*;
+import com.netcracker.skillstable.model.dto.attr.Position;
 import com.netcracker.skillstable.model.dto.attr.Role;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
@@ -24,6 +22,7 @@ public class UserService {
     private MetamodelService metamodelService;
 
     private final Role[] roleValues = Role.values();
+    private final Position[] positionValues = Position.values();
 
     public Long createUser(User user) {
         EAVObject eavObj = new EAVObject(
@@ -56,37 +55,75 @@ public class UserService {
         return null; // todo
     }
 
-    /*public Optional<User> getUserById(Long userId) {
-        Optional<EAVObject> userEavObj = eavService.getEAVObjById(userId);
-        if (userEavObj.isPresent()) {
-            Set<Role> roles = new HashSet<>();
-            List<ParameterValue> rolesAsParams = userEavObj.get().getParametersByAttrId(User.getRoleId());
-            for (ParameterValue roleParam : rolesAsParams) {
-                roles.add(roleValues[Math.toIntExact(roleParam.getValueInt())]);
-            }
-            List<ParameterValue> userEavObj.get().getParametersByAttrId(User.getDepartmentRefId())
-            EAVObject departEavObject = eavService.getEAVObjById();
-            Department department = new Department(
-                    eavService.getE
-            );
-
-            User user = new User(
-                    userId,
-                    userEavObj.get().getEntName(),
-                    null,
-                    roles,
-                    userEavObj.get().getParametersByAttrId(User.getFirstNameId()),
-                    userEavObj.get().getParametersByAttrId(User.getLastNameId()),
-                    userEavObj.get().getParametersByAttrId(User.getAgeId()),
-                    userEavObj.get().getParametersByAttrId(User.getEmailId()),
-                    userEavObj.get().getParametersByAttrId(User.getAboutId()),
-                    userEavObj.get().getParametersByAttrId(User.getFirstNameId()),
-                    userEavObj.get().getParametersByAttrId(User.getFirstNameId()),
-                    userEavObj.get().getParametersByAttrId(User.getFirstNameId()),
-                    )
+    public Optional<User> getUserById(Long userId) {
+        Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(userId);
+        if (!optionalEavObj.isPresent()) {
+            return Optional.empty();
         }
 
-    }*/
+        EAVObject userEavObj = optionalEavObj.get();
+
+        Set<Role> roles = new HashSet<>();
+        List<ParameterValue> rolesAsParams = userEavObj.getParametersByAttrId(User.getRoleId());
+        for (ParameterValue roleParam : rolesAsParams) {
+            roles.add(roleValues[Math.toIntExact(roleParam.getValueInt())]);
+        }
+
+        List<ParameterValue> departsAsParams = userEavObj.getParametersByAttrId(User.getDepartmentRefId());
+        Optional<EAVObject> departEavObject = eavService.getEAVObjById(departsAsParams.get(0).getValueInt());
+        Department department = departEavObject.map(eavObject -> new Department(
+                eavObject.getId(),
+                eavObject.getEntName()
+        )).orElseGet(Department::new);
+
+        List<ParameterValue> teamsAsParams = userEavObj.getParametersByAttrId(User.getTeamRefId());
+        Optional<EAVObject> teamEavObject = eavService.getEAVObjById(teamsAsParams.get(0).getValueInt());
+        Team team = teamEavObject.map(eavObject -> new Team(
+                eavObject.getId(),
+                eavObject.getEntName()
+        )).orElseGet(Team::new);
+
+        List<ParameterValue> skillsAsParams = userEavObj.getParametersByAttrId(User.getSkillRefId());
+        List<EAVObject> skillsEavList = new ArrayList<>();
+        for (ParameterValue skillAsParam : skillsAsParams) {
+            Optional<EAVObject> optSkillEavObj = eavService.getEAVObjById(skillAsParam.getValueInt());
+            optSkillEavObj.ifPresent(skillsEavList::add);
+        }
+        Set<Skill> skills = new HashSet<>();
+        for (EAVObject skillAsEavObj : skillsEavList) {
+            skills.add(new Skill(
+                    skillAsEavObj.getId(),
+                    skillAsEavObj.getEntName(),
+                    skillAsEavObj.getParametersByAttrId(Skill.getAboutId()).get(0).getValueStr(),
+                    Math.toIntExact(skillAsEavObj.getParametersByAttrId(Skill.getLevelId()).get(0).getValueInt())
+            ));
+        }
+
+        User user = new User(
+                userId,
+                userEavObj.getEntName(),
+                null,
+                roles,
+                userEavObj.getParametersByAttrId(User.getFirstNameId()).get(0).getValueStr(),
+                userEavObj.getParametersByAttrId(User.getLastNameId()).get(0).getValueStr(),
+                Math.toIntExact(userEavObj.getParametersByAttrId(User.getAgeId()).get(0).getValueInt()),
+                userEavObj.getParametersByAttrId(User.getEmailId()).get(0).getValueStr(),
+                userEavObj.getParametersByAttrId(User.getAboutId()).get(0).getValueStr(),
+                department,
+                team,
+                positionValues[
+                        Math.toIntExact(
+                                userEavObj
+                                        .getParametersByAttrId(User.getPositionId())
+                                        .get(0)
+                                        .getValueInt()
+                                )
+                        ],
+                skills
+                );
+
+        return Optional.of(user);
+    }
 
     public void deleteUser(Long userId) {
         // todo

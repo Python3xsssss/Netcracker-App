@@ -18,6 +18,11 @@ public class OrgItem {
     public OrgItem() {
     }
 
+    public OrgItem(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public OrgItem(String name, String about) {
         this.name = name;
         this.about = about;

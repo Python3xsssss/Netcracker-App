@@ -12,6 +12,10 @@ public class Department extends OrgItem {
     public Department() {
     }
 
+    public Department(Long id, String name) {
+        super(id, name);
+    }
+
     public Department(String name, String description, User leader, Object superior) {
         super(name, description, leader, superior);
     }
