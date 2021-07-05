@@ -8,6 +8,7 @@ import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
+import com.netcracker.skillstable.service.converter.TeamConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,25 +21,14 @@ public class TeamService {
     @Autowired
     private MetamodelService metamodelService;
 
-    // todo: converter Team <-> EAVObject?
+
     public Integer createTeam(Team team) {
-        EAVObject eavObj = new EAVObject(
-                metamodelService.getEntityTypeByEntTypeId(Team.getEntTypeId()),
-                team.getName()
-        );
-        /*
-        eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
-                new Parameter(eavObj, Team.getAboutId(), team.getAbout()),
-                new Parameter(eavObj, Team.getLeaderRefId(), team.getLeader().getId())
-        )));
-
-        List<Parameter> membersAsParams = new ArrayList<>();
-        for (User member : team.getMembers()) {
-            membersAsParams.add(new Parameter(eavObj, Team.getMemberRefId(), member.getId()));
-        }
-        eavObj.addParameters(membersAsParams);*/
-
-        return eavService.createEAVObj(eavObj).getId();
+        return eavService.createEAVObj(
+                TeamConverter.dtoToEavObj(
+                        team,
+                        metamodelService.getEntityTypeByEntTypeId(Team.getEntTypeId())
+                )
+        ).getId();
     }
 
     public List<Team> getAllTeams() {
@@ -53,48 +43,7 @@ public class TeamService {
 
         EAVObject teamEavObj = optionalEavObj.get();
 
-        Optional<ParameterValue> leaderAsParam = teamEavObj.getParameterByAttrId(Team.getLeaderRefId());
-        User leader = new User();
-        if (leaderAsParam.isPresent()) {
-            Optional<EAVObject> leaderEavObject = eavService.getEAVObjById(leaderAsParam.get().getValueInt());
-            leader = leaderEavObject.map(eavObject -> new User(
-                    eavObject.getId(),
-                    eavObject.getEntName()
-            )).orElseGet(User::new);
-        }
-
-        Optional<ParameterValue> departAsParam = teamEavObj.getParameterByAttrId(Team.getSuperiorRefId());
-        Department department = new Department();
-        if (departAsParam.isPresent()) {
-            Optional<EAVObject> departEavObject = eavService.getEAVObjById(departAsParam.get().getValueInt());
-            department = departEavObject.map(eavObject -> new Department(
-                    eavObject.getId(),
-                    eavObject.getEntName()
-            )).orElseGet(Department::new);
-        }
-
-        List<ParameterValue> membersAsParams = teamEavObj.getMultipleParametersByAttrId(Team.getMemberRefId());
-        List<EAVObject> membersEavList = new ArrayList<>();
-        for (ParameterValue memberAsParam : membersAsParams) {
-            Optional<EAVObject> optMemberEavObj = eavService.getEAVObjById(memberAsParam.getValueInt());
-            optMemberEavObj.ifPresent(membersEavList::add);
-        }
-        Set<User> members = new HashSet<>();
-        for (EAVObject memberAsEavObj : membersEavList) {
-            members.add(new User(
-                    memberAsEavObj.getId(),
-                    memberAsEavObj.getEntName()
-            ));
-        }
-
-        return Optional.of(new Team(
-                teamId,
-                teamEavObj.getEntName(),
-                teamEavObj.getParameterByAttrId(Team.getAboutId()).map(ParameterValue::getValueStr).orElse(null),
-                leader,
-                department,
-                members
-        ));
+        return TeamConverter.eavObjToDto(teamEavObj);
     }
 
     public void deleteTeam(Integer userId) {

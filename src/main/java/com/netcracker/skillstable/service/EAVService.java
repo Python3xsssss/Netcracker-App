@@ -12,8 +12,6 @@ import java.util.Optional;
 @Service
 public class EAVService {
     @Autowired
-    private ParameterRepo parameterRepo;
-    @Autowired
     private EAVObjectRepo eavRepo;
 
     public EAVObject createEAVObj(EAVObject eavObj) {

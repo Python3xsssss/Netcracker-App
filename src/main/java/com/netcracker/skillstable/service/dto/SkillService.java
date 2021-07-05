@@ -21,7 +21,7 @@ public class SkillService {
     @Autowired
     private MetamodelService metamodelService;
 
-    // todo: converter Skill <-> EAVObject?
+
     public Integer createSkill(Skill skill) {
         EAVObject eavObj = new EAVObject(
                 metamodelService.getEntityTypeByEntTypeId(Skill.getEntTypeId()),
