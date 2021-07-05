@@ -1,18 +1,16 @@
 package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.Parameter;
-import com.netcracker.skillstable.model.ParameterValue;
-import com.netcracker.skillstable.model.dto.Department;
 import com.netcracker.skillstable.model.dto.Team;
-import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
 import com.netcracker.skillstable.service.converter.TeamConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TeamService {
@@ -32,7 +30,12 @@ public class TeamService {
     }
 
     public List<Team> getAllTeams() {
-        return null; // todo
+        return eavService
+                .getAllByEntTypeId(Team.getEntTypeId())
+                .stream()
+                .map(TeamConverter::eavObjToDto)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     public Optional<Team> getTeamById(Integer teamId) {

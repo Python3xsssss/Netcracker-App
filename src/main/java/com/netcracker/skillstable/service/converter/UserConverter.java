@@ -11,7 +11,6 @@ import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.model.dto.attr.Position;
 import com.netcracker.skillstable.model.dto.attr.Role;
 import com.netcracker.skillstable.service.EAVService;
-import com.netcracker.skillstable.service.MetamodelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

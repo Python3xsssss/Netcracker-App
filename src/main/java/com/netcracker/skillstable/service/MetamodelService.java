@@ -1,6 +1,9 @@
 package com.netcracker.skillstable.service;
 
-import com.netcracker.skillstable.model.*;
+import com.netcracker.skillstable.model.Attribute;
+import com.netcracker.skillstable.model.EAVObject;
+import com.netcracker.skillstable.model.EntTypeAttr;
+import com.netcracker.skillstable.model.EntityType;
 import com.netcracker.skillstable.repos.AttributeRepo;
 import com.netcracker.skillstable.repos.EntTypeAttrRepo;
 import com.netcracker.skillstable.repos.EntityTypeRepo;

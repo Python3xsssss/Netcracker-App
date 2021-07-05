@@ -1,19 +1,16 @@
 package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.Parameter;
-import com.netcracker.skillstable.model.ParameterValue;
 import com.netcracker.skillstable.model.dto.Department;
-import com.netcracker.skillstable.model.dto.Skill;
-import com.netcracker.skillstable.model.dto.Team;
-import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
 import com.netcracker.skillstable.service.converter.DepartmentConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DepartmentService {
@@ -22,7 +19,7 @@ public class DepartmentService {
     @Autowired
     private MetamodelService metamodelService;
 
-    
+
     public Integer createDepartment(Department department) {
         return eavService.createEAVObj(
                 DepartmentConverter.dtoToEavObj(
@@ -33,7 +30,12 @@ public class DepartmentService {
     }
 
     public List<Department> getAllDepartments() {
-        return null; // todo
+        return eavService
+                .getAllByEntTypeId(Department.getEntTypeId())
+                .stream()
+                .map(DepartmentConverter::eavObjToDto)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     public Optional<Department> getDepartmentById(Integer departmentId) {

@@ -1,8 +1,6 @@
 package com.netcracker.skillstable.web;
 
-import com.netcracker.skillstable.model.dto.Department;
 import com.netcracker.skillstable.model.dto.Team;
-import com.netcracker.skillstable.service.dto.DepartmentService;
 import com.netcracker.skillstable.service.dto.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

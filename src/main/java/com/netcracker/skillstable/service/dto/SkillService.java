@@ -2,9 +2,7 @@ package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.model.EAVObject;
 import com.netcracker.skillstable.model.Parameter;
-import com.netcracker.skillstable.model.dto.Department;
 import com.netcracker.skillstable.model.dto.Skill;
-import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Service
 public class SkillService {
