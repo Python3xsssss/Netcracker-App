@@ -23,6 +23,10 @@ public class MetamodelService {
     @Autowired
     private EAVService eavService;
 
+    public EntityType getEntityTypeByEntTypeId(Integer id) {
+        return entityTypeRepo.getById(id);
+    }
+
     public EntityType getEntityTypeByEntId(Integer entId) {
         Optional<EAVObject> optionalEAVObject = eavService.getEAVObjById(entId);
         return optionalEAVObject.map(EAVObject::getEntType).orElse(null);

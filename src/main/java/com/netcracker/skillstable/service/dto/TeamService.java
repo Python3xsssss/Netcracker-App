@@ -19,15 +19,14 @@ public class TeamService {
     private EAVService eavService;
     @Autowired
     private MetamodelService metamodelService;
-    @Autowired
-    private UserService userService;
 
+    // todo: converter Team <-> EAVObject?
     public Integer createTeam(Team team) {
         EAVObject eavObj = new EAVObject(
-                metamodelService.getEntityTypeByEntId(Team.getEntTypeId()),
+                metamodelService.getEntityTypeByEntTypeId(Team.getEntTypeId()),
                 team.getName()
         );
-
+        /*
         eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
                 new Parameter(eavObj, Team.getAboutId(), team.getAbout()),
                 new Parameter(eavObj, Team.getLeaderRefId(), team.getLeader().getId())
@@ -37,7 +36,7 @@ public class TeamService {
         for (User member : team.getMembers()) {
             membersAsParams.add(new Parameter(eavObj, Team.getMemberRefId(), member.getId()));
         }
-        eavObj.addParameters(membersAsParams);
+        eavObj.addParameters(membersAsParams);*/
 
         return eavService.createEAVObj(eavObj).getId();
     }

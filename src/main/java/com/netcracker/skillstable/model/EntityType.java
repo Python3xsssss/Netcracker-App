@@ -8,6 +8,7 @@ import java.util.List;
 @Table (name = "entity_types")
 public class EntityType {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(
             name = "ent_type_id",
             updatable = false,

@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Table (name = "parameters")
 public class Parameter {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(
             name = "id_pk",
             updatable = false,

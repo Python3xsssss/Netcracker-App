@@ -21,15 +21,16 @@ public class SkillService {
     @Autowired
     private MetamodelService metamodelService;
 
+    // todo: converter Skill <-> EAVObject?
     public Integer createSkill(Skill skill) {
         EAVObject eavObj = new EAVObject(
-                metamodelService.getEntityTypeByEntId(Skill.getEntTypeId()),
+                metamodelService.getEntityTypeByEntTypeId(Skill.getEntTypeId()),
                 skill.getName()
         );
 
         eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
                 new Parameter(eavObj, Skill.getAboutId(), skill.getAbout()),
-                new Parameter(eavObj, Skill.getLevelId(), skill.getLevel())
+                new Parameter(eavObj, Skill.getLevelId(), skill.getLevel()) // I think I'm missing something about skills logic...
         )));
 
         return eavService.createEAVObj(eavObj).getId();

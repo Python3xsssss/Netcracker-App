@@ -11,22 +11,11 @@ function addColumn(columnName) {
 }
 
 app.controller("AppCtrl", function($scope, $http) {
+    // {"id":1,"entType":{"name":"user"},"entName":"User1"},
+    // {"id":2,"entType":{"name":"user"},"entName":"User2"},
+    // {"id":3,"entType":{"name":"user"},"entName":"User3"},
     $scope.entities = [];
     $http.get('http://localhost:8080/data/entities').then(async function (response) {
         $scope.entities = response.data;
     });
-
-    $scope.attributes = [
-        {"id":1,"name":"first_name","type":"text","descr":null},
-        {"id":2,"name":"last_name","type":"text","descr":null},
-        {"id":14,"name":"role","type":"text","descr":null},
-        {"id":15,"name":"picture","type":"text","descr":null},
-        {"id":16,"name":"email","type":"text","descr":null},
-        {"id":24,"name":"age","type":"integer","descr":null}
-    ];
-    // $http.get('http://localhost:8080/data/entities/1/attributes').then(async function (response) {
-    //     $scope.attributes = response.data;
-    // });
-
-
 });

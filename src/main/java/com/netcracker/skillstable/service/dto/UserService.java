@@ -24,9 +24,10 @@ public class UserService {
     private final Role[] roleValues = Role.values();
     private final Position[] positionValues = Position.values();
 
+    // todo: converter User <-> EAVObject?
     public Integer createUser(User user) {
         EAVObject eavObj = new EAVObject(
-                metamodelService.getEntityTypeByEntId(User.getEntTypeId()),
+                metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId()),
                 user.getUsername()
         );
 
@@ -36,10 +37,10 @@ public class UserService {
                 new Parameter(eavObj, User.getLastNameId(), user.getLastName()),
                 new Parameter(eavObj, User.getAgeId(), user.getAge()),
                 new Parameter(eavObj, User.getEmailId(), user.getEmail()),
-                new Parameter(eavObj, User.getAboutId(), user.getAbout()),
-                new Parameter(eavObj, User.getDepartmentRefId(), user.getDepartment().getId()),
-                new Parameter(eavObj, User.getTeamRefId(), user.getTeam().getId()),
-                new Parameter(eavObj, User.getPositionId(), user.getPosition().ordinal())
+                new Parameter(eavObj, User.getAboutId(), user.getAbout())
+                //new Parameter(eavObj, User.getDepartmentRefId(), user.getDepartment().getId()),
+                //new Parameter(eavObj, User.getTeamRefId(), user.getTeam().getId()),
+                //new Parameter(eavObj, User.getPositionId(), user.getPosition().ordinal())
         )));
 
         List<Parameter> skillsAsParams = new ArrayList<>();
@@ -56,6 +57,7 @@ public class UserService {
     }
 
     public Optional<User> getUserById(Integer userId) {
+
         Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(userId);
         if (!optionalEavObj.isPresent() || !User.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
             return Optional.empty();

@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Table (name = "entity_type_attr")
 public class EntTypeAttr {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(
             name = "id_pk",
             updatable = false,

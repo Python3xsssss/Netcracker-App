@@ -9,6 +9,7 @@ import java.util.Optional;
 @Table (name = "entities")
 public class EAVObject {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(
             name = "ent_id",
             updatable = false,

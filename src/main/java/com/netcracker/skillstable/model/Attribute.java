@@ -8,6 +8,7 @@ import java.util.List;
 @Table (name = "attributes")
 public class Attribute {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(
             name = "attr_id",
             updatable = false,

@@ -52,6 +52,8 @@ public class User {
         this.username = username;
     }
 
+
+
     public User(
             String username,
             String password,
@@ -107,6 +109,16 @@ public class User {
         this.team = team;
         this.position = position;
         this.skills = skills;
+    }
+
+    public User(String username, String password, String firstName, String lastName, Integer age, String email, String about) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.email = email;
+        this.about = about;
     }
 
     public static Integer getEntTypeId() {

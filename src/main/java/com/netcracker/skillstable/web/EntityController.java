@@ -20,7 +20,6 @@ public class EntityController {
     @Autowired
     private ParameterRepo parameterRepo;
 
-
     @GetMapping("/entities")
     public List<EAVObject> getAllEntities(){
         return eavService.getAll();
