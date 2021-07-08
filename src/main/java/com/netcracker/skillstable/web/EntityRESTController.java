@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/data")
-public class EntityController {
+public class EntityRESTController {
     @Autowired
     private EAVService eavService;
     @Autowired

@@ -3,13 +3,16 @@ package com.netcracker.skillstable.service.dto;
 import com.netcracker.skillstable.model.EAVObject;
 import com.netcracker.skillstable.model.Parameter;
 import com.netcracker.skillstable.model.dto.Skill;
+import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
+import com.netcracker.skillstable.service.converter.SkillConverter;
+import com.netcracker.skillstable.service.converter.TeamConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SkillService {
@@ -20,16 +23,19 @@ public class SkillService {
 
 
     public Integer createSkill(Skill skill) {
-        EAVObject eavObj = new EAVObject(
-                metamodelService.getEntityTypeByEntTypeId(Skill.getEntTypeId()),
-                skill.getName()
-        );
+        return eavService.createEAVObj(
+                SkillConverter.dtoToEavObj(
+                        skill,
+                        metamodelService.getEntityTypeByEntTypeId(Skill.getEntTypeId())
+                )
+        ).getId();
+    }
 
-        eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
-                new Parameter(eavObj, Skill.getAboutId(), skill.getAbout()),
-                new Parameter(eavObj, Skill.getLevelId(), skill.getLevel()) // I think I'm missing something about skills logic...
-        )));
-
-        return eavService.createEAVObj(eavObj).getId();
+    public List<Skill> getAllSkills() {
+        return eavService
+                .getAllByEntTypeId(Skill.getEntTypeId())
+                .stream()
+                .map(SkillConverter::eavObjToDto)
+                .collect(Collectors.toList());
     }
 }

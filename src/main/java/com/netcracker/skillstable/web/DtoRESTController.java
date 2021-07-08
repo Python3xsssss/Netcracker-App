@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/data")
-public class DtoController {
+public class DtoRESTController {
     @Autowired
     private UserService userService;
     @Autowired

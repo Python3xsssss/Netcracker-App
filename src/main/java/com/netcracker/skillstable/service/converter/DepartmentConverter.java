@@ -2,6 +2,7 @@ package com.netcracker.skillstable.service.converter;
 
 import com.netcracker.skillstable.model.EAVObject;
 import com.netcracker.skillstable.model.EntityType;
+import com.netcracker.skillstable.model.Parameter;
 import com.netcracker.skillstable.model.ParameterValue;
 import com.netcracker.skillstable.model.dto.Department;
 import com.netcracker.skillstable.model.dto.Team;
@@ -23,11 +24,11 @@ public class DepartmentConverter {
                 department.getName()
         );
 
-        /*eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
-                new Parameter(eavObj, Department.getAboutId(), department.getAbout()),
-                new Parameter(eavObj, Department.getLeaderRefId(), department.getLeader().getId())
+        eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
+                new Parameter(eavObj, Department.getAboutId(), department.getAbout())
+                //new Parameter(eavObj, Department.getLeaderRefId(), department.getLeader().getId())
         )));
-
+        /*
         List<Parameter> teamsAsParams = new ArrayList<>();
         for (Team team : department.getTeams()) {
             teamsAsParams.add(new Parameter(eavObj, Department.getTeamRefId(), team.getId()));
@@ -36,15 +37,16 @@ public class DepartmentConverter {
         return eavObj;
     }
 
-    public static Optional<Department> eavObjToDto(EAVObject departEavObj) {
+    public static Department eavObjToDto(EAVObject departEavObj) {
         Optional<ParameterValue> leaderAsParam = departEavObj.getParameterByAttrId(Department.getLeaderRefId());
         User leader = new User();
         if (leaderAsParam.isPresent()) {
             Optional<EAVObject> leaderEavObject = eavService.getEAVObjById(leaderAsParam.get().getValueInt());
-            leader = leaderEavObject.map(eavObject -> new User(
-                    eavObject.getId(),
-                    eavObject.getEntName()
-            )).orElseGet(User::new);
+            leader = leaderEavObject.map(eavObject -> User.builder()
+                    .id(eavObject.getId())
+                    .username(eavObject.getEntName())
+                    .build()
+            ).orElseGet(User::new);
         }
 
         List<ParameterValue> teamsAsParams = departEavObj.getMultipleParametersByAttrId(Department.getTeamRefId());
@@ -55,19 +57,20 @@ public class DepartmentConverter {
         }
         Set<Team> teams = new HashSet<>();
         for (EAVObject teamAsEavObj : teamsEavList) {
-            teams.add(new Team(
-                    teamAsEavObj.getId(),
-                    teamAsEavObj.getEntName()
-            ));
+            teams.add(Team.builder()
+                    .id(teamAsEavObj.getId())
+                    .name(teamAsEavObj.getEntName())
+                    .build()
+            );
         }
 
-        return Optional.of(new Department(
-                departEavObj.getId(),
-                departEavObj.getEntName(),
-                departEavObj.getParameterByAttrId(Department.getAboutId()).map(ParameterValue::getValueStr).orElse(null),
-                leader,
-                null,
-                teams
-        ));
+        return Department.builder()
+                .id(departEavObj.getId())
+                .name(departEavObj.getEntName())
+                .about(departEavObj.getParameterByAttrId(Department.getAboutId()).map(ParameterValue::getValueStr).orElse(null))
+                .leader(leader)
+                .superior(null)
+                .teams(teams)
+                .build();
     }
 }

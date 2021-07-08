@@ -35,7 +35,6 @@ public class UserService {
                 .getAllByEntTypeId(User.getEntTypeId())
                 .stream()
                 .map(UserConverter::eavObjToDto)
-                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
@@ -48,7 +47,7 @@ public class UserService {
 
         EAVObject userEavObj = optionalEavObj.get();
 
-        return UserConverter.eavObjToDto(userEavObj);
+        return Optional.of(UserConverter.eavObjToDto(userEavObj));
     }
 
     public void deleteUser(Integer userId) {

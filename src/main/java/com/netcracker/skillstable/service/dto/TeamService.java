@@ -34,7 +34,6 @@ public class TeamService {
                 .getAllByEntTypeId(Team.getEntTypeId())
                 .stream()
                 .map(TeamConverter::eavObjToDto)
-                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
@@ -46,7 +45,7 @@ public class TeamService {
 
         EAVObject teamEavObj = optionalEavObj.get();
 
-        return TeamConverter.eavObjToDto(teamEavObj);
+        return Optional.of(TeamConverter.eavObjToDto(teamEavObj));
     }
 
     public void deleteTeam(Integer userId) {

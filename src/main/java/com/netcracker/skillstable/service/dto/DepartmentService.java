@@ -34,7 +34,6 @@ public class DepartmentService {
                 .getAllByEntTypeId(Department.getEntTypeId())
                 .stream()
                 .map(DepartmentConverter::eavObjToDto)
-                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
@@ -46,7 +45,7 @@ public class DepartmentService {
 
         EAVObject departEavObj = optionalEavObj.get();
 
-        return DepartmentConverter.eavObjToDto(departEavObj);
+        return Optional.of(DepartmentConverter.eavObjToDto(departEavObj));
     }
 
     public void deleteDepartment(Integer userId) {
