@@ -20,13 +20,13 @@ public class DepartmentService {
     private MetamodelService metamodelService;
 
 
-    public Integer createDepartment(Department department) {
-        return eavService.createEAVObj(
+    public Department createDepartment(Department department) {
+        return DepartmentConverter.eavObjToDto(eavService.createEAVObj(
                 DepartmentConverter.dtoToEavObj(
                         department,
                         metamodelService.getEntityTypeByEntTypeId(Department.getEntTypeId())
                 )
-        ).getId();
+        ));
     }
 
     public List<Department> getAllDepartments() {

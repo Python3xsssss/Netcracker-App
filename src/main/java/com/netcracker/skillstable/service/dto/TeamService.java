@@ -20,13 +20,13 @@ public class TeamService {
     private MetamodelService metamodelService;
 
 
-    public Integer createTeam(Team team) {
-        return eavService.createEAVObj(
+    public Team createTeam(Team team) {
+        return TeamConverter.eavObjToDto(eavService.createEAVObj(
                 TeamConverter.dtoToEavObj(
                         team,
                         metamodelService.getEntityTypeByEntTypeId(Team.getEntTypeId())
                 )
-        ).getId();
+        ));
     }
 
     public List<Team> getAllTeams() {

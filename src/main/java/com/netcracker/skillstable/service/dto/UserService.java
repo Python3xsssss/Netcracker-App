@@ -21,13 +21,13 @@ public class UserService {
     private MetamodelService metamodelService;
 
 
-    public Integer createUser(User user) {
-       return eavService.createEAVObj(
+    public User createUser(User user) {
+       return UserConverter.eavObjToDto(eavService.createEAVObj(
                UserConverter.dtoToEavObj(
                        user,
                        metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
                )
-       ).getId();
+       ));
     }
 
     public List<User> getAllUsers() {

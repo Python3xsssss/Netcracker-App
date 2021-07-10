@@ -6,3 +6,4 @@
 *.jar
 target
 .idea
+**/node_modules/

@@ -22,13 +22,13 @@ public class SkillService {
     private MetamodelService metamodelService;
 
 
-    public Integer createSkill(Skill skill) {
-        return eavService.createEAVObj(
+    public Skill createSkill(Skill skill) {
+        return SkillConverter.eavObjToDto(eavService.createEAVObj(
                 SkillConverter.dtoToEavObj(
                         skill,
                         metamodelService.getEntityTypeByEntTypeId(Skill.getEntTypeId())
                 )
-        ).getId();
+        ));
     }
 
     public List<Skill> getAllSkills() {

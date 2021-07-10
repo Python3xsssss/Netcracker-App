@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
-@RequestMapping("/data")
+@RequestMapping("/api")
 public class DtoRESTController {
     @Autowired
     private UserService userService;
@@ -21,6 +22,7 @@ public class DtoRESTController {
     private DepartmentService departmentService;
     @Autowired
     private TeamService teamService;
+
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
@@ -30,6 +32,16 @@ public class DtoRESTController {
     @GetMapping("/users/{userId}")
     public Optional<User> getSpecificUser(@PathVariable(value="userId") Integer userId) {
         return userService.getUserById(userId);
+    }
+
+    @PostMapping("/users")
+    public User create(@RequestBody User user){
+        return userService.createUser(user);
+    }
+
+    @DeleteMapping("/users/{userId}")
+    public void delete(@PathVariable("userId") int userId) {
+        userService.deleteUser(userId);
     }
 
     @GetMapping("/departments")
