@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/data")
 public class DtoRESTController {
     @Autowired
     private UserService userService;

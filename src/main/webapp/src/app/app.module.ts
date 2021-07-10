@@ -4,27 +4,24 @@ import {HttpClientModule} from "@angular/common/http";
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {ListUserComponent} from './user/list-user/list-user.component';
 import {AddUserComponent} from './user/add-user/add-user.component';
-import {EditUserComponent} from './user/edit-user/edit-user.component';
 import {ReactiveFormsModule} from "@angular/forms";
-import {UserService} from "./service/user.service";
+import {HomeComponent} from './home/home.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ListUserComponent,
+    HomeComponent,
     AddUserComponent,
-    EditUserComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
-  providers: [UserService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {

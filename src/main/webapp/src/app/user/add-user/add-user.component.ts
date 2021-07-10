@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {UserService} from "../../service/user.service";
+import {User} from "../../model/user.model";
 
 @Component({
   selector: 'app-add-user',
@@ -9,13 +10,12 @@ import {UserService} from "../../service/user.service";
   styleUrls: ['./add-user.component.css']
 })
 export class AddUserComponent implements OnInit {
-
-  constructor(private formBuilder: FormBuilder, private router: Router, private apiService: UserService) {
-  }
-
   addForm!: FormGroup;
 
-  ngOnInit() {
+  constructor(private formBuilder: FormBuilder, private router: Router, private userService: UserService) {
+  }
+
+  ngOnInit(): void {
     this.addForm = this.formBuilder.group({
       id: [],
       username: ['', Validators.required],
@@ -25,15 +25,14 @@ export class AddUserComponent implements OnInit {
       age: ['', Validators.required],
       email: ['', Validators.required],
       about: ['', Validators.required],
-      position: ['', Validators.required]
     });
 
   }
 
   onSubmit() {
-    this.apiService.createUser(this.addForm.value)
+    this.userService.createUser(this.addForm.value)
       .subscribe(data => {
-        this.router.navigate(['list-user']);
+        this.router.navigate(['home']);
       });
   }
 
