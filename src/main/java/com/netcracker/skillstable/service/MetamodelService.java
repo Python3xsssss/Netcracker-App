@@ -1,6 +1,9 @@
 package com.netcracker.skillstable.service;
 
-import com.netcracker.skillstable.model.*;
+import com.netcracker.skillstable.model.Attribute;
+import com.netcracker.skillstable.model.EAVObject;
+import com.netcracker.skillstable.model.EntTypeAttr;
+import com.netcracker.skillstable.model.EntityType;
 import com.netcracker.skillstable.repos.AttributeRepo;
 import com.netcracker.skillstable.repos.EntTypeAttrRepo;
 import com.netcracker.skillstable.repos.EntityTypeRepo;
@@ -23,12 +26,16 @@ public class MetamodelService {
     @Autowired
     private EAVService eavService;
 
-    public EntityType getEntityTypeByEntId(Long entId) {
+    public EntityType getEntityTypeByEntTypeId(Integer id) {
+        return entityTypeRepo.getById(id);
+    }
+
+    public EntityType getEntityTypeByEntId(Integer entId) {
         Optional<EAVObject> optionalEAVObject = eavService.getEAVObjById(entId);
         return optionalEAVObject.map(EAVObject::getEntType).orElse(null);
     }
 
-    public List<Attribute> getAttributesByEntTypeId(Long entTypeId) {
+    public List<Attribute> getAttributesByEntTypeId(Integer entTypeId) {
         List<EntTypeAttr> entTypeAttrList = entTypeAttrRepo.findByEntityTypeId(entTypeId);
 
         List<Attribute> attributes = new ArrayList<>();
@@ -39,7 +46,11 @@ public class MetamodelService {
         return attributes;
     }
 
-    public Attribute getAttributeByEntTypeIdAndAttrId(Long entTypeId, Long attrId) {
+    public Attribute getAttributeByEntTypeIdAndAttrId(Integer entTypeId, Integer attrId) {
         return entTypeAttrRepo.findByEntityTypeIdAndAttributeId(entTypeId, attrId).getAttribute();
+    }
+
+    public Attribute getAttributeByAttrName(String attrName) {
+        return attributeRepo.findByName(attrName);
     }
 }

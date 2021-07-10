@@ -6,30 +6,25 @@ import javax.persistence.*;
 @Table (name = "parameters")
 public class Parameter {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(
             name = "id_pk",
             updatable = false,
             nullable = false,
             columnDefinition = "SERIAL"
     )
-    private Long id;
+    private Integer id;
 
     @ManyToOne(targetEntity = EAVObject.class)
     @JoinColumn(name = "ent_id")
     private EAVObject eavObject;
-    /*@Column(
-            name = "ent_id",
-            nullable = false,
-            columnDefinition = "INT"
-    )
-    private Long entId;*/
 
     @Column(
             name = "attr_id",
             nullable = false,
             columnDefinition = "INT"
     )
-    private Long attrId;
+    private Integer attrId;
 
     @Column(
             name = "attr_value_txt",
@@ -48,19 +43,45 @@ public class Parameter {
 
     }
 
+    public Parameter(Integer attrId, String attrValueTxt) {
+        this.attrId = attrId;
+        this.attrValueTxt = attrValueTxt;
+        this.attrValueInt = null;
+    }
 
-    public Parameter(Long attrId, String attrValueTxt, Integer attrValueInt) {
+    public Parameter(Integer attrId, Integer attrValueInt) {
+        this.attrId = attrId;
+        this.attrValueTxt = null;
+        this.attrValueInt = attrValueInt;
+    }
+
+    public Parameter(Integer attrId, String attrValueTxt, Integer attrValueInt) {
         this.attrId = attrId;
         this.attrValueTxt = attrValueTxt;
         this.attrValueInt = attrValueInt;
     }
 
+    public Parameter(EAVObject eavObject, Integer attrId, String attrValueTxt) {
+        this(attrId, attrValueTxt);
+        this.eavObject = eavObject;
+    }
 
-    public Long getId() {
+    public Parameter(EAVObject eavObject, Integer attrId, Integer attrValueInt) {
+        this(attrId, attrValueInt);
+        this.eavObject = eavObject;
+    }
+
+    public Parameter(EAVObject eavObject, Integer attrId, String attrValueTxt, Integer attrValueInt) {
+        this(attrId, attrValueTxt, attrValueInt);
+        this.eavObject = eavObject;
+    }
+
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -72,11 +93,11 @@ public class Parameter {
         this.entId = entId;
     }*/
 
-    public Long getAttrId() {
+    public Integer getAttrId() {
         return attrId;
     }
 
-    public void setAttrId(Long attrId) {
+    public void setAttrId(Integer attrId) {
         this.attrId = attrId;
     }
 

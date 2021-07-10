@@ -1,20 +1,19 @@
 package com.netcracker.skillstable.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity(name="Attribute")
 @Table (name = "attributes")
 public class Attribute {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(
             name = "attr_id",
             updatable = false,
             nullable = false,
             columnDefinition = "SERIAL"
     )
-    private Long id;
+    private Integer id;
 
     @Column(
             name = "attr_name",
@@ -47,11 +46,11 @@ public class Attribute {
         this.descr = descr;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

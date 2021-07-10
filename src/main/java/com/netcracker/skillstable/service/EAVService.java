@@ -1,9 +1,7 @@
 package com.netcracker.skillstable.service;
 
 import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.Parameter;
 import com.netcracker.skillstable.repos.EAVObjectRepo;
-import com.netcracker.skillstable.repos.ParameterRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +10,6 @@ import java.util.Optional;
 
 @Service
 public class EAVService {
-    @Autowired
-    private ParameterRepo parameterRepo;
     @Autowired
     private EAVObjectRepo eavRepo;
 
@@ -25,15 +21,15 @@ public class EAVService {
         return eavRepo.findAll();
     }
 
-    /*public List<Parameter> getAllParametersById(Long entId) {
-        return eavRepo.findAll();
-    }*/
+    public List<EAVObject> getAllByEntTypeId(Integer entTypeId) {
+        return eavRepo.findAllByEntTypeId(entTypeId);
+    }
 
-    public Optional<EAVObject> getEAVObjById(Long entId) {
+    public Optional<EAVObject> getEAVObjById(Integer entId) {
         return eavRepo.findById(entId);
     }
 
-    public void deleteEAVObj(Long entId) {
+    public void deleteEAVObj(Integer entId) {
         eavRepo.deleteById(entId);
     }
 

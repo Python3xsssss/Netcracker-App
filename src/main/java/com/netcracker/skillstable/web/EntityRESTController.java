@@ -3,24 +3,25 @@ package com.netcracker.skillstable.web;
 import com.netcracker.skillstable.model.*;
 import com.netcracker.skillstable.repos.ParameterRepo;
 import com.netcracker.skillstable.service.EAVService;
-import com.netcracker.skillstable.service.OldEntityObjService;
 import com.netcracker.skillstable.service.MetamodelService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/data")
-public class HelloController {
+public class EntityRESTController {
     @Autowired
     private EAVService eavService;
     @Autowired
     private MetamodelService metamodelService;
     @Autowired
     private ParameterRepo parameterRepo;
-
 
     @GetMapping("/entities")
     public List<EAVObject> getAllEntities(){
@@ -29,30 +30,30 @@ public class HelloController {
 
     @GetMapping("/entities/{entId}")
     public Optional<EAVObject> getEntity(
-            @PathVariable(value="entId") Long entId
+            @PathVariable(value="entId") Integer entId
     ) {
         return eavService.getEAVObjById(entId);
     }
 
     @GetMapping("/entities/{entId}/parameters")
     public List<Parameter> getAllParametersByEAVObject(
-            @PathVariable(value="entId") Long entId
+            @PathVariable(value="entId") Integer entId
     ) {
         return parameterRepo.findByEavObjectId(entId);
     }
 
     @GetMapping("/entities/{entId}/parameters/{attrId}")
     public List<ParameterValue> getParameterByEAVObject(
-            @PathVariable(value="entId") Long entId,
-            @PathVariable(value="attrId") Long attrId
+            @PathVariable(value="entId") Integer entId,
+            @PathVariable(value="attrId") Integer attrId
     ) {
         Optional<EAVObject> optEntity = eavService.getEAVObjById(entId);
-        return optEntity.map(eavObject -> eavObject.getParameterByAttrId(attrId)).orElse(null);
+        return optEntity.map(eavObject -> eavObject.getMultipleParametersByAttrId(attrId)).orElse(null);
     }
 
     @GetMapping("/entities/{entId}/attributes")
     public List<Attribute> getAllAttributesByEAVObject(
-            @PathVariable(value="entId") Long entId
+            @PathVariable(value="entId") Integer entId
     ) {
         EntityType entityType = metamodelService.getEntityTypeByEntId(entId);
 
@@ -61,8 +62,8 @@ public class HelloController {
 
     @GetMapping("/entities/{entId}/attributes/{entAttrId}")
     public Attribute getAttributeByEAVObject(
-            @PathVariable(value="entId") Long entId,
-            @PathVariable(value="entAttrId") Long entAttrId
+            @PathVariable(value="entId") Integer entId,
+            @PathVariable(value="entAttrId") Integer entAttrId
     ) {
         EntityType entityType = metamodelService.getEntityTypeByEntId(entId);
 
