@@ -1,6 +1,8 @@
-let app = angular.module("skillsApp", []);
+'use strict'
 
-app.controller("AppCtrl", function($scope, $http) {
+let module = angular.module("skillsApp", []);
+
+module.controller("AppCtrl", function($scope, $http) {
     $scope.entities = [];
     $http.get('http://localhost:8080/data/entities').then(async function (response) {
         $scope.entities = response.data;

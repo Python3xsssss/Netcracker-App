@@ -38,4 +38,15 @@ public class SkillService {
                 .map(SkillConverter::eavObjToDto)
                 .collect(Collectors.toList());
     }
+
+    public Optional<Skill> getSkillById(Integer skillId) {
+        Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(skillId);
+        if (!optionalEavObj.isPresent() || !Skill.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
+            return Optional.empty();
+        }
+
+        EAVObject skillEavObj = optionalEavObj.get();
+
+        return Optional.of(SkillConverter.eavObjToDto(skillEavObj));
+    }
 }
