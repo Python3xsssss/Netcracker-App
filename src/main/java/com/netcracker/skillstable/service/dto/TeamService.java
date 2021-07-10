@@ -48,7 +48,7 @@ public class TeamService {
         return Optional.of(TeamConverter.eavObjToDto(teamEavObj));
     }
 
-    public void deleteTeam(Integer userId) {
-        // todo
+    public void deleteTeam(Integer teamId) {
+        eavService.deleteEAVObj(teamId);
     }
 }

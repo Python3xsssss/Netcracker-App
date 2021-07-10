@@ -48,7 +48,7 @@ public class DepartmentService {
         return Optional.of(DepartmentConverter.eavObjToDto(departEavObj));
     }
 
-    public void deleteDepartment(Integer userId) {
-        // todo
+    public void deleteDepartment(Integer departmentId) {
+        eavService.deleteEAVObj(departmentId);
     }
 }

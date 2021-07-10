@@ -51,6 +51,6 @@ public class UserService {
     }
 
     public void deleteUser(Integer userId) {
-        // todo
+        eavService.deleteEAVObj(userId);
     }
 }

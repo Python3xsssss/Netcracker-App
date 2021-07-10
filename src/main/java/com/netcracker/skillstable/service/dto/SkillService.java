@@ -49,4 +49,8 @@ public class SkillService {
 
         return Optional.of(SkillConverter.eavObjToDto(skillEavObj));
     }
+
+    public void deleteSkill(Integer skillId) {
+        eavService.deleteEAVObj(skillId);
+    }
 }
