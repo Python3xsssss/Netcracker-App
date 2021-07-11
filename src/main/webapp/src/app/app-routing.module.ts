@@ -1,13 +1,17 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from '@angular/router';
 
-import {AddUserComponent} from "./user/add-user/add-user.component";
-import {HomeComponent} from "./home/home.component";
+import {HomeComponent} from "./view-controller/home/home.component";
+import {AddUserComponent} from "./view-controller/user/add-user/add-user.component";
+import {AddDepartComponent} from "./view-controller/department/add-depart/add-depart.component";
+import {AddTeamComponent} from "./view-controller/team/add-team/add-team.component";
 
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'add-user', component: AddUserComponent},
+  {path: 'add-depart', component: AddDepartComponent},
+  {path: 'add-team', component: AddTeamComponent},
   {path: '', redirectTo: 'home', pathMatch: 'full'}
 ];
 

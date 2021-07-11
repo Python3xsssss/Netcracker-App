@@ -1,26 +1,57 @@
 package com.netcracker.skillstable.web;
 
+import com.netcracker.skillstable.model.ApiResponse;
 import com.netcracker.skillstable.model.dto.Department;
+import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.dto.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+import java.util.Optional;
+
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@RestController
+@RequestMapping("/api/departments")
 public class DepartmentController {
     @Autowired
     private DepartmentService departmentService;
 
-    @GetMapping("/create/department")
-    public String createDepartment() {
-        return "createDepart";
+    @PostMapping
+    public ApiResponse<Department> saveDepart(@RequestBody Department department) {
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Department saved successfully.",
+                departmentService.createDepartment(department)
+        );
     }
 
-    @PostMapping("/create/department")
-    public String addDepartment(Department department) {
-        departmentService.createDepartment(department);
+    @GetMapping
+    public ApiResponse<List<Department>> getAllDeparts() {
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Department list fetched successfully.",
+                departmentService.getAllDepartments()
+        );
+    }
 
-        return "redirect:/";
+    @GetMapping("/{id}")
+    public ApiResponse<Optional<Department>> getDepart(@PathVariable(value = "id") Integer departId) {
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Department fetched successfully.",
+                departmentService.getDepartmentById(departId)
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> deleteDepart(@PathVariable(value = "id") Integer departId) {
+        departmentService.deleteDepartment(departId);
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Department deleted successfully.",
+                null
+        );
     }
 }

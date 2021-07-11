@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {UserService} from "../../service/user.service";
-import {User} from "../../model/user.model";
+import {UserService} from "../../../service/user.service";
+import {User} from "../../../model/user.model";
 
 @Component({
   selector: 'app-add-user',

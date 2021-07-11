@@ -1,0 +1,17 @@
+<div class="col-md-6 offset-md-3 user-container">
+  <h2 class="text-center">Adding new team</h2>
+  <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username">Name of team</label>
+      <input type="text" formControlName="name" placeholder="Team" name="name" class="form-control"
+             id="username">
+    </div>
+
+    <div class="form-group">
+      <label for="about">About</label>
+      <input type="text" formControlName="about" placeholder="About" name="about" class="form-control" id="about">
+    </div>
+
+    <button class="btn btn-success">Add team</button>
+  </form>
+</div>

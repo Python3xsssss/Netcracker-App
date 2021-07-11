@@ -1,30 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 
 import {Router} from "@angular/router";
-import {User} from "../model/user.model";
-import {UserService} from "../service/user.service";
+import {User} from "../../../model/user.model";
+import {UserService} from "../../../service/user.service";
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-list-user',
+  templateUrl: './list-user.component.html',
+  styleUrls: ['./list-user.component.css']
 })
-export class HomeComponent implements OnInit {
+export class ListUserComponent implements OnInit {
 
-  constructor(private router: Router, private apiService: UserService) {
+  constructor(private router: Router, private userService: UserService) {
   }
 
   users: User[] = [];
 
   ngOnInit() {
-    this.apiService.getUsers()
+    this.userService.getUsers()
       .subscribe(data => {
         this.users = data.result;
       });
   }
 
   deleteUser(user: User): void {
-    this.apiService.deleteUser(user.id)
+    this.userService.deleteUser(user.id)
       .subscribe(data => {
         this.users = this.users.filter(u => u !== user);
       })
