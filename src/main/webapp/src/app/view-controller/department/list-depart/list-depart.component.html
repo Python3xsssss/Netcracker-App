@@ -1,6 +1,6 @@
 <div class="col-md-6 offset-md-3 depart-container">
   <h2>Departments</h2>
-  <button class="btn btn-danger" (click)="addDepart()">Add Department</button>
+  <button class="btn btn-success" (click)="addDepart()">Add Department</button>
   <table class="table table-striped">
     <thead>
     <tr>
@@ -15,7 +15,7 @@
       <td>{{department.name}}</td>
       <td>{{department.about}}</td>
       <td>
-        <button class="btn btn-success" (click)="deleteDepart(department)">Delete</button>
+        <button class="btn btn-danger" (click)="deleteDepart(department)">Delete</button>
       </td>
     </tr>
     </tbody>

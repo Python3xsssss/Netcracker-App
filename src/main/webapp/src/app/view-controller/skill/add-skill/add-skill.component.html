@@ -1,9 +1,9 @@
 <div class="col-md-6 offset-md-3 user-container">
-  <h2 class="text-center">Adding new team</h2>
+  <h2 class="text-center">Adding new skill</h2>
   <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="name">Name of team</label>
-      <input type="text" formControlName="name" placeholder="Team" name="name" class="form-control"
+      <label for="name">Name of skill</label>
+      <input type="text" formControlName="name" placeholder="Skill" name="name" class="form-control"
              id="name">
     </div>
 
@@ -12,6 +12,6 @@
       <input type="text" formControlName="about" placeholder="About" name="about" class="form-control" id="about">
     </div>
 
-    <button class="btn btn-success">Add team</button>
+    <button class="btn btn-success">Add skill</button>
   </form>
 </div>

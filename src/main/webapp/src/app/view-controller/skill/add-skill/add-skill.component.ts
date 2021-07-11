@@ -1,17 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {TeamService} from "../../../service/team.service";
+import {SkillService} from "../../../service/skill.service";
 
 @Component({
-  selector: 'app-add-team',
-  templateUrl: './add-team.component.html',
-  styleUrls: ['./add-team.component.css']
+  selector: 'app-add-skill',
+  templateUrl: './add-skill.component.html',
+  styleUrls: ['./add-skill.component.css']
 })
-export class AddTeamComponent implements OnInit {
+export class AddSkillComponent implements OnInit {
   addForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private teamService: TeamService) {
+  constructor(private formBuilder: FormBuilder, private router: Router, private skillService: SkillService) {
   }
 
   ngOnInit(): void {
@@ -24,7 +24,7 @@ export class AddTeamComponent implements OnInit {
   }
 
   onSubmit() {
-    this.teamService.createTeam(this.addForm.value)
+    this.skillService.createSkill(this.addForm.value)
       .subscribe(data => {
         this.router.navigate(['home']);
       });

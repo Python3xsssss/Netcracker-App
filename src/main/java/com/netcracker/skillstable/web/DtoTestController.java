@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/data")
-public class DtoRESTController {
+public class DtoTestController {
     @Autowired
     private UserService userService;
     @Autowired
