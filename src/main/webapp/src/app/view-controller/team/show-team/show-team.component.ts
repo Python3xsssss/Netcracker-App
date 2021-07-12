@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
+import {ActivatedRoute, Router} from "@angular/router";
+import {TeamService} from "../../../service/team.service";
+import {Team} from "../../../model/team.model";
+
 @Component({
   selector: 'app-show-team',
   templateUrl: './show-team.component.html',
@@ -7,9 +11,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ShowTeamComponent implements OnInit {
 
-  constructor() { }
+  id!: number;
+  team!: Team;
 
-  ngOnInit(): void {
+  constructor(private router: Router, private route: ActivatedRoute, private teamService: TeamService) {
   }
+
+  ngOnInit() {
+    this.id = this.route.snapshot.params['id'];
+    this.teamService.getTeamById(this.id)
+      .subscribe(data => {
+        this.team = data.result;
+      });
+  }
+
+  deleteTeam(team: Team): void {
+    this.teamService.deleteTeam(team.id);
+  };
 
 }

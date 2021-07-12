@@ -13,8 +13,11 @@
       <td>
         <h3>{{department.name}}</h3>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item" *ngFor="let team of department.teams" href="/">{{team.name}}</li>
+          <li class="list-group-item" *ngFor="let team of department.teams">
+            <a routerLink="/team/{{team.id}}">{{team.name}}</a>
+          </li>
         </ul>
+
       </td>
       <td>
         <button class="btn btn-danger" (click)="deleteDepart(department)">Delete</button>

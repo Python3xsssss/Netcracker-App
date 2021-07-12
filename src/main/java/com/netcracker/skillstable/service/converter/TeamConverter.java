@@ -9,17 +9,19 @@ import com.netcracker.skillstable.model.dto.OrgItem;
 import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
+import com.netcracker.skillstable.service.dto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TeamConverter {
     @Autowired
     private EAVService eavService;
     @Autowired
-    private DepartmentConverter departmentConverter;
+    private UserService userService;
 
     public EAVObject dtoToEavObj(Team team, EntityType entityType) {
         EAVObject eavObj = new EAVObject(
@@ -71,19 +73,14 @@ public class TeamConverter {
             ).orElseGet(Department::new);
         }
 
-        List<ParameterValue> membersAsParams = teamEavObj.getMultipleParametersByAttrId(Team.getMemberRefId());
-        List<EAVObject> membersEavList = new ArrayList<>();
-        for (ParameterValue memberAsParam : membersAsParams) {
-            Optional<EAVObject> optMemberEavObj = eavService.getEAVObjById(memberAsParam.getValueInt());
-            optMemberEavObj.ifPresent(membersEavList::add);
-        }
-        Set<User> members = new HashSet<>();
-        for (EAVObject memberAsEavObj : membersEavList) {
-            members.add(User.builder()
-                    .id(memberAsEavObj.getId())
-                    .username(memberAsEavObj.getEntName())
-                    .build()
-            );
+        Set<User> members = userService
+                .getAllUsers()
+                .stream()
+                .filter(user -> user.getTeam().getId().equals(teamEavObj.getId()))
+                .collect(Collectors.toSet());
+
+        for (User member : members) {
+            member = User.builder().id(member.getId()).username(member.getUsername()).build();
         }
 
         return Team.builder()
