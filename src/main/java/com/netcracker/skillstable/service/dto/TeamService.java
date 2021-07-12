@@ -18,11 +18,13 @@ public class TeamService {
     private EAVService eavService;
     @Autowired
     private MetamodelService metamodelService;
+    @Autowired
+    private TeamConverter teamConverter;
 
 
     public Team createTeam(Team team) {
-        return TeamConverter.eavObjToDto(eavService.createEAVObj(
-                TeamConverter.dtoToEavObj(
+        return teamConverter.eavObjToDto(eavService.createEAVObj(
+                teamConverter.dtoToEavObj(
                         team,
                         metamodelService.getEntityTypeByEntTypeId(Team.getEntTypeId())
                 )
@@ -33,7 +35,7 @@ public class TeamService {
         return eavService
                 .getAllByEntTypeId(Team.getEntTypeId())
                 .stream()
-                .map(TeamConverter::eavObjToDto)
+                .map(teamConverter::eavObjToDto)
                 .collect(Collectors.toList());
     }
 
@@ -45,7 +47,7 @@ public class TeamService {
 
         EAVObject teamEavObj = optionalEavObj.get();
 
-        return Optional.of(TeamConverter.eavObjToDto(teamEavObj));
+        return Optional.of(teamConverter.eavObjToDto(teamEavObj));
     }
 
     public void deleteTeam(Integer teamId) {

@@ -26,7 +26,8 @@ public class OrgItem {
     }
 
     @Builder(builderMethodName = "OrgItemBuilder")
-    public OrgItem(String name, String about, User leader, Object superior) {
+    public OrgItem(Integer id, String name, String about, User leader, Object superior) {
+        this.id = id;
         this.name = name;
         this.about = about;
         this.leader = leader;

@@ -16,28 +16,34 @@ import java.util.*;
 @Service
 public class DepartmentConverter {
     @Autowired
-    private static EAVService eavService;
+    private EAVService eavService;
 
-    public static EAVObject dtoToEavObj(Department department, EntityType entityType) {
+    public EAVObject dtoToEavObj(Department department, EntityType entityType) {
         EAVObject eavObj = new EAVObject(
                 entityType,
                 department.getName()
         );
 
-        eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
+        eavObj.addParameter(
                 new Parameter(eavObj, Department.getAboutId(), department.getAbout())
-                //new Parameter(eavObj, Department.getLeaderRefId(), department.getLeader().getId())
-        )));
-        /*
+        );
+
+        if (department.getLeader() != null) {
+            eavObj.addParameter(
+                    new Parameter(eavObj, Department.getLeaderRefId(), department.getLeader().getId())
+            );
+        }
+
         List<Parameter> teamsAsParams = new ArrayList<>();
         for (Team team : department.getTeams()) {
             teamsAsParams.add(new Parameter(eavObj, Department.getTeamRefId(), team.getId()));
         }
-        eavObj.addParameters(teamsAsParams);*/
+        eavObj.addParameters(teamsAsParams);
+
         return eavObj;
     }
 
-    public static Department eavObjToDto(EAVObject departEavObj) {
+    public Department eavObjToDto(EAVObject departEavObj) {
         Optional<ParameterValue> leaderAsParam = departEavObj.getParameterByAttrId(Department.getLeaderRefId());
         User leader = new User();
         if (leaderAsParam.isPresent()) {

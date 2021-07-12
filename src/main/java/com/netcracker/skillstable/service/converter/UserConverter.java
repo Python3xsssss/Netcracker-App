@@ -38,14 +38,14 @@ public class UserConverter {
                         (user.getPosition() != null) ? user.getPosition().ordinal() : Position.NEWCOMER.ordinal())
         )));
         if (user.getDepartment() != null) {
-            eavObj.addParameters(Collections.singletonList(
+            eavObj.addParameter(
                     new Parameter(eavObj, User.getDepartmentRefId(), user.getDepartment().getId())
-            ));
+            );
         }
         if (user.getTeam() != null) {
-            eavObj.addParameters(Collections.singletonList(
+            eavObj.addParameter(
                     new Parameter(eavObj, User.getTeamRefId(), user.getTeam().getId())
-            ));
+            );
         }
 
         List<Parameter> skillLevelsAsParams = new ArrayList<>();

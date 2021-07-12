@@ -71,6 +71,10 @@ public class EAVObject {
         this.entName = entName;
     }
 
+    public void addParameter(Parameter inputParam) {
+        parameters.add(inputParam);
+    }
+
     public void addParameters(List<Parameter> inputParams) {
         parameters.addAll(inputParams);
     }

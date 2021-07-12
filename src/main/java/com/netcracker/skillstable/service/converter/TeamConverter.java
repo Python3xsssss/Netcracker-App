@@ -16,30 +16,36 @@ import java.util.*;
 @Service
 public class TeamConverter {
     @Autowired
-    private static EAVService eavService;
+    private EAVService eavService;
 
-    public static EAVObject dtoToEavObj(Team team, EntityType entityType) {
+    public EAVObject dtoToEavObj(Team team, EntityType entityType) {
         EAVObject eavObj = new EAVObject(
                 entityType,
                 team.getName()
         );
 
+        Department superior = (Department) team.getSuperior();
         eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
-                new Parameter(eavObj, Team.getAboutId(), team.getAbout())
-                //new Parameter(eavObj, Team.getLeaderRefId(), team.getLeader().getId())
+                new Parameter(eavObj, Team.getAboutId(), team.getAbout()),
+                new Parameter(eavObj, Team.getSuperiorRefId(), superior.getId())
         )));
-        /*
+
+        if (team.getLeader() != null) {
+            eavObj.addParameter(
+                    new Parameter(eavObj, Team.getLeaderRefId(), team.getLeader().getId())
+            );
+        }
+
         List<Parameter> membersAsParams = new ArrayList<>();
         for (User member : team.getMembers()) {
             membersAsParams.add(new Parameter(eavObj, Team.getMemberRefId(), member.getId()));
         }
         eavObj.addParameters(membersAsParams);
-        */
 
         return eavObj;
     }
 
-    public static Team eavObjToDto(EAVObject teamEavObj) {
+    public Team eavObjToDto(EAVObject teamEavObj) {
         Optional<ParameterValue> leaderAsParam = teamEavObj.getParameterByAttrId(Team.getLeaderRefId());
         User leader = new User();
         if (leaderAsParam.isPresent()) {

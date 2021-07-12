@@ -24,9 +24,9 @@ public class SkillConverter {
                 skill.getName()
         );
 
-        eavObj.addParameters(new ArrayList<Parameter>(Collections.singletonList(
+        eavObj.addParameter(
                 new Parameter(eavObj, Skill.getAboutId(), skill.getAbout())
-        )));
+        );
 
         return eavObj;
     }

@@ -18,11 +18,13 @@ public class DepartmentService {
     private EAVService eavService;
     @Autowired
     private MetamodelService metamodelService;
+    @Autowired
+    private DepartmentConverter departmentConverter;
 
 
     public Department createDepartment(Department department) {
-        return DepartmentConverter.eavObjToDto(eavService.createEAVObj(
-                DepartmentConverter.dtoToEavObj(
+        return departmentConverter.eavObjToDto(eavService.createEAVObj(
+                departmentConverter.dtoToEavObj(
                         department,
                         metamodelService.getEntityTypeByEntTypeId(Department.getEntTypeId())
                 )
@@ -33,7 +35,7 @@ public class DepartmentService {
         return eavService
                 .getAllByEntTypeId(Department.getEntTypeId())
                 .stream()
-                .map(DepartmentConverter::eavObjToDto)
+                .map(departmentConverter::eavObjToDto)
                 .collect(Collectors.toList());
     }
 
@@ -45,7 +47,7 @@ public class DepartmentService {
 
         EAVObject departEavObj = optionalEavObj.get();
 
-        return Optional.of(DepartmentConverter.eavObjToDto(departEavObj));
+        return Optional.of(departmentConverter.eavObjToDto(departEavObj));
     }
 
     public void deleteDepartment(Integer departmentId) {
