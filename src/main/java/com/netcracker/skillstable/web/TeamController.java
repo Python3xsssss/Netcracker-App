@@ -1,13 +1,11 @@
 package com.netcracker.skillstable.web;
 
 import com.netcracker.skillstable.model.ApiResponse;
-import com.netcracker.skillstable.model.dto.Department;
+import com.netcracker.skillstable.model.dto.OrgItem;
 import com.netcracker.skillstable.model.dto.Team;
-import com.netcracker.skillstable.service.dto.DepartmentService;
 import com.netcracker.skillstable.service.dto.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

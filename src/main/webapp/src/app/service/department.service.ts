@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {User} from "../model/user.model";
 import {Observable} from "rxjs";
 import {ApiResponse} from "../model/api.response";
+import {Department} from "../model/department.model";
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +22,12 @@ export class DepartmentService {
     return this.http.get<ApiResponse>(this.baseUrl + id);
   }
 
-  createDepartment(user: User): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.baseUrl, user);
+  createDepartment(department: Department): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.baseUrl, department);
   }
 
-  updateDepartment(user: User): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(this.baseUrl + user.id, user);
+  updateDepartment(department: Department): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(this.baseUrl + department.id, department);
   }
 
   deleteDepartment(id: number): Observable<ApiResponse> {

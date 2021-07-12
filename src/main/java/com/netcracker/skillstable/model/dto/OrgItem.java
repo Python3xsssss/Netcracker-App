@@ -18,7 +18,7 @@ public class OrgItem {
     protected User leader;
     @Getter private static final Integer leaderRefId = 17;
 
-    protected Object superior;
+    protected OrgItem superior;
     @Getter private static final Integer superiorRefId = 19;
 
 
@@ -26,7 +26,7 @@ public class OrgItem {
     }
 
     @Builder(builderMethodName = "OrgItemBuilder")
-    public OrgItem(Integer id, String name, String about, User leader, Object superior) {
+    public OrgItem(Integer id, String name, String about, User leader, OrgItem superior) {
         this.id = id;
         this.name = name;
         this.about = about;

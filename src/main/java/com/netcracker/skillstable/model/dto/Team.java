@@ -19,8 +19,8 @@ public class Team extends OrgItem {
     }
 
     @Builder
-    public Team(Integer id, String name, String about, User leader, Object department, Set<User> members) {
-        super(id, name, about, leader, department);
+    public Team(Integer id, String name, String about, User leader, Department superior, Set<User> members) {
+        super(id, name, about, leader, superior);
         this.members = members;
     }
 

@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {User} from "../model/user.model";
 import {Observable} from "rxjs";
 import {ApiResponse} from "../model/api.response";
+import {Team} from "../model/team.model";
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +22,12 @@ export class TeamService {
     return this.http.get<ApiResponse>(this.baseUrl + id);
   }
 
-  createTeam(user: User): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.baseUrl, user);
+  createTeam(team: Team): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.baseUrl, team);
   }
 
-  updateTeam(user: User): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(this.baseUrl + user.id, user);
+  updateTeam(team: Team): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(this.baseUrl + team.id, team);
   }
 
   deleteTeam(id: number): Observable<ApiResponse> {

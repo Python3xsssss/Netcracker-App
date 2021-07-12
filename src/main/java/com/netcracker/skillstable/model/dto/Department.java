@@ -19,7 +19,7 @@ public class Department extends OrgItem {
     }
 
     @Builder
-    public Department(Integer id, String name, String about, User leader, Object superior, Set<Team> teams) {
+    public Department(Integer id, String name, String about, User leader, OrgItem superior, Set<Team> teams) {
         super(id, name, about, leader, superior);
         this.teams = teams;
     }

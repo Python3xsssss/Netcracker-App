@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {User} from "../model/user.model";
 import {Observable} from "rxjs";
 import {ApiResponse} from "../model/api.response";
+import {Skill} from "../model/skill.model";
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +22,12 @@ export class SkillService {
     return this.http.get<ApiResponse>(this.baseUrl + id);
   }
 
-  createSkill(user: User): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.baseUrl, user);
+  createSkill(skill: Skill): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.baseUrl, skill);
   }
 
-  updateSkill(user: User): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(this.baseUrl + user.id, user);
+  updateSkill(skill: Skill): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(this.baseUrl + skill.id, skill);
   }
 
   deleteSkill(id: number): Observable<ApiResponse> {

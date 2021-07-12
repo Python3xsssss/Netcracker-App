@@ -5,6 +5,7 @@ import com.netcracker.skillstable.model.EntityType;
 import com.netcracker.skillstable.model.Parameter;
 import com.netcracker.skillstable.model.ParameterValue;
 import com.netcracker.skillstable.model.dto.Department;
+import com.netcracker.skillstable.model.dto.OrgItem;
 import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
@@ -24,7 +25,7 @@ public class TeamConverter {
                 team.getName()
         );
 
-        Department superior = (Department) team.getSuperior();
+        OrgItem superior = team.getSuperior();
         eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
                 new Parameter(eavObj, Team.getAboutId(), team.getAbout()),
                 new Parameter(eavObj, Team.getSuperiorRefId(), superior.getId())
@@ -88,7 +89,7 @@ public class TeamConverter {
                 .name(teamEavObj.getEntName())
                 .about(teamEavObj.getParameterByAttrId(Team.getAboutId()).map(ParameterValue::getValueStr).orElse(null))
                 .leader(leader)
-                .department(department)
+                .superior(department)
                 .members(members)
                 .build();
     }

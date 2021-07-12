@@ -55,6 +55,13 @@
       </select>
     </div>
 
+    <div class="form-group">
+      <label for="team-select">Choose team</label>
+      <select formControlName="team" class="form-select" id="team-select">
+        <option *ngFor="let team of teamsInDepart" [value]=team.id>{{team.name}}</option>
+      </select>
+    </div>
+
     <button class="btn btn-success" ng-click="onSubmit()">Add user</button>
   </form>
 </div>

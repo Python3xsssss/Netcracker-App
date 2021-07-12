@@ -2,6 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {TeamService} from "../../../service/team.service";
+import {DepartmentService} from "../../../service/department.service";
+import {Department} from "../../../model/department.model";
+import {User} from "../../../model/user.model";
+import {Team} from "../../../model/team.model";
 
 @Component({
   selector: 'app-add-team',
@@ -10,8 +14,14 @@ import {TeamService} from "../../../service/team.service";
 })
 export class AddTeamComponent implements OnInit {
   addForm!: FormGroup;
+  departs: Department[] = [];
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private teamService: TeamService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private teamService: TeamService,
+    private departService: DepartmentService
+  ) {
   }
 
   ngOnInit(): void {
@@ -19,12 +29,30 @@ export class AddTeamComponent implements OnInit {
       id: [],
       name: ['', Validators.required],
       about: ['', Validators.required],
+      superior: [null, Validators.required]
     });
+
+    this.departService.getDepartments()
+      .subscribe(data => {
+        this.departs = data.result;
+      });
 
   }
 
+  onSuperiorSelect(departId: any) {
+  }
+
   onSubmit() {
-    this.teamService.createTeam(this.addForm.value)
+    let value = this.addForm.value;
+    for (let i = 0; i < this.departs.length; i++) {
+      if (this.departs[i].id === Number(value.superior)) {
+        value.superior = this.departs[i];
+      }
+    }
+
+    let team: Team = value;
+    console.log(team);
+    this.teamService.createTeam(team)
       .subscribe(data => {
         this.router.navigate(['home']);
       });
