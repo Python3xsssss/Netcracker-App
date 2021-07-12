@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators, FormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {UserService} from "../../../service/user.service";
 import {Department} from "../../../model/department.model";
@@ -7,7 +7,6 @@ import {Team} from "../../../model/team.model";
 import {DepartmentService} from "../../../service/department.service";
 import {TeamService} from "../../../service/team.service";
 import {Role} from "../../../model/role.model";
-import { KeyValue } from '@angular/common';
 import {User} from "../../../model/user.model";
 
 @Component({

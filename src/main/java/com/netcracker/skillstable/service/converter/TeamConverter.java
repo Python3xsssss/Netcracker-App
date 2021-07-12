@@ -18,6 +18,8 @@ import java.util.*;
 public class TeamConverter {
     @Autowired
     private EAVService eavService;
+    @Autowired
+    private DepartmentConverter departmentConverter;
 
     public EAVObject dtoToEavObj(Team team, EntityType entityType) {
         EAVObject eavObj = new EAVObject(

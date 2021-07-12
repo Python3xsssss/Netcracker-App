@@ -101,8 +101,7 @@ public class UserConverter {
                         .id(skillLevelAsEavObj.getId())
                         .name(skillLevelAsEavObj.getEntName())
                         .level(skillLevelAsEavObj
-                                .getParameterByAttrId(SkillLevel
-                                .getLevelId())
+                                .getParameterByAttrId(SkillLevel.getLevelId())
                                 .map(ParameterValue::getValueInt)
                                 .orElse(null)
                         )

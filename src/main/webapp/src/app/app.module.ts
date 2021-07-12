@@ -14,6 +14,7 @@ import {AddTeamComponent} from "./view-controller/team/add-team/add-team.compone
 import {ListTeamComponent} from "./view-controller/team/list-team/list-team.component";
 import {AddSkillComponent} from "./view-controller/skill/add-skill/add-skill.component";
 import {ListSkillComponent} from "./view-controller/skill/list-skill/list-skill.component";
+import {ShowTeamComponent} from "./view-controller/team/show-team/show-team.component";
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import {ListSkillComponent} from "./view-controller/skill/list-skill/list-skill.
     ListUserComponent,
     ListDepartComponent,
     ListTeamComponent,
-    ListSkillComponent
+    ListSkillComponent,
+    ShowTeamComponent
   ],
   imports: [
     BrowserModule,

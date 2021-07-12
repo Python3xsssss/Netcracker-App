@@ -12,7 +12,7 @@ import java.util.Set;
 public class Department extends OrgItem {
     @Getter private static final Integer entTypeId = 4;
     private Set<Team> teams = new HashSet<>();
-    @Getter private static final Integer teamRefId = 4;
+    @Getter private static final Integer teamRefId = 22;
 
 
     public Department() {
