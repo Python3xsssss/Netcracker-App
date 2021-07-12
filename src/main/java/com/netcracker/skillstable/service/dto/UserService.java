@@ -19,11 +19,13 @@ public class UserService {
     private EAVService eavService;
     @Autowired
     private MetamodelService metamodelService;
+    @Autowired
+    private UserConverter userConverter;
 
 
     public User createUser(User user) {
-       return UserConverter.eavObjToDto(eavService.createEAVObj(
-               UserConverter.dtoToEavObj(
+       return userConverter.eavObjToDto(eavService.createEAVObj(
+               userConverter.dtoToEavObj(
                        user,
                        metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
                )
@@ -34,7 +36,7 @@ public class UserService {
         return eavService
                 .getAllByEntTypeId(User.getEntTypeId())
                 .stream()
-                .map(UserConverter::eavObjToDto)
+                .map(userConverter::eavObjToDto)
                 .collect(Collectors.toList());
     }
 
@@ -47,7 +49,7 @@ public class UserService {
 
         EAVObject userEavObj = optionalEavObj.get();
 
-        return Optional.of(UserConverter.eavObjToDto(userEavObj));
+        return Optional.of(userConverter.eavObjToDto(userEavObj));
     }
 
     public void deleteUser(Integer userId) {

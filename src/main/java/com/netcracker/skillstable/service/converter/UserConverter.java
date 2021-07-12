@@ -16,12 +16,12 @@ import java.util.*;
 @Service
 public class UserConverter {
     @Autowired
-    private static EAVService eavService;
+    private EAVService eavService;
 
     private static final Role[] roleValues = Role.values();
     private static final Position[] positionValues = Position.values();
 
-    public static EAVObject dtoToEavObj(User user, EntityType entityType) {
+    public EAVObject dtoToEavObj(User user, EntityType entityType) {
         EAVObject eavObj = new EAVObject(
                 entityType,
                 user.getUsername()
@@ -33,11 +33,20 @@ public class UserConverter {
                 new Parameter(eavObj, User.getLastNameId(), user.getLastName()),
                 new Parameter(eavObj, User.getAgeId(), user.getAge()),
                 new Parameter(eavObj, User.getEmailId(), user.getEmail()),
-                new Parameter(eavObj, User.getAboutId(), user.getAbout())
-                //new Parameter(eavObj, User.getDepartmentRefId(), user.getDepartment().getId()),
-                //new Parameter(eavObj, User.getTeamRefId(), user.getTeam().getId()),
-                //new Parameter(eavObj, User.getPositionId(), user.getPosition().ordinal())
+                new Parameter(eavObj, User.getAboutId(), user.getAbout()),
+                new Parameter(eavObj, User.getPositionId(),
+                        (user.getPosition() != null) ? user.getPosition().ordinal() : Position.NEWCOMER.ordinal())
         )));
+        if (user.getDepartment() != null) {
+            eavObj.addParameters(Collections.singletonList(
+                    new Parameter(eavObj, User.getDepartmentRefId(), user.getDepartment().getId())
+            ));
+        }
+        if (user.getTeam() != null) {
+            eavObj.addParameters(Collections.singletonList(
+                    new Parameter(eavObj, User.getTeamRefId(), user.getTeam().getId())
+            ));
+        }
 
         List<Parameter> skillLevelsAsParams = new ArrayList<>();
         for (SkillLevel skillLevel : user.getSkillLevels()) {
@@ -48,7 +57,7 @@ public class UserConverter {
         return eavObj;
     }
 
-    public static User eavObjToDto(EAVObject userEavObj) {
+    public User eavObjToDto(EAVObject userEavObj) {
         Set<Role> roles = new HashSet<>();
         List<ParameterValue> rolesAsParams = userEavObj.getMultipleParametersByAttrId(User.getRoleId());
         for (ParameterValue roleParam : rolesAsParams) {
@@ -65,7 +74,6 @@ public class UserConverter {
                     .build()
             ).orElseGet(Department::new);
         }
-
 
         Optional<ParameterValue> teamAsParam = userEavObj.getParameterByAttrId(User.getTeamRefId());
         Team team = new Team();

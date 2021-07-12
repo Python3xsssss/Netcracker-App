@@ -1,7 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators, FormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
 import {UserService} from "../../../service/user.service";
+import {Department} from "../../../model/department.model";
+import {Team} from "../../../model/team.model";
+import {DepartmentService} from "../../../service/department.service";
+import {TeamService} from "../../../service/team.service";
+import {Role} from "../../../model/role.model";
+import { KeyValue } from '@angular/common';
 import {User} from "../../../model/user.model";
 
 @Component({
@@ -11,8 +17,17 @@ import {User} from "../../../model/user.model";
 })
 export class AddUserComponent implements OnInit {
   addForm!: FormGroup;
+  departs: Department[] = [];
+  teams: Team[] = [];
+  roles = Object.keys(Role).filter(key => isNaN(Number(key)));
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private userService: UserService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private userService: UserService,
+    private departService: DepartmentService,
+    private teamService: TeamService
+  ) {
   }
 
   ngOnInit(): void {
@@ -20,17 +35,34 @@ export class AddUserComponent implements OnInit {
       id: [],
       username: ['', Validators.required],
       password: ['', Validators.required],
+      //role: [null, Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      age: ['', Validators.required],
+      age: [0, Validators.required],
       email: ['', Validators.required],
       about: ['', Validators.required],
+      department: [null, Validators.required]
     });
+
+    this.departService.getDepartments()
+      .subscribe(data => {
+        this.departs = data.result;
+      });
 
   }
 
+  onDepartSelect(departId: any) {
+  }
+
   onSubmit() {
-    this.userService.createUser(this.addForm.value)
+    let value = this.addForm.value;
+    for (let i = 0; i < this.departs.length; i++) {
+      if (this.departs[i].id === Number(value.department)) {
+        value.department = this.departs[i];
+      }
+    }
+    let user: User = value;
+    this.userService.createUser(user)
       .subscribe(data => {
         this.router.navigate(['home']);
       });
