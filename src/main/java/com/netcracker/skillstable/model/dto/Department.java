@@ -11,17 +11,29 @@ import java.util.Set;
 @Setter
 public class Department extends OrgItem {
     @Getter private static final Integer entTypeId = 4;
+
     private Set<Team> teams = new HashSet<>();
     @Getter private static final Integer teamRefId = 22;
 
+    private Set<User> membersNoTeam = new HashSet<>();
+    @Getter private static final Integer memberRefId = 20;
 
     public Department() {
     }
 
     @Builder
-    public Department(Integer id, String name, String about, User leader, OrgItem superior, Set<Team> teams) {
+    public Department(
+            Integer id,
+            String name,
+            String about,
+            User leader,
+            OrgItem superior,
+            Set<Team> teams,
+            Set<User> membersNoTeam
+    ) {
         super(id, name, about, leader, superior);
         this.teams = teams;
+        this.membersNoTeam = membersNoTeam;
     }
 
     public boolean addTeam(Team newTeam) {

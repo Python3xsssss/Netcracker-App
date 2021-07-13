@@ -2,6 +2,7 @@ package com.netcracker.skillstable.service;
 
 import com.netcracker.skillstable.model.EAVObject;
 import com.netcracker.skillstable.repos.EAVObjectRepo;
+import com.netcracker.skillstable.repos.ParameterRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

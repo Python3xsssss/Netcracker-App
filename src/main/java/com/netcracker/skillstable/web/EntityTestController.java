@@ -1,7 +1,6 @@
 package com.netcracker.skillstable.web;
 
 import com.netcracker.skillstable.model.*;
-import com.netcracker.skillstable.repos.ParameterRepo;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,6 @@ public class EntityTestController {
     private EAVService eavService;
     @Autowired
     private MetamodelService metamodelService;
-    @Autowired
-    private ParameterRepo parameterRepo;
 
     @GetMapping("/entities")
     public List<EAVObject> getAllEntities(){
@@ -33,13 +30,6 @@ public class EntityTestController {
             @PathVariable(value="entId") Integer entId
     ) {
         return eavService.getEAVObjById(entId);
-    }
-
-    @GetMapping("/entities/{entId}/parameters")
-    public List<Parameter> getAllParametersByEAVObject(
-            @PathVariable(value="entId") Integer entId
-    ) {
-        return parameterRepo.findByEavObjectId(entId);
     }
 
     @GetMapping("/entities/{entId}/parameters/{attrId}")

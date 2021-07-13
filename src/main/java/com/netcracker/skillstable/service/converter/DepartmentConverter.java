@@ -9,6 +9,7 @@ import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.dto.TeamService;
+import com.netcracker.skillstable.service.dto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,8 @@ public class DepartmentConverter {
     private EAVService eavService;
     @Autowired
     private TeamService teamService;
+    @Autowired
+    private UserService userService;
 
     public EAVObject dtoToEavObj(Department department, EntityType entityType) {
         EAVObject eavObj = new EAVObject(
@@ -69,6 +72,16 @@ public class DepartmentConverter {
             team = Team.builder().id(team.getId()).name(team.getName()).build();
         }
 
+        Set<User> membersNoTeam = userService
+                .getAllUsers()
+                .stream()
+                .filter(user -> user.getTeam() == null && user.getDepartment().getId().equals(departEavObj.getId()))
+                .collect(Collectors.toSet());
+
+        for (User member : membersNoTeam) {
+            member = User.builder().id(member.getId()).username(member.getUsername()).build();
+        }
+
         return Department.builder()
                 .id(departEavObj.getId())
                 .name(departEavObj.getEntName())
@@ -76,6 +89,7 @@ public class DepartmentConverter {
                 .leader(leader)
                 .superior(null)
                 .teams(teams)
+                .membersNoTeam(membersNoTeam)
                 .build();
     }
 }

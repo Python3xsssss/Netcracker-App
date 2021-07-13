@@ -2,6 +2,8 @@ package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.model.EAVObject;
 import com.netcracker.skillstable.model.dto.Department;
+import com.netcracker.skillstable.model.dto.Team;
+import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
 import com.netcracker.skillstable.service.converter.DepartmentConverter;
@@ -51,6 +53,20 @@ public class DepartmentService {
     }
 
     public void deleteDepartment(Integer departmentId) {
+        Optional<Department> optionalDepartment = this.getDepartmentById(departmentId);
+        if (!optionalDepartment.isPresent()) {
+            return;
+        }
+
+        Department department = optionalDepartment.get();
+        for (Team team : department.getTeams()) {
+            eavService.deleteEAVObj(team.getId());
+        }
+
+        for (User user : department.getMembersNoTeam()) {
+            user.setDepartment(null);
+        }
+
         eavService.deleteEAVObj(departmentId);
     }
 }
