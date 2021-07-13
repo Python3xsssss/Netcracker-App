@@ -1,7 +1,7 @@
 <div class="col-md-6 offset-md-2 list-depart-container">
   <h2>Departments</h2>
   <button class="btn btn-success" id="add-dep" (click)="addDepart()">New Department</button>
-  <table class="table table-light">
+  <table class="table table-bordered table-light">
     <thead>
     <tr>
       <th></th>
@@ -12,11 +12,23 @@
     <tr *ngFor="let department of departments">
       <td>
         <h3>{{department.name}}</h3>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item" *ngFor="let team of department.teams">
-            <a routerLink="/team/{{team.id}}">{{team.name}}</a>
-          </li>
-        </ul>
+        <figure>
+          <figcaption>Teams:</figcaption>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let team of department.teams">
+              <a routerLink="/team/{{team.id}}">{{team.name}}</a>
+            </li>
+          </ul>
+        </figure>
+        <figure>
+          <figcaption>Members without team:</figcaption>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" *ngFor="let member of department.membersNoTeam">
+              <a routerLink="/user/{{member.id}}">{{member.username}} - {{member.firstName}} {{member.lastName}}</a>
+            </li>
+          </ul>
+        </figure>
+
 
       </td>
       <td>

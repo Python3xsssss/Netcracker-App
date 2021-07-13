@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {DepartmentService} from "../../../service/department.service";
+import {User} from "../../../model/user.model";
 
 @Component({
   selector: 'app-add-depart',
@@ -18,7 +19,7 @@ export class AddDepartComponent implements OnInit {
     this.addForm = this.formBuilder.group({
       id: [],
       name: ['', Validators.required],
-      about: ['', Validators.required],
+      about: ['', Validators.required]
     });
 
   }

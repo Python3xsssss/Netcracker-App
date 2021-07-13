@@ -22,6 +22,10 @@ public class TeamConverter {
     private EAVService eavService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private DepartmentConverter departmentConverter;
+    @Autowired
+    private UserConverter userConverter;
 
     public EAVObject dtoToEavObj(Team team, EntityType entityType) {
         EAVObject eavObj = new EAVObject(
@@ -51,45 +55,44 @@ public class TeamConverter {
     }
 
     public Team eavObjToDto(EAVObject teamEavObj) {
+        Team team = this.eavObjToDtoNoRefs(teamEavObj);
+
         Optional<ParameterValue> leaderAsParam = teamEavObj.getParameterByAttrId(Team.getLeaderRefId());
         User leader = new User();
         if (leaderAsParam.isPresent()) {
             Optional<EAVObject> leaderEavObject = eavService.getEAVObjById(leaderAsParam.get().getValueInt());
-            leader = leaderEavObject.map(eavObject -> User.builder()
-                            .id(eavObject.getId())
-                            .username(eavObject.getEntName())
-                            .build()
-            ).orElseGet(User::new);
+            leader = leaderEavObject
+                    .map(eavObject -> userConverter.eavObjToDtoNoRefs(eavObject))
+                    .orElseGet(User::new);
         }
+        team.setLeader(leader);
 
         Optional<ParameterValue> departAsParam = teamEavObj.getParameterByAttrId(Team.getSuperiorRefId());
         Department department = new Department();
         if (departAsParam.isPresent()) {
             Optional<EAVObject> departEavObject = eavService.getEAVObjById(departAsParam.get().getValueInt());
-            department = departEavObject.map(eavObject -> Department.builder()
-                    .id(eavObject.getId())
-                    .name(eavObject.getEntName())
-                    .build()
-            ).orElseGet(Department::new);
+            department = departEavObject
+                    .map(eavObject -> departmentConverter.eavObjToDtoNoRefs(eavObject))
+                    .orElseGet(Department::new);
         }
+        team.setSuperior(department);
 
         Set<User> members = userService
                 .getAllUsers()
                 .stream()
-                .filter(user -> user.getTeam().getId().equals(teamEavObj.getId()))
+                .filter(user -> user.getTeam() != null && teamEavObj.getId().equals(user.getTeam().getId()))
+                .map(User::toUserNoRefs)
                 .collect(Collectors.toSet());
+        team.setMembers(members);
 
-        for (User member : members) {
-            member = User.builder().id(member.getId()).username(member.getUsername()).build();
-        }
+        return team;
+    }
 
+    public Team eavObjToDtoNoRefs(EAVObject teamEavObj) {
         return Team.builder()
                 .id(teamEavObj.getId())
                 .name(teamEavObj.getEntName())
                 .about(teamEavObj.getParameterByAttrId(Team.getAboutId()).map(ParameterValue::getValueStr).orElse(null))
-                .leader(leader)
-                .superior(department)
-                .members(members)
                 .build();
     }
 }

@@ -58,11 +58,7 @@ public class UserConverter {
     }
 
     public User eavObjToDto(EAVObject userEavObj) {
-        Set<Role> roles = new HashSet<>();
-        List<ParameterValue> rolesAsParams = userEavObj.getMultipleParametersByAttrId(User.getRoleId());
-        for (ParameterValue roleParam : rolesAsParams) {
-            roles.add(roleValues[Math.toIntExact(roleParam.getValueInt())]);
-        }
+        User user = this.eavObjToDtoNoRefs(userEavObj);
 
         Optional<ParameterValue> departAsParam = userEavObj.getParameterByAttrId(User.getDepartmentRefId());
         Department department = new Department();
@@ -74,6 +70,7 @@ public class UserConverter {
                     .build()
             ).orElseGet(Department::new);
         }
+        user.setDepartment(department);
 
         Optional<ParameterValue> teamAsParam = userEavObj.getParameterByAttrId(User.getTeamRefId());
         Team team = new Team();
@@ -85,6 +82,7 @@ public class UserConverter {
                     .build()
             ).orElseGet(Team::new);
         }
+        user.setTeam(team);
 
         List<ParameterValue> skillsAsParams = userEavObj.getMultipleParametersByAttrId(User.getSkillLevelRefId());
         List<EAVObject> skillLevelsEavList = new ArrayList<>();
@@ -110,28 +108,44 @@ public class UserConverter {
                 ));
             }
         }
+        user.setSkillLevels(skillLevels);
+
+        return user;
+    }
+
+    public User eavObjToDtoNoRefs(EAVObject userEavObj) {
+        Set<Role> roles = new HashSet<>();
+        List<ParameterValue> rolesAsParams = userEavObj.getMultipleParametersByAttrId(User.getRoleId());
+        for (ParameterValue roleParam : rolesAsParams) {
+            roles.add(roleValues[Math.toIntExact(roleParam.getValueInt())]);
+        }
 
         return User.builder()
                 .id(userEavObj.getId())
                 .username(userEavObj.getEntName())
                 .password(null)
                 .roles(roles)
-                .firstName(userEavObj.getParameterByAttrId(User.getFirstNameId()).map(ParameterValue::getValueStr).orElse(null))
-                .lastName(userEavObj.getParameterByAttrId(User.getLastNameId()).map(ParameterValue::getValueStr).orElse(null))
-                .age(userEavObj.getParameterByAttrId(User.getAgeId()).map(ParameterValue::getValueInt).orElse(null))
-                .email(userEavObj.getParameterByAttrId(User.getEmailId()).map(ParameterValue::getValueStr).orElse(null))
-                .about(userEavObj.getParameterByAttrId(User.getAboutId()).map(ParameterValue::getValueStr).orElse(null))
-                .department(department)
-                .team(team)
+                .firstName(userEavObj.getParameterByAttrId(User.getFirstNameId())
+                        .map(ParameterValue::getValueStr)
+                        .orElse(null))
+                .lastName(userEavObj.getParameterByAttrId(User.getLastNameId())
+                        .map(ParameterValue::getValueStr)
+                        .orElse(null))
+                .age(userEavObj.getParameterByAttrId(User.getAgeId())
+                        .map(ParameterValue::getValueInt)
+                        .orElse(null))
+                .email(userEavObj.getParameterByAttrId(User.getEmailId())
+                        .map(ParameterValue::getValueStr)
+                        .orElse(null))
+                .about(userEavObj.getParameterByAttrId(User.getAboutId())
+                        .map(ParameterValue::getValueStr)
+                        .orElse(null))
                 .position(positionValues[
-                                userEavObj
-                                        .getParameterByAttrId(User.getPositionId())
-                                        .map(ParameterValue::getValueInt)
-                                        .orElse(Position.NEWCOMER.ordinal())
+                        userEavObj
+                                .getParameterByAttrId(User.getPositionId())
+                                .map(ParameterValue::getValueInt)
+                                .orElse(Position.NEWCOMER.ordinal())
                         ])
-                .skillLevels(skillLevels)
                 .build();
     }
-
-
 }

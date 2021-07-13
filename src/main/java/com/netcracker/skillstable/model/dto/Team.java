@@ -24,6 +24,14 @@ public class Team extends OrgItem {
         this.members = members;
     }
 
+    public Team toTeamNoRefs() {
+        return Team.builder()
+                .id(this.id)
+                .name(this.name)
+                .about(this.about)
+                .build();
+    }
+
     public boolean addMember(User newMember) {
         return members.add(newMember);
     }

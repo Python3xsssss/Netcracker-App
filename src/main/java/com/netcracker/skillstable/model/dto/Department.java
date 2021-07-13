@@ -36,6 +36,14 @@ public class Department extends OrgItem {
         this.membersNoTeam = membersNoTeam;
     }
 
+    public Department toDepartNoRefs() {
+        return Department.builder()
+                .id(this.id)
+                .name(this.name)
+                .about(this.about)
+                .build();
+    }
+
     public boolean addTeam(Team newTeam) {
         return teams.add(newTeam);
     }

@@ -84,4 +84,17 @@ public class User {
         this.position = position;
         this.skillLevels = skillLevels;
     }
+
+    public User toUserNoRefs() {
+        return User.builder()
+                .id(this.id)
+                .username(this.username)
+                .roles(this.roles)
+                .firstName(this.firstName)
+                .lastName(this.lastName)
+                .age(this.age)
+                .about(this.about)
+                .position(this.position)
+                .build();
+    }
 }
