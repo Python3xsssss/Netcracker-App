@@ -44,9 +44,9 @@ export class AddTeamComponent implements OnInit {
 
   onSubmit() {
     let value = this.addForm.value;
-    for (let i = 0; i < this.departs.length; i++) {
-      if (this.departs[i].id === Number(value.superior)) {
-        value.superior = this.departs[i];
+    for (let depart of this.departs) {
+      if (depart.id === Number(value.superior)) {
+        value.superior = depart;
       }
     }
 

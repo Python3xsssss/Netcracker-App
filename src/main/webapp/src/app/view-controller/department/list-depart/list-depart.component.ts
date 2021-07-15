@@ -20,6 +20,10 @@ export class ListDepartComponent implements OnInit {
     this.departService.getDepartments()
       .subscribe(data => {
         this.departments = data.result;
+        this.departments = this.departments.sort((dep1,dep2) => dep1.id - dep2.id);
+        for(let dep of this.departments) {
+          console.log(dep.name);
+        }
       });
   }
 

@@ -1,1 +1,21 @@
-<p>show-user works!</p>
+<div class="col-md-6 offset-md-3 show-user-container">
+  <h2>{{user.username}} - {{user.firstName}} {{user.lastName}}</h2>
+  <button class="btn btn-danger" id="delete-user" (click)="deleteUser()">Delete user</button>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Username: {{user.username}}</li>
+    <li class="list-group-item">Name: {{user.firstName}} {{user.lastName}}</li>
+    <li class="list-group-item">Age: {{user.age}}</li>
+    <li class="list-group-item">E-mail: {{user.email}}</li>
+    <li class="list-group-item">About user: {{user.about}}</li>
+    <li class="list-group-item">Department:
+      <a routerLink="/home" fragment="{{user.department.id}}">{{user.department.name}}</a>
+    </li>
+    <li class="list-group-item">Team:
+      <a routerLink="/team/{{user.team.id}}" *ngIf="user.team.id !== null">
+        {{user.team.name}}
+      </a>
+      <a *ngIf="user.team.id === null">None</a>
+    </li>
+  </ul>
+</div>
+

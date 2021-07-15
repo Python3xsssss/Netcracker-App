@@ -1,5 +1,5 @@
 import {NgModule} from "@angular/core";
-import {RouterModule, Routes} from '@angular/router';
+import {ExtraOptions, RouterModule, Routes} from '@angular/router';
 
 import {HomeComponent} from "./view-controller/home/home.component";
 import {AddUserComponent} from "./view-controller/user/add-user/add-user.component";
@@ -13,7 +13,13 @@ import {ListSkillComponent} from "./view-controller/skill/list-skill/list-skill.
 import {ShowUserComponent} from "./view-controller/user/show-user/show-user.component";
 
 
-const routes: Routes = [
+const routerOptions: ExtraOptions = {
+  scrollPositionRestoration: 'enabled',
+  anchorScrolling: 'enabled',
+  scrollOffset: [0, 64],
+};
+
+const ROUTES: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'team/:id', component: ShowTeamComponent},
   {path: 'user/:id', component: ShowUserComponent},
@@ -28,7 +34,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(ROUTES, routerOptions)],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

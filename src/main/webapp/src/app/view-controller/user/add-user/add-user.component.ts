@@ -58,9 +58,9 @@ export class AddUserComponent implements OnInit {
 
   onDepartSelect(departId: any) {
     this.teamsInDepart = [];
-    for (let i = 0; i < this.teams.length; i++) {
-      if (this.teams[i].superior.id === Number(departId)) {
-        this.teamsInDepart.push(this.teams[i]);
+    for (let team of this.teams) {
+      if (team.superior.id === Number(departId)) {
+        this.teamsInDepart.push(team);
       }
     }
   }
@@ -68,15 +68,15 @@ export class AddUserComponent implements OnInit {
   onSubmit() {
     let value = this.addForm.value;
 
-    for (let i = 0; i < this.departs.length; i++) {
-      if (this.departs[i].id === Number(value.department)) {
-        value.department = this.departs[i];
+    for (let depart of this.departs) {
+      if (depart.id === Number(value.department)) {
+        value.department = depart;
       }
     }
 
-    for (let i = 0; i < this.teams.length; i++) {
-      if (this.teams[i].id === Number(value.team)) {
-        value.team = this.teams[i];
+    for (let team of this.teams) {
+      if (team.id === Number(value.team)) {
+        value.team = team;
       }
     }
 

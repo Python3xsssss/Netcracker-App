@@ -1,4 +1,4 @@
-<div class="col-md-6 offset-md-2 list-depart-container">
+<div class="col-md-6 offset-md-3 list-depart-container">
   <h2>Departments</h2>
   <button class="btn btn-success" id="add-dep" (click)="addDepart()">New Department</button>
   <table class="table table-bordered table-light">
@@ -9,9 +9,9 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let department of departments">
+    <tr *ngFor="let department of departments" >
       <td>
-        <h3>{{department.name}}</h3>
+        <h3 [attr.id]="department.id">{{department.name}}</h3>
         <figure>
           <figcaption>Teams:</figcaption>
           <ul class="list-group list-group-flush">
