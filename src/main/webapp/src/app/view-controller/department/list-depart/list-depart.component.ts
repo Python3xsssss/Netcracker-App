@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 import {Router} from "@angular/router";
 import {DepartmentService} from "../../../service/department.service";
@@ -20,10 +20,15 @@ export class ListDepartComponent implements OnInit {
     this.departService.getDepartments()
       .subscribe(data => {
         this.departments = data.result;
-        this.departments = this.departments.sort((dep1,dep2) => dep1.id - dep2.id);
-        for(let dep of this.departments) {
-          console.log(dep.name);
-        }
+        this.departments = this.departments.sort((dep1, dep2) => {
+          if (dep1.name < dep2.name) {
+            return -1;
+          } else if (dep1.name > dep2.name) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
       });
   }
 

@@ -97,4 +97,8 @@ public class User {
                 .position(this.position)
                 .build();
     }
+
+    public void deleteSkillLevel(Skill skill) {
+        skillLevels.removeIf(level -> skill.getId().equals(level.getSkill().getId()));
+    }
 }
