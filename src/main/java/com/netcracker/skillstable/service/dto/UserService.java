@@ -23,7 +23,7 @@ public class UserService {
     private UserConverter userConverter;
 
 
-    public User createUser(User user) {
+    public User createOrUpdateUser(User user) {
        return userConverter.eavObjToDto(eavService.createEAVObj(
                userConverter.dtoToEavObj(
                        user,

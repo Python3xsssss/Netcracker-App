@@ -24,7 +24,7 @@ public class DepartmentService {
     private DepartmentConverter departmentConverter;
 
 
-    public Department createDepartment(Department department) {
+    public Department createOrUpdateDepartment(Department department) {
         return departmentConverter.eavObjToDto(eavService.createEAVObj(
                 departmentConverter.dtoToEavObj(
                         department,

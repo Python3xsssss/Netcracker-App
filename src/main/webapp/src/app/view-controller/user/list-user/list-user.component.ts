@@ -20,14 +20,14 @@ export class ListUserComponent implements OnInit {
     this.userService.getUsers()
       .subscribe(data => {
         this.users = data.result;
-      });
+      }, error => console.log(error));
   }
 
   deleteUser(user: User): void {
     this.userService.deleteUser(user.id)
       .subscribe(data => {
         this.users = this.users.filter(u => u !== user);
-      })
+      }, error => console.log(error))
   };
 
   addUser(): void {

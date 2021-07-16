@@ -2,9 +2,7 @@ package com.netcracker.skillstable.web;
 
 import com.netcracker.skillstable.model.ApiResponse;
 import com.netcracker.skillstable.model.dto.Skill;
-import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.service.dto.SkillService;
-import com.netcracker.skillstable.service.dto.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +22,7 @@ public class SkillController {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Skill saved successfully.",
-                skillService.createSkill(skill)
+                skillService.createOrUpdateSkill(skill)
         );
     }
 
@@ -43,6 +41,15 @@ public class SkillController {
                 HttpStatus.OK.value(),
                 "Skill fetched successfully.",
                 skillService.getSkillById(skillId)
+        );
+    }
+
+    @PutMapping
+    public ApiResponse<Skill> updateSkill(@RequestBody Skill skill) {
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Skill updated successfully.",
+                skillService.createOrUpdateSkill(skill)
         );
     }
 

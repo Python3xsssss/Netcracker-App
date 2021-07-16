@@ -20,14 +20,14 @@ export class ListSkillComponent implements OnInit {
     this.skillService.getSkills()
       .subscribe(data => {
         this.skills = data.result;
-      });
+      }, error => console.log(error));
   }
 
   deleteSkill(skill: Skill): void {
     this.skillService.deleteSkill(skill.id)
       .subscribe(data => {
         this.skills = this.skills.filter(s => s !== skill);
-      })
+      }, error => console.log(error))
   };
 
   addSkill(): void {

@@ -36,7 +36,7 @@ export class ListDepartComponent implements OnInit {
     this.departService.deleteDepartment(department.id)
       .subscribe(data => {
         this.departments = this.departments.filter(d => d !== department);
-      })
+      }, error => console.log(error))
   };
 
   addDepart(): void {

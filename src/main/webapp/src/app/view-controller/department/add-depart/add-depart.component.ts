@@ -28,7 +28,7 @@ export class AddDepartComponent implements OnInit {
     this.departmentService.createDepartment(this.addForm.value)
       .subscribe(data => {
         this.router.navigate(['home']);
-      });
+      }, error => console.log(error));
   }
 
 }

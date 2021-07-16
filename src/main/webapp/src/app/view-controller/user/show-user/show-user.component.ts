@@ -21,7 +21,7 @@ export class ShowUserComponent implements OnInit {
     this.userService.getUserById(this.id)
       .subscribe(data => {
         this.user = data.result;
-      });
+      }, error => console.log(error));
   }
 
   deleteUser(): void {

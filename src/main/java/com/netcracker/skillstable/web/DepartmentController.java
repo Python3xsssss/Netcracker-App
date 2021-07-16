@@ -2,7 +2,6 @@ package com.netcracker.skillstable.web;
 
 import com.netcracker.skillstable.model.ApiResponse;
 import com.netcracker.skillstable.model.dto.Department;
-import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.dto.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,7 @@ public class DepartmentController {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Department saved successfully.",
-                departmentService.createDepartment(department)
+                departmentService.createOrUpdateDepartment(department)
         );
     }
 
@@ -42,6 +41,15 @@ public class DepartmentController {
                 HttpStatus.OK.value(),
                 "Department fetched successfully.",
                 departmentService.getDepartmentById(departId)
+        );
+    }
+
+    @PutMapping
+    public ApiResponse<Department> updateDepart(@RequestBody Department department) {
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Department updated successfully.",
+                departmentService.createOrUpdateDepartment(department)
         );
     }
 

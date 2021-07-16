@@ -22,7 +22,7 @@ public class UserController {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "User saved successfully.",
-                userService.createUser(user)
+                userService.createOrUpdateUser(user)
         );
     }
 
@@ -41,6 +41,15 @@ public class UserController {
                 HttpStatus.OK.value(),
                 "User fetched successfully.",
                 userService.getUserById(userId)
+        );
+    }
+
+    @PutMapping
+    public ApiResponse<User> updateUser(@RequestBody User user){
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "User updated successfully.",
+                userService.createOrUpdateUser(user)
         );
     }
 

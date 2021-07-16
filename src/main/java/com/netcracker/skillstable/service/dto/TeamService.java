@@ -24,7 +24,7 @@ public class TeamService {
     private TeamConverter teamConverter;
 
 
-    public Team createTeam(Team team) {
+    public Team createOrUpdateTeam(Team team) {
         return teamConverter.eavObjToDto(eavService.createEAVObj(
                 teamConverter.dtoToEavObj(
                         team,

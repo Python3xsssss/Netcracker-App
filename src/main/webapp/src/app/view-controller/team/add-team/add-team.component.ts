@@ -35,7 +35,7 @@ export class AddTeamComponent implements OnInit {
     this.departService.getDepartments()
       .subscribe(data => {
         this.departs = data.result;
-      });
+      }, error => console.log(error));
 
   }
 
@@ -55,7 +55,7 @@ export class AddTeamComponent implements OnInit {
     this.teamService.createTeam(team)
       .subscribe(data => {
         this.router.navigate(['home']);
-      });
+      }, error => console.log(error));
   }
 
 }

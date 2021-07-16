@@ -23,7 +23,7 @@ public class SkillService {
     private UserService userService;
 
 
-    public Skill createSkill(Skill skill) {
+    public Skill createOrUpdateSkill(Skill skill) {
         return SkillConverter.eavObjToDto(eavService.createEAVObj(
                 SkillConverter.dtoToEavObj(
                         skill,

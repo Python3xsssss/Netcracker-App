@@ -22,7 +22,7 @@ export class ShowTeamComponent implements OnInit {
     this.teamService.getTeamById(this.id)
       .subscribe(data => {
         this.team = data.result;
-      });
+      }, error => console.log(error));
   }
 
   deleteTeam(team: Team): void {

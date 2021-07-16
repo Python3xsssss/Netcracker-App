@@ -1,7 +1,6 @@
 package com.netcracker.skillstable.web;
 
 import com.netcracker.skillstable.model.ApiResponse;
-import com.netcracker.skillstable.model.dto.OrgItem;
 import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.service.dto.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class TeamController {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Team saved successfully.",
-                teamService.createTeam(team)
+                teamService.createOrUpdateTeam(team)
         );
     }
 
@@ -42,6 +41,15 @@ public class TeamController {
                 HttpStatus.OK.value(),
                 "Team fetched successfully.",
                 teamService.getTeamById(teamId)
+        );
+    }
+
+    @PutMapping
+    public ApiResponse<Team> updateTeam(@RequestBody Team team) {
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Team updated successfully.",
+                teamService.createOrUpdateTeam(team)
         );
     }
 
