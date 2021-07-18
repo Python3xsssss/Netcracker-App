@@ -1,12 +1,10 @@
 package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.Parameter;
 import com.netcracker.skillstable.model.dto.*;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
 import com.netcracker.skillstable.service.converter.SkillConverter;
-import com.netcracker.skillstable.service.converter.TeamConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +40,7 @@ public class SkillService {
 
     public Optional<Skill> getSkillById(Integer skillId) {
         Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(skillId);
-        if (!optionalEavObj.isPresent() || !Skill.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
+        if (optionalEavObj.isEmpty() || !Skill.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
             return Optional.empty();
         }
 
@@ -53,7 +51,7 @@ public class SkillService {
 
     public void deleteSkill(Integer skillId) {
         Optional<Skill> optionalSkill = this.getSkillById(skillId);
-        if (!optionalSkill.isPresent()) {
+        if (optionalSkill.isEmpty()) {
             return;
         }
 

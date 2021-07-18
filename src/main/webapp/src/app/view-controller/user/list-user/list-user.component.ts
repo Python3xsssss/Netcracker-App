@@ -33,4 +33,8 @@ export class ListUserComponent implements OnInit {
   addUser(): void {
     this.router.navigate(['add-user']);
   };
+
+  updateUser(id: number): void {
+    this.router.navigate(['update-user', id]);
+  };
 }

@@ -23,8 +23,15 @@ public class EntTypeAttr {
     @JoinColumn(name = "attr_id")
     private Attribute attribute;
 
+
     public EntTypeAttr() {
     }
+
+    public EntTypeAttr(EntityType entityType, Attribute attribute) {
+        this.entityType = entityType;
+        this.attribute = attribute;
+    }
+
 
     public Integer getId() {
         return id;

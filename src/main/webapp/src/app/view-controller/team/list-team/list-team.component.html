@@ -13,10 +13,10 @@
     </thead>
     <tbody>
     <tr *ngFor="let team of teams">
-      <td class="hidden">{{team.id}}</td>
-      <td>{{team.name}}</td>
-      <td>{{team.about}}</td>
-      <td>{{team.superior.name}}</td>
+      <td class="hidden">{{team?.id}}</td>
+      <td>{{team?.name}}</td>
+      <td>{{team?.about}}</td>
+      <td>{{team?.superior?.name}}</td>
       <td>
         <button class="btn btn-danger" (click)="deleteTeam(team)">Delete</button>
       </td>

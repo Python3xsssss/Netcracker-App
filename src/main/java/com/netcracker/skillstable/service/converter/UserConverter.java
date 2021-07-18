@@ -1,13 +1,11 @@
 package com.netcracker.skillstable.service.converter;
 
-import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.EntityType;
-import com.netcracker.skillstable.model.Parameter;
-import com.netcracker.skillstable.model.ParameterValue;
+import com.netcracker.skillstable.model.*;
 import com.netcracker.skillstable.model.dto.*;
 import com.netcracker.skillstable.model.dto.attr.Position;
 import com.netcracker.skillstable.model.dto.attr.Role;
 import com.netcracker.skillstable.service.EAVService;
+import com.netcracker.skillstable.service.MetamodelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +15,8 @@ import java.util.*;
 public class UserConverter {
     @Autowired
     private EAVService eavService;
+    @Autowired
+    private MetamodelService metamodelService;
 
     private static final Role[] roleValues = Role.values();
     private static final Position[] positionValues = Position.values();
@@ -28,29 +28,70 @@ public class UserConverter {
         );
 
         eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
-                new Parameter(eavObj, User.getRoleId(), Role.STAFF.ordinal()),
-                new Parameter(eavObj, User.getFirstNameId(), user.getFirstName()),
-                new Parameter(eavObj, User.getLastNameId(), user.getLastName()),
-                new Parameter(eavObj, User.getAgeId(), user.getAge()),
-                new Parameter(eavObj, User.getEmailId(), user.getEmail()),
-                new Parameter(eavObj, User.getAboutId(), user.getAbout()),
-                new Parameter(eavObj, User.getPositionId(),
-                        (user.getPosition() != null) ? user.getPosition().ordinal() : Position.NEWCOMER.ordinal())
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getRoleId()),
+                        Role.STAFF.ordinal()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getFirstNameId()),
+                        user.getFirstName()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getLastNameId()),
+                        user.getLastName()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getAgeId()),
+                        user.getAge()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getEmailId()),
+                        user.getEmail()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getAboutId()),
+                        user.getAbout()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getPositionId()),
+                        (user.getPosition() != null) ? user.getPosition().ordinal() : Position.NEWCOMER.ordinal()
+                )
         )));
+
         if (user.getDepartment() != null) {
             eavObj.addParameter(
-                    new Parameter(eavObj, User.getDepartmentRefId(), user.getDepartment().getId())
+                    new Parameter(
+                            eavObj,
+                            metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getDepartmentRefId()),
+                            user.getDepartment().getId()
+                    )
             );
         }
         if (user.getTeam() != null) {
             eavObj.addParameter(
-                    new Parameter(eavObj, User.getTeamRefId(), user.getTeam().getId())
+                    new Parameter(
+                            eavObj,
+                            metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getTeamRefId()),
+                            user.getTeam().getId()
+                    )
             );
         }
 
+        Attribute skillLevelAttr = metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getSkillLevelRefId());
         List<Parameter> skillLevelsAsParams = new ArrayList<>();
         for (SkillLevel skillLevel : user.getSkillLevels()) {
-            skillLevelsAsParams.add(new Parameter(eavObj, User.getSkillLevelRefId(), skillLevel.getId()));
+            skillLevelsAsParams.add(new Parameter(
+                    eavObj,
+                    skillLevelAttr,
+                    skillLevel.getId()
+            ));
         }
         eavObj.addParameters(skillLevelsAsParams);
 

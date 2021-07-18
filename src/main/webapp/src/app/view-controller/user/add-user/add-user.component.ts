@@ -48,12 +48,11 @@ export class AddUserComponent implements OnInit {
     this.departService.getDepartments()
       .subscribe(data => {
         this.departs = data.result;
-      }, error => console.log(error));
-
+      });
     this.teamService.getTeams()
       .subscribe(data => {
         this.teams = data.result;
-      }, error => console.log(error));
+      });
 
   }
 
@@ -86,7 +85,7 @@ export class AddUserComponent implements OnInit {
     this.userService.createUser(user)
       .subscribe(data => {
         this.router.navigate(['home']);
-      }, error => console.log(error));
+      });
   }
 
 }

@@ -1,14 +1,9 @@
 package com.netcracker.skillstable.service.converter;
 
-import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.EntityType;
-import com.netcracker.skillstable.model.Parameter;
-import com.netcracker.skillstable.model.ParameterValue;
-import com.netcracker.skillstable.model.dto.Department;
-import com.netcracker.skillstable.model.dto.OrgItem;
-import com.netcracker.skillstable.model.dto.Team;
-import com.netcracker.skillstable.model.dto.User;
+import com.netcracker.skillstable.model.*;
+import com.netcracker.skillstable.model.dto.*;
 import com.netcracker.skillstable.service.EAVService;
+import com.netcracker.skillstable.service.MetamodelService;
 import com.netcracker.skillstable.service.dto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +21,8 @@ public class TeamConverter {
     private DepartmentConverter departmentConverter;
     @Autowired
     private UserConverter userConverter;
+    @Autowired
+    private MetamodelService metamodelService;
 
     public EAVObject dtoToEavObj(Team team, EntityType entityType) {
         EAVObject eavObj = new EAVObject(
@@ -35,19 +32,34 @@ public class TeamConverter {
 
         OrgItem superior = team.getSuperior();
         eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
-                new Parameter(eavObj, Team.getAboutId(), team.getAbout()),
-                new Parameter(eavObj, Team.getSuperiorRefId(), superior.getId())
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), Team.getAboutId()),
+                        team.getAbout()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), Team.getSuperiorRefId()),
+                        superior.getId()
+                )
         )));
 
         if (team.getLeader() != null) {
             eavObj.addParameter(
-                    new Parameter(eavObj, Team.getLeaderRefId(), team.getLeader().getId())
+                    new Parameter(
+                            eavObj,
+                            metamodelService.updateEntTypeAttrMapping(entityType.getId(), Team.getLeaderRefId()),
+                            team.getLeader().getId()
+                    )
             );
         }
 
+        Attribute memberAttr = metamodelService.updateEntTypeAttrMapping(entityType.getId(), Team.getMemberRefId());
         List<Parameter> membersAsParams = new ArrayList<>();
         for (User member : team.getMembers()) {
-            membersAsParams.add(new Parameter(eavObj, Team.getMemberRefId(), member.getId()));
+            membersAsParams.add(new Parameter(
+                    eavObj, memberAttr, member.getId()
+            ));
         }
         eavObj.addParameters(membersAsParams);
 

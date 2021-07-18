@@ -1,7 +1,6 @@
 package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.dto.Department;
 import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
@@ -43,7 +42,7 @@ public class TeamService {
 
     public Optional<Team> getTeamById(Integer teamId) {
         Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(teamId);
-        if (!optionalEavObj.isPresent() || !Team.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
+        if (optionalEavObj.isEmpty() || !Team.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
             return Optional.empty();
         }
 
@@ -54,7 +53,7 @@ public class TeamService {
 
     public void deleteTeam(Integer teamId) {
         Optional<Team> optionalTeam = this.getTeamById(teamId);
-        if (!optionalTeam.isPresent()) {
+        if (optionalTeam.isEmpty()) {
             return;
         }
 

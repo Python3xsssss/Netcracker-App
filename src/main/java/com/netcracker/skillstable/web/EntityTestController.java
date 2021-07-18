@@ -49,16 +49,4 @@ public class EntityTestController {
 
         return (entityType != null) ? metamodelService.getAttributesByEntTypeId(entityType.getId()) : null;
     }
-
-    @GetMapping("/entities/{entId}/attributes/{entAttrId}")
-    public Attribute getAttributeByEAVObject(
-            @PathVariable(value="entId") Integer entId,
-            @PathVariable(value="entAttrId") Integer entAttrId
-    ) {
-        EntityType entityType = metamodelService.getEntityTypeByEntId(entId);
-
-        return (entityType != null) ?
-                metamodelService.getAttributeByEntTypeIdAndAttrId(entityType.getId(), entAttrId) :
-                null;
-    }
 }

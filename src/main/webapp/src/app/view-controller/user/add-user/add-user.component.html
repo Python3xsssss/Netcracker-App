@@ -25,12 +25,12 @@
 
     <div class="form-group">
       <label for="firstName">First Name</label>
-      <input formControlName="firstName" placeholder="Name" name="firstName" class="form-control" id="firstName">
+      <input formControlName="firstName" placeholder="First Name" name="firstName" class="form-control" id="firstName">
     </div>
 
     <div class="form-group">
       <label for="lastName">Last Name</label>
-      <input formControlName="lastName" placeholder="Surname" name="lastName" class="form-control" id="lastName">
+      <input formControlName="lastName" placeholder="Last Name" name="lastName" class="form-control" id="lastName">
     </div>
 
     <div class="form-group">
@@ -51,14 +51,14 @@
     <div class="form-group">
       <label for="depart-select">Choose department</label>
       <select formControlName="department" class="form-select" id="depart-select" (ngModelChange)="onDepartSelect($event)">
-        <option *ngFor="let depart of departs" [value]=depart.id>{{depart.name}}</option>
+        <option *ngFor="let depart of departs" [value]=depart?.id>{{depart?.name}}</option>
       </select>
     </div>
 
     <div class="form-group">
       <label for="team-select">Choose team</label>
       <select formControlName="team" class="form-select" id="team-select">
-        <option *ngFor="let team of teamsInDepart" [value]=team.id>{{team.name}}</option>
+        <option *ngFor="let team of teamsInDepart" [value]=team?.id>{{team?.name}}</option>
       </select>
     </div>
 

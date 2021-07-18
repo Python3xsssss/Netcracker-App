@@ -11,6 +11,7 @@ import {ListUserComponent} from "./view-controller/user/list-user/list-user.comp
 import {ListTeamComponent} from "./view-controller/team/list-team/list-team.component";
 import {ListSkillComponent} from "./view-controller/skill/list-skill/list-skill.component";
 import {ShowUserComponent} from "./view-controller/user/show-user/show-user.component";
+import {UpdateUserComponent} from "./view-controller/user/update-user/update-user.component";
 
 
 const routerOptions: ExtraOptions = {
@@ -24,6 +25,7 @@ const ROUTES: Routes = [
   {path: 'team/:id', component: ShowTeamComponent},
   {path: 'user/:id', component: ShowUserComponent},
   {path: 'add-user', component: AddUserComponent},
+  {path: 'update-user/:id', component: UpdateUserComponent},
   {path: 'add-depart', component: AddDepartComponent},
   {path: 'add-team', component: AddTeamComponent},
   {path: 'add-skill', component: AddSkillComponent},

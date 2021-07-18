@@ -23,13 +23,13 @@ public class UserService {
     private UserConverter userConverter;
 
 
-    public User createOrUpdateUser(User user) {
-       return userConverter.eavObjToDto(eavService.createEAVObj(
-               userConverter.dtoToEavObj(
-                       user,
-                       metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
-               )
-       ));
+    public User createUser(User user) {
+        return userConverter.eavObjToDto(eavService.createEAVObj(
+                userConverter.dtoToEavObj(
+                        user,
+                        metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
+                )
+        ));
     }
 
     public List<User> getAllUsers() {
@@ -43,13 +43,34 @@ public class UserService {
     public Optional<User> getUserById(Integer userId) {
 
         Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(userId);
-        if (!optionalEavObj.isPresent() || !User.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
+        if (optionalEavObj.isEmpty() || !User.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
             return Optional.empty();
         }
 
         EAVObject userEavObj = optionalEavObj.get();
 
         return Optional.of(userConverter.eavObjToDto(userEavObj));
+    }
+
+    public Optional<User> updateUser(User user, Integer userId) {
+        EAVObject dtoEavObj = userConverter.dtoToEavObj(
+                user,
+                metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
+        );
+
+        Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(userId);
+        if (optionalEavObj.isEmpty()) {
+            return Optional.empty();
+        }
+
+        EAVObject databaseEavObj = optionalEavObj.get();
+        databaseEavObj.setEntName(dtoEavObj.getEntName());
+
+        return Optional.of(
+                userConverter.eavObjToDto(
+                        eavService.updateEAVObj(databaseEavObj, dtoEavObj.getParameters())
+                )
+        );
     }
 
     public void deleteUser(Integer userId) {

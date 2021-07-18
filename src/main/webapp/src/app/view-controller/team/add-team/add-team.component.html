@@ -15,7 +15,7 @@
     <div class="form-group">
       <label for="superior-select">Choose department the team belongs to</label>
       <select formControlName="superior" class="form-select" id="superior-select" (ngModelChange)="onSuperiorSelect($event)">
-        <option *ngFor="let depart of departs" [value]=depart.id>{{depart.name}}</option>
+        <option *ngFor="let depart of departs" [value]=depart?.id>{{depart?.name}}</option>
       </select>
     </div>
 

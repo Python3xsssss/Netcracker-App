@@ -35,15 +35,15 @@ public class Attribute {
     )
     private String descr;
 
+    @Column(
+            name = "attr_multiple",
+            columnDefinition = "BOOLEAN"
+    )
+    private Boolean multiple;
+
 
     public Attribute() {
 
-    }
-
-    public Attribute(String name, String type, String descr) {
-        this.name = name;
-        this.type = type;
-        this.descr = descr;
     }
 
     public Integer getId() {
@@ -76,5 +76,13 @@ public class Attribute {
 
     public void setDescr(String descr) {
         this.descr = descr;
+    }
+
+    public Boolean getMultiple() {
+        return multiple;
+    }
+
+    public void setMultiple(Boolean multiple) {
+        this.multiple = multiple;
     }
 }

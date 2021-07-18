@@ -12,9 +12,9 @@
     </thead>
     <tbody>
     <tr *ngFor="let skill of skills">
-      <td class="hidden">{{skill.id}}</td>
-      <td>{{skill.name}}</td>
-      <td>{{skill.about}}</td>
+      <td class="hidden">{{skill?.id}}</td>
+      <td>{{skill?.name}}</td>
+      <td>{{skill?.about}}</td>
       <td>
         <button class="btn btn-danger" (click)="deleteSkill(skill)">Delete</button>
       </td>

@@ -43,7 +43,7 @@ public class DepartmentService {
 
     public Optional<Department> getDepartmentById(Integer departmentId) {
         Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(departmentId);
-        if (!optionalEavObj.isPresent() || !Department.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
+        if (optionalEavObj.isEmpty() || !Department.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
             return Optional.empty();
         }
 
@@ -54,7 +54,7 @@ public class DepartmentService {
 
     public void deleteDepartment(Integer departmentId) {
         Optional<Department> optionalDepartment = this.getDepartmentById(departmentId);
-        if (!optionalDepartment.isPresent()) {
+        if (optionalDepartment.isEmpty()) {
             return;
         }
 

@@ -40,7 +40,7 @@ import { UpdateUserComponent } from './view-controller/user/update-user/update-u
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    //FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

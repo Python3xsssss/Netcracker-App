@@ -46,11 +46,30 @@ public class MetamodelService {
         return attributes;
     }
 
-    public Attribute getAttributeByEntTypeIdAndAttrId(Integer entTypeId, Integer attrId) {
-        return entTypeAttrRepo.findByEntityTypeIdAndAttributeId(entTypeId, attrId).getAttribute();
+    public Optional<Attribute> getEntTypeAttrMapping(Integer entTypeId, Integer attrId) {
+        Optional<EntTypeAttr> optionalTypeAttr = Optional.ofNullable(
+                entTypeAttrRepo.findByEntityTypeIdAndAttributeId(entTypeId, attrId)
+        );
+        if (optionalTypeAttr.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(optionalTypeAttr.get().getAttribute());
     }
 
     public Attribute getAttributeByAttrName(String attrName) {
         return attributeRepo.findByName(attrName);
+    }
+
+    public void setEntTypeAttrMapping(Integer entTypeId, Integer attrId) {
+        EntityType entType = entityTypeRepo.getById(entTypeId);
+        Attribute attr = attributeRepo.getById(attrId);
+        entTypeAttrRepo.save(new EntTypeAttr(entType, attr));
+    }
+
+    public Attribute updateEntTypeAttrMapping(Integer entTypeId, Integer attrId) {
+        if (this.getEntTypeAttrMapping(entTypeId, attrId).isEmpty()) {
+            this.setEntTypeAttrMapping(entTypeId, attrId);
+        }
+        return this.getEntTypeAttrMapping(entTypeId, attrId).get();
     }
 }

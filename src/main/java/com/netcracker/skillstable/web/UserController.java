@@ -22,7 +22,7 @@ public class UserController {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "User saved successfully.",
-                userService.createOrUpdateUser(user)
+                userService.createUser(user)
         );
     }
 
@@ -44,12 +44,12 @@ public class UserController {
         );
     }
 
-    @PutMapping
-    public ApiResponse<User> updateUser(@RequestBody User user){
+    @PutMapping("/{id}")
+    public ApiResponse<Optional<User>> updateUser(@PathVariable(value = "id") Integer userId, @RequestBody User user){
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
-                "User updated successfully.",
-                userService.createOrUpdateUser(user)
+                "User (id: " + userId + ") updated successfully.",
+                userService.updateUser(user, userId)
         );
     }
 

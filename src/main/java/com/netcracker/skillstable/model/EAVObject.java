@@ -1,11 +1,14 @@
 package com.netcracker.skillstable.model;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Entity(name="EAVObject")
+@DynamicUpdate
 @Table (name = "entities")
 public class EAVObject {
     @Id
@@ -42,6 +45,12 @@ public class EAVObject {
     }
 
     public EAVObject(EntityType entType, String entName) {
+        this.entType = entType;
+        this.entName = entName;
+    }
+
+    public EAVObject(Integer id, EntityType entType, String entName) {
+        this.id = id;
         this.entType = entType;
         this.entName = entName;
     }
@@ -85,7 +94,7 @@ public class EAVObject {
 
     public Optional<ParameterValue> getParameterByAttrId(Integer attrId) {
         for (Parameter parameter : parameters) {
-            if (attrId.equals(parameter.getAttrId())) {
+            if (attrId.equals(parameter.getAttribute().getId())) {
                 return Optional.of(new ParameterValue(
                         parameter.getAttrValueInt(),
                         parameter.getAttrValueTxt()
@@ -99,7 +108,7 @@ public class EAVObject {
     public List<ParameterValue> getMultipleParametersByAttrId(Integer attrId) { // id exception?
         List<ParameterValue> listOfValues = new ArrayList<>();
         for (Parameter parameter : parameters) {
-            if (attrId.equals(parameter.getAttrId())) {
+            if (attrId.equals(parameter.getAttribute().getId())) {
                 listOfValues.add(new ParameterValue(
                         parameter.getAttrValueInt(),
                         parameter.getAttrValueTxt()
@@ -112,7 +121,7 @@ public class EAVObject {
 
     public void setParameter(Integer attrId, ParameterValue value) {
         for (Parameter parameter : parameters) {
-            if (attrId.equals(parameter.getAttrId())) {  // multiple?
+            if (attrId.equals(parameter.getAttribute().getId())) {  // multiple?
                 parameter.setAttrValueInt(value.getValueInt());
                 parameter.setAttrValueTxt(value.getValueStr());
             }
@@ -120,6 +129,16 @@ public class EAVObject {
     }
 
     public void deleteParameter(Integer attrId) {
-        parameters.removeIf(parameter -> attrId.equals(parameter.getAttrId()));
+        parameters.removeIf(parameter -> attrId.equals(parameter.getAttribute().getId()));
+    }
+
+    @Override
+    public String toString() {
+        return "EAVObject{" +
+                "id=" + id +
+                ", entType=" + entType +
+                ", entName='" + entName + '\'' +
+                ", parameters=" + parameters +
+                '}';
     }
 }

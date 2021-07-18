@@ -35,7 +35,7 @@ public class DtoTestController {
 
     @PostMapping("/users")
     public User create(@RequestBody User user){
-        return userService.createOrUpdateUser(user);
+        return userService.createUser(user);
     }
 
     @DeleteMapping("/users/{userId}")

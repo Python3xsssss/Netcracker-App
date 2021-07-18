@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.Singular;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -100,5 +101,37 @@ public class User {
 
     public void deleteSkillLevel(Skill skill) {
         skillLevels.removeIf(level -> skill.getId().equals(level.getSkill().getId()));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(age, user.age) && Objects.equals(email, user.email) && Objects.equals(about, user.about) && Objects.equals(department, user.department) && Objects.equals(team, user.team) && position == user.position && Objects.equals(skillLevels, user.skillLevels);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password, roles, firstName, lastName, age, email, about, department, team, position, skillLevels);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", email='" + email + '\'' +
+                ", about='" + about + '\'' +
+                ", department=" + ((department != null) ? department.name : "None") +
+                ", team=" + ((team != null) ? team.name : "None") +
+                ", position=" + position +
+                ", skillLevels=" + skillLevels +
+                '}';
     }
 }
