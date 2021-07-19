@@ -22,7 +22,7 @@ public class TeamController {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Team saved successfully.",
-                teamService.createOrUpdateTeam(team)
+                teamService.createTeam(team)
         );
     }
 
@@ -44,12 +44,12 @@ public class TeamController {
         );
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ApiResponse<Team> updateTeam(@RequestBody Team team) {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Team updated successfully.",
-                teamService.createOrUpdateTeam(team)
+                teamService.createTeam(team)
         );
     }
 

@@ -53,8 +53,8 @@ export class UpdateUserComponent implements OnInit {
         age: [this.user.age, Validators.required],
         email: [this.user.email, Validators.required],
         about: [this.user.about, Validators.required],
-        department: [null, Validators.required],
-        team: [null, Validators.required]
+        department: [this.user.department.id, Validators.required],
+        team: [this.user.team.id, Validators.required]
       });
     }, error => console.log(error));
 

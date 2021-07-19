@@ -19,11 +19,13 @@ public class SkillService {
     private MetamodelService metamodelService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private SkillConverter skillConverter;
 
 
-    public Skill createOrUpdateSkill(Skill skill) {
-        return SkillConverter.eavObjToDto(eavService.createEAVObj(
-                SkillConverter.dtoToEavObj(
+    public Skill createSkill(Skill skill) {
+        return skillConverter.eavObjToDto(eavService.createEAVObj(
+                skillConverter.dtoToEavObj(
                         skill,
                         metamodelService.getEntityTypeByEntTypeId(Skill.getEntTypeId())
                 )
@@ -34,7 +36,7 @@ public class SkillService {
         return eavService
                 .getAllByEntTypeId(Skill.getEntTypeId())
                 .stream()
-                .map(SkillConverter::eavObjToDto)
+                .map(skillConverter::eavObjToDto)
                 .collect(Collectors.toList());
     }
 
@@ -46,7 +48,19 @@ public class SkillService {
 
         EAVObject skillEavObj = optionalEavObj.get();
 
-        return Optional.of(SkillConverter.eavObjToDto(skillEavObj));
+        return Optional.of(skillConverter.eavObjToDto(skillEavObj));
+    }
+
+    public Optional<Skill> updateSkill(Skill skill, Integer skillId) {
+        EAVObject dtoEavObj = skillConverter.dtoToEavObj(
+                skill,
+                metamodelService.getEntityTypeByEntTypeId(Team.getEntTypeId())
+        );
+
+        Optional<EAVObject> optionalEAVObject = eavService.updateEAVObj(dtoEavObj, skillId);
+        return optionalEAVObject.isEmpty()
+                ? Optional.empty()
+                : Optional.ofNullable(skillConverter.eavObjToDto(optionalEAVObject.get()));
     }
 
     public void deleteSkill(Integer skillId) {

@@ -24,7 +24,7 @@ public class DepartmentService {
     private DepartmentConverter departmentConverter;
 
 
-    public Department createOrUpdateDepartment(Department department) {
+    public Department createDepartment(Department department) {
         return departmentConverter.eavObjToDto(eavService.createEAVObj(
                 departmentConverter.dtoToEavObj(
                         department,
@@ -50,6 +50,18 @@ public class DepartmentService {
         EAVObject departEavObj = optionalEavObj.get();
 
         return Optional.of(departmentConverter.eavObjToDto(departEavObj));
+    }
+
+    public Optional<Department> updateDepartment(Department department, Integer departId) {
+        EAVObject dtoEavObj = departmentConverter.dtoToEavObj(
+                department,
+                metamodelService.getEntityTypeByEntTypeId(Department.getEntTypeId())
+        );
+
+        Optional<EAVObject> optionalEAVObject = eavService.updateEAVObj(dtoEavObj, departId);
+        return optionalEAVObject.isEmpty()
+                ? Optional.empty()
+                : Optional.ofNullable(departmentConverter.eavObjToDto(optionalEAVObject.get()));
     }
 
     public void deleteDepartment(Integer departmentId) {

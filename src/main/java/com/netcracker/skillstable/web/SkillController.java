@@ -22,7 +22,7 @@ public class SkillController {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Skill saved successfully.",
-                skillService.createOrUpdateSkill(skill)
+                skillService.createSkill(skill)
         );
     }
 
@@ -44,12 +44,12 @@ public class SkillController {
         );
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ApiResponse<Skill> updateSkill(@RequestBody Skill skill) {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Skill updated successfully.",
-                skillService.createOrUpdateSkill(skill)
+                skillService.createSkill(skill)
         );
     }
 

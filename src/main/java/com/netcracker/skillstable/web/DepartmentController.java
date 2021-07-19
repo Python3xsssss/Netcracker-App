@@ -22,7 +22,7 @@ public class DepartmentController {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Department saved successfully.",
-                departmentService.createOrUpdateDepartment(department)
+                departmentService.createDepartment(department)
         );
     }
 
@@ -44,12 +44,12 @@ public class DepartmentController {
         );
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ApiResponse<Department> updateDepart(@RequestBody Department department) {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Department updated successfully.",
-                departmentService.createOrUpdateDepartment(department)
+                departmentService.createDepartment(department)
         );
     }
 

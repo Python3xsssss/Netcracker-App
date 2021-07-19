@@ -21,7 +21,7 @@ export class User {
   department: Department;
   team: Team;
   position: Position;
-  skillLevels: Set<SkillLevel>;
+  skillLevels: SkillLevel[] = [];
 
 
   constructor(id: number,
@@ -36,7 +36,7 @@ export class User {
               department: Department,
               team: Team,
               position: Position,
-              skillLevels: Set<SkillLevel>) {
+              skillLevels: SkillLevel[]) {
     this.id = id;
     this.username = username;
     this.password = password;

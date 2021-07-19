@@ -26,7 +26,7 @@ export class AddSkillComponent implements OnInit {
   onSubmit() {
     this.skillService.createSkill(this.addForm.value)
       .subscribe(data => {
-        this.router.navigate(['home']);
+        this.router.navigate(['skills']);
       }, error => console.log(error));
   }
 

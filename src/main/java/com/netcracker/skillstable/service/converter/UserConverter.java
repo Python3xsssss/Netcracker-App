@@ -17,6 +17,8 @@ public class UserConverter {
     private EAVService eavService;
     @Autowired
     private MetamodelService metamodelService;
+    @Autowired
+    private SkillConverter skillConverter;
 
     private static final Role[] roleValues = Role.values();
     private static final Position[] positionValues = Position.values();
@@ -88,11 +90,16 @@ public class UserConverter {
         Attribute skillLevelAttr = metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getSkillLevelRefId());
         List<Parameter> skillLevelsAsParams = new ArrayList<>();
         for (SkillLevel skillLevel : user.getSkillLevels()) {
+//            EAVObject skillLevelEavObj = new EAVObject(
+//                    entityType,
+//                    user.getUsername()
+//            );
             skillLevelsAsParams.add(new Parameter(
                     eavObj,
                     skillLevelAttr,
                     skillLevel.getId()
             ));
+
         }
         eavObj.addParameters(skillLevelsAsParams);
 
@@ -139,13 +146,12 @@ public class UserConverter {
                 Optional<EAVObject> skillEavObject = eavService.getEAVObjById(skillAsParam.get().getValueInt());
                 skillEavObject.ifPresent(eavObject -> skillLevels.add(SkillLevel.builder()
                         .id(skillLevelAsEavObj.getId())
-                        .name(skillLevelAsEavObj.getEntName())
                         .level(skillLevelAsEavObj
                                 .getParameterByAttrId(SkillLevel.getLevelId())
                                 .map(ParameterValue::getValueInt)
                                 .orElse(null)
                         )
-                        .skill(SkillConverter.eavObjToDto(eavObject))
+                        .skill(skillConverter.eavObjToDto(eavObject))
                         .build()
                 ));
             }

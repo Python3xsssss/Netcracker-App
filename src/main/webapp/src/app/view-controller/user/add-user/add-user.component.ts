@@ -84,8 +84,8 @@ export class AddUserComponent implements OnInit {
     console.log(user);
     this.userService.createUser(user)
       .subscribe(data => {
-        this.router.navigate(['home']);
-      });
+        this.router.navigate(['users']);
+      }, error => console.log(error));
   }
 
 }

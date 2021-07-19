@@ -54,7 +54,7 @@ export class AddTeamComponent implements OnInit {
     console.log(team);
     this.teamService.createTeam(team)
       .subscribe(data => {
-        this.router.navigate(['home']);
+        this.router.navigate(['teams']);
       }, error => console.log(error));
   }
 
