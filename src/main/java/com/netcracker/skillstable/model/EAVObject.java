@@ -3,9 +3,7 @@ package com.netcracker.skillstable.model;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Entity(name="EAVObject")
 @DynamicUpdate
@@ -119,13 +117,33 @@ public class EAVObject {
         return listOfValues;
     }
 
-    public void setParameter(Integer attrId, ParameterValue value) {
-        for (Parameter parameter : parameters) {
-            if (attrId.equals(parameter.getAttribute().getId())) {  // multiple?
-                parameter.setAttrValueInt(value.getValueInt());
-                parameter.setAttrValueTxt(value.getValueStr());
+    public List<Parameter> updateParameters(List<Parameter> inputParams) {
+
+        List<Parameter> newParameters = new ArrayList<>();
+
+        for (Parameter inputParam : inputParams) {
+            boolean contains = false;
+            for (ListIterator<Parameter> iter = this.parameters.listIterator(); iter.hasNext(); ) {
+                Parameter param = iter.next();
+                if (inputParam.getAttribute().equals(param.getAttribute())) {
+                    contains = true;
+                    if (param.getAttribute().getMultiple()) {
+                        newParameters.add(inputParam);
+                    } else {
+                        param.setAttrValueInt(inputParam.getAttrValueInt());
+                        param.setAttrValueTxt(inputParam.getAttrValueTxt());
+                        iter.set(param);
+                    }
+
+                    break;
+                }
+            }
+            if (!contains) {
+                newParameters.add(inputParam);
             }
         }
+
+        return newParameters;
     }
 
     public void deleteParameter(Integer attrId) {
@@ -141,4 +159,19 @@ public class EAVObject {
                 ", parameters=" + parameters +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EAVObject eavObject = (EAVObject) o;
+        return id.equals(eavObject.id) && entType.equals(eavObject.entType) && Objects.equals(entName, eavObject.entName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, entType, entName);
+    }
+
+
 }

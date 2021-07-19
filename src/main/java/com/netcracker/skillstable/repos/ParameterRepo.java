@@ -10,5 +10,6 @@ import java.util.Optional;
 @RepositoryRestResource(collectionResourceRel = "parameters", path = "parameters")
 public interface ParameterRepo extends JpaRepository<Parameter, Integer> {
     List<Parameter> findByEavObjectId(Integer eavId);
+    Parameter findByEavObjectIdAndAttributeId(Integer id, Integer eavId);
 }
 

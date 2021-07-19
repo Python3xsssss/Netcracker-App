@@ -117,15 +117,13 @@ public class Parameter {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Parameter parameter = (Parameter) o;
-        return eavObject.equals(parameter.eavObject) && attribute.equals(parameter.attribute) && Objects.equals(attrValueTxt, parameter.attrValueTxt) && Objects.equals(attrValueInt, parameter.attrValueInt);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(eavObject, attribute, attrValueTxt, attrValueInt);
+    public String toString() {
+        return "Parameter{" +
+                "id=" + id +
+                ", eavObjectId=" + ((eavObject != null) ? eavObject.getId() : "None") +
+                ", attribute=" + ((attribute != null) ? attribute.getName() : "None") +
+                ", attrValueTxt='" + attrValueTxt + '\'' +
+                ", attrValueInt=" + attrValueInt +
+                '}';
     }
 }

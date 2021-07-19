@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 public class OrgItem {
@@ -32,5 +34,19 @@ public class OrgItem {
         this.about = about;
         this.leader = leader;
         this.superior = superior;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrgItem orgItem = (OrgItem) o;
+        return id.equals(orgItem.id) && Objects.equals(name, orgItem.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 }

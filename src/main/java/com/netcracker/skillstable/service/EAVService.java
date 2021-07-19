@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 
 @Service
@@ -33,13 +34,19 @@ public class EAVService {
         return eavRepo.findById(entId);
     }
 
-    public EAVObject updateEAVObj(EAVObject eavObj, List<Parameter> parameters) {
-        /*List<Parameter> paramsFromRepo = parameterRepo.findByEavObjectId(eavObj.getId());
-        for (Parameter parameter : parameters) {
-            if (paramsFromRepo.contains())
+    public Optional<EAVObject> updateEAVObj(EAVObject dtoEavObj, Integer eavObjId) {
+        Optional<EAVObject> optionalEAVObject = eavRepo.findById(eavObjId);
+        if (optionalEAVObject.isEmpty()) {
+            return Optional.empty();
         }
-        eavObj.setParameters(paramsFromRepo);*/
-        return eavRepo.save(eavObj);
+
+        EAVObject databaseEavObj = optionalEAVObject.get();
+
+        List<Parameter> newParameters = databaseEavObj.updateParameters(dtoEavObj.getParameters());
+
+        parameterRepo.saveAll(newParameters);
+
+        return Optional.of(eavRepo.save(databaseEavObj));
     }
 
     public void deleteEAVObj(Integer entId) {

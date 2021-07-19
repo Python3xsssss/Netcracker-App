@@ -98,7 +98,7 @@ export class UpdateUserComponent implements OnInit {
     console.log(user);
     this.userService.updateUser(user)
       .subscribe(data => {
-        this.router.navigate(['users']);
+        this.router.navigate(['user', this.id]);
       });
   }
 }

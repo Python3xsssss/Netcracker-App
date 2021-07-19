@@ -24,10 +24,13 @@ export class ShowUserComponent implements OnInit {
       }, error => console.log(error));
   }
 
+  updateUser(id: number): void {
+    this.router.navigate(['update-user', id]);
+  };
+
   deleteUser(): void {
     this.userService.deleteUser(this.id).subscribe();
     this.router.navigate(['users']);
   };
-
 
 }

@@ -1,6 +1,7 @@
 .list-depart-container {
   position: relative;
 }
+
 #add-dep {
   position: absolute;
   right: 10px;

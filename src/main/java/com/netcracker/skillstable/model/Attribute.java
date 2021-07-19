@@ -1,6 +1,7 @@
 package com.netcracker.skillstable.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity(name="Attribute")
 @Table (name = "attributes")
@@ -84,5 +85,18 @@ public class Attribute {
 
     public void setMultiple(Boolean multiple) {
         this.multiple = multiple;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Attribute attribute = (Attribute) o;
+        return id.equals(attribute.id) && Objects.equals(name, attribute.name) && type.equals(attribute.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, type);
     }
 }

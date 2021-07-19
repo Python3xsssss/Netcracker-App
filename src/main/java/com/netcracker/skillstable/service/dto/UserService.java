@@ -58,19 +58,10 @@ public class UserService {
                 metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
         );
 
-        Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(userId);
-        if (optionalEavObj.isEmpty()) {
-            return Optional.empty();
-        }
-
-        EAVObject databaseEavObj = optionalEavObj.get();
-        databaseEavObj.setEntName(dtoEavObj.getEntName());
-
-        return Optional.of(
-                userConverter.eavObjToDto(
-                        eavService.updateEAVObj(databaseEavObj, dtoEavObj.getParameters())
-                )
-        );
+        Optional<EAVObject> optionalEAVObject = eavService.updateEAVObj(dtoEavObj, userId);
+        return optionalEAVObject.isEmpty()
+                ? Optional.empty()
+                : Optional.ofNullable(userConverter.eavObjToDto(optionalEAVObject.get()));
     }
 
     public void deleteUser(Integer userId) {

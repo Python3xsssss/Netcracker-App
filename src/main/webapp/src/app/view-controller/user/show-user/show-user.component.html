@@ -1,5 +1,6 @@
 <div class="col-md-6 offset-md-3 show-user-container">
   <h2>{{user?.username}} - {{user?.firstName}} {{user?.lastName}}</h2>
+  <button class="btn btn-success" id="edit-user" (click)="updateUser(user.id)">Edit user</button>
   <button class="btn btn-danger" id="delete-user" (click)="deleteUser()">Delete user</button>
   <ul class="list-group list-group-flush">
     <li class="list-group-item">Username: {{user?.username}}</li>

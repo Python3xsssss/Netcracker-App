@@ -26,6 +26,7 @@ public class UserConverter {
                 entityType,
                 user.getUsername()
         );
+        eavObj.setId(user.getId());
 
         eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
                 new Parameter(

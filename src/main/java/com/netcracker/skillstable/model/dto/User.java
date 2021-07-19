@@ -104,19 +104,6 @@ public class User {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id.equals(user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(age, user.age) && Objects.equals(email, user.email) && Objects.equals(about, user.about) && Objects.equals(department, user.department) && Objects.equals(team, user.team) && position == user.position && Objects.equals(skillLevels, user.skillLevels);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, username, password, roles, firstName, lastName, age, email, about, department, team, position, skillLevels);
-    }
-
-    @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
@@ -133,5 +120,18 @@ public class User {
                 ", position=" + position +
                 ", skillLevels=" + skillLevels +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id) && Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username);
     }
 }
