@@ -42,7 +42,7 @@ public class DepartmentConverter {
                 )
         );
 
-        if (department.getLeader() != null) {
+        if (department.getLeader() != null && department.getLeader().getId() != null) {
             eavObj.addParameter(
                     new Parameter(
                             eavObj,

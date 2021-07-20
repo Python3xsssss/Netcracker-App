@@ -126,4 +126,17 @@ public class Parameter {
                 ", attrValueInt=" + attrValueInt +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Parameter parameter = (Parameter) o;
+        return eavObject.equals(parameter.eavObject) && attribute.equals(parameter.attribute) && Objects.equals(attrValueTxt, parameter.attrValueTxt) && Objects.equals(attrValueInt, parameter.attrValueInt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(eavObject, attribute, attrValueTxt, attrValueInt);
+    }
 }

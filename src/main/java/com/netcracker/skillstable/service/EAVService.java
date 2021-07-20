@@ -2,6 +2,7 @@ package com.netcracker.skillstable.service;
 
 import com.netcracker.skillstable.model.EAVObject;
 import com.netcracker.skillstable.model.Parameter;
+import com.netcracker.skillstable.model.dto.SkillLevel;
 import com.netcracker.skillstable.repos.EAVObjectRepo;
 import com.netcracker.skillstable.repos.ParameterRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class EAVService {
 
     public EAVObject createEAVObj(EAVObject eavObj) {
         return eavRepo.save(eavObj);
+    }
+
+    public EAVObject creatOrUpdateEAVObj(EAVObject eavObj) {
+        return (eavObj.getId() == null)
+                ? this.createEAVObj(eavObj)
+                : this.updateEAVObj(eavObj, eavObj.getId()).orElseGet(EAVObject::new);
     }
 
     public List<EAVObject> getAll() {
@@ -45,8 +52,9 @@ public class EAVService {
         List<Parameter> newParameters = databaseEavObj.updateParameters(dtoEavObj.getParameters());
 
         parameterRepo.saveAll(newParameters);
+        eavRepo.save(databaseEavObj);
 
-        return Optional.of(eavRepo.save(databaseEavObj));
+        return eavRepo.findById(eavObjId);
     }
 
     public void deleteEAVObj(Integer entId) {

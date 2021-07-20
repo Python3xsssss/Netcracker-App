@@ -128,7 +128,9 @@ public class EAVObject {
                 if (inputParam.getAttribute().equals(param.getAttribute())) {
                     contains = true;
                     if (param.getAttribute().getMultiple()) {
-                        newParameters.add(inputParam);
+                        if (!Objects.equals(param, inputParam)) {
+                            newParameters.add(inputParam);
+                        }
                     } else {
                         param.setAttrValueInt(inputParam.getAttrValueInt());
                         param.setAttrValueTxt(inputParam.getAttrValueTxt());
@@ -142,6 +144,8 @@ public class EAVObject {
                 newParameters.add(inputParam);
             }
         }
+
+        this.parameters.removeIf(param -> !inputParams.contains(param));
 
         return newParameters;
     }

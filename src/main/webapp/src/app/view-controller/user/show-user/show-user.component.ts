@@ -21,11 +21,11 @@ export class ShowUserComponent implements OnInit {
   show: boolean = false;
 
   constructor(
-      private formBuilder: FormBuilder,
-      private router: Router,
-      private route: ActivatedRoute,
-      private userService: UserService,
-      private skillService: SkillService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private userService: UserService,
+    private skillService: SkillService,
   ) {
   }
 
@@ -47,7 +47,7 @@ export class ShowUserComponent implements OnInit {
     this.router.navigate(['users']);
   };
 
-  addSkill(): void {
+  addSkillLevel(): void {
     this.show = true;
     this.addForm = this.formBuilder.group({
       id: [],
@@ -56,9 +56,19 @@ export class ShowUserComponent implements OnInit {
     });
 
     this.skillService.getSkills()
-        .subscribe(data => {
-          this.skills = data.result;
-        });
+      .subscribe(data => {
+        this.skills = data.result;
+      });
+  }
+
+  deleteSkillLevel(idToDelete: number): void {
+    this.user.skillLevels = this.user.skillLevels.filter(sl => sl.id !== idToDelete);
+    console.log(this.user);
+    this.userService.updateUser(this.user)
+      .subscribe(data => {
+        console.log(data.result);
+        this.user = data.result;
+      });
   }
 
   onSubmit() {
@@ -74,11 +84,13 @@ export class ShowUserComponent implements OnInit {
     let skillLevel: SkillLevel = value;
 
     this.user.skillLevels.push(skillLevel);
-    console.log(this.user.skillLevels);
-    // this.userService.updateUser(this.user)
-    //     .subscribe(data => {
-    //     });
-    this.show = false;
+    console.log(this.user);
+    this.userService.updateUser(this.user)
+      .subscribe(data => {
+        console.log(data);
+        this.user = data.result;
+        this.show = false;
+      });
   }
 
 }

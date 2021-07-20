@@ -1,6 +1,7 @@
 package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.model.EAVObject;
+import com.netcracker.skillstable.model.ParameterValue;
 import com.netcracker.skillstable.model.dto.*;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
@@ -72,6 +73,19 @@ public class SkillService {
         Skill skill = optionalSkill.get();
         for (User user : userService.getAllUsers()) {
             user.deleteSkillLevel(skill);
+            userService.updateUser(user, user.getId());
+        }
+
+        for (EAVObject skillLevelEav: eavService.getAllByEntTypeId(SkillLevel.getEntTypeId())) {
+            if (skillId.equals(
+                    (
+                            skillLevelEav
+                                    .getParameterByAttrId(SkillLevel.getSkillRefId())
+                                    .orElseGet(ParameterValue::new)
+                    ).getValueInt()
+            )) {
+                eavService.deleteEAVObj(skillLevelEav.getId());
+            }
         }
         
         eavService.deleteEAVObj(skillId);

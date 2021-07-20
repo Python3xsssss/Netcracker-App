@@ -16,7 +16,7 @@ public class SkillLevel {
     @Getter private static final Integer levelId = 21;
 
     private Skill skill;
-    @Getter private static final Integer skillRefId = 6;
+    @Getter private static final Integer skillRefId = 5;
 
 
     @Builder

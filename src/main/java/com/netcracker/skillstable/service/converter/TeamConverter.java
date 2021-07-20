@@ -44,7 +44,7 @@ public class TeamConverter {
                 )
         )));
 
-        if (team.getLeader() != null) {
+        if (team.getLeader() != null && team.getLeader().getId() != null) {
             eavObj.addParameter(
                     new Parameter(
                             eavObj,

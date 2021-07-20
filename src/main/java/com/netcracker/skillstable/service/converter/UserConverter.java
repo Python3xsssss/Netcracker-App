@@ -23,6 +23,29 @@ public class UserConverter {
     private static final Role[] roleValues = Role.values();
     private static final Position[] positionValues = Position.values();
 
+    public EAVObject skillLevelToEavObj(SkillLevel skillLevel, EntityType entityType) {
+        EAVObject eavObj = new EAVObject(
+                entityType,
+                "Skill Level"
+        );
+        eavObj.setId(skillLevel.getId());
+
+        eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), SkillLevel.getLevelId()),
+                        skillLevel.getLevel()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), SkillLevel.getSkillRefId()),
+                        skillLevel.getSkill().getId()
+                )
+        )));
+
+        return eavObj;
+    }
+
     public EAVObject dtoToEavObj(User user, EntityType entityType) {
         EAVObject eavObj = new EAVObject(
                 entityType,
@@ -68,7 +91,7 @@ public class UserConverter {
                 )
         )));
 
-        if (user.getDepartment() != null) {
+        if (user.getDepartment() != null && user.getDepartment().getId() != null) {
             eavObj.addParameter(
                     new Parameter(
                             eavObj,
@@ -77,7 +100,7 @@ public class UserConverter {
                     )
             );
         }
-        if (user.getTeam() != null) {
+        if (user.getTeam() != null && user.getTeam().getId() != null) {
             eavObj.addParameter(
                     new Parameter(
                             eavObj,
@@ -90,10 +113,6 @@ public class UserConverter {
         Attribute skillLevelAttr = metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getSkillLevelRefId());
         List<Parameter> skillLevelsAsParams = new ArrayList<>();
         for (SkillLevel skillLevel : user.getSkillLevels()) {
-//            EAVObject skillLevelEavObj = new EAVObject(
-//                    entityType,
-//                    user.getUsername()
-//            );
             skillLevelsAsParams.add(new Parameter(
                     eavObj,
                     skillLevelAttr,
@@ -133,20 +152,20 @@ public class UserConverter {
         }
         user.setTeam(team);
 
-        List<ParameterValue> skillsAsParams = userEavObj.getMultipleParametersByAttrId(User.getSkillLevelRefId());
+        List<ParameterValue> skillLevelsAsParams = userEavObj.getMultipleParametersByAttrId(User.getSkillLevelRefId());
         List<EAVObject> skillLevelsEavList = new ArrayList<>();
-        for (ParameterValue skillAsParam : skillsAsParams) {
-            Optional<EAVObject> optSkillEavObj = eavService.getEAVObjById(skillAsParam.getValueInt());
+        for (ParameterValue skillLevelAsParam : skillLevelsAsParams) {
+            Optional<EAVObject> optSkillEavObj = eavService.getEAVObjById(skillLevelAsParam.getValueInt());
             optSkillEavObj.ifPresent(skillLevelsEavList::add);
         }
         Set<SkillLevel> skillLevels = new HashSet<>();
-        for (EAVObject skillLevelAsEavObj : skillLevelsEavList) {
-            Optional<ParameterValue> skillAsParam = userEavObj.getParameterByAttrId(SkillLevel.getSkillRefId());
+        for (EAVObject skillLevelEavObj : skillLevelsEavList) {
+            Optional<ParameterValue> skillAsParam = skillLevelEavObj.getParameterByAttrId(SkillLevel.getSkillRefId());
             if (skillAsParam.isPresent()) {
                 Optional<EAVObject> skillEavObject = eavService.getEAVObjById(skillAsParam.get().getValueInt());
                 skillEavObject.ifPresent(eavObject -> skillLevels.add(SkillLevel.builder()
-                        .id(skillLevelAsEavObj.getId())
-                        .level(skillLevelAsEavObj
+                        .id(skillLevelEavObj.getId())
+                        .level(skillLevelEavObj
                                 .getParameterByAttrId(SkillLevel.getLevelId())
                                 .map(ParameterValue::getValueInt)
                                 .orElse(null)
