@@ -43,7 +43,7 @@ export class ShowUserComponent implements OnInit {
   };
 
   deleteUser(): void {
-    this.userService.deleteUser(this.id).subscribe();
+    this.userService.deleteUser(this.id).subscribe(data => {}, error => console.log(error));
     this.router.navigate(['users']);
   };
 
@@ -58,7 +58,7 @@ export class ShowUserComponent implements OnInit {
     this.skillService.getSkills()
       .subscribe(data => {
         this.skills = data.result;
-      });
+      }, error => console.log(error));
   }
 
   deleteSkillLevel(idToDelete: number): void {
@@ -66,9 +66,11 @@ export class ShowUserComponent implements OnInit {
     console.log(this.user);
     this.userService.updateUser(this.user)
       .subscribe(data => {
-        console.log(data.result);
-        this.user = data.result;
-      });
+        this.userService.getUserById(this.id)
+          .subscribe(data => {
+            this.user = data.result;
+          }, error => console.log(error));
+      }, error => console.log(error));
   }
 
   onSubmit() {
@@ -87,10 +89,12 @@ export class ShowUserComponent implements OnInit {
     console.log(this.user);
     this.userService.updateUser(this.user)
       .subscribe(data => {
-        console.log(data);
-        this.user = data.result;
+        this.userService.getUserById(this.id)
+          .subscribe(data => {
+            this.user = data.result;
+        }, error => console.log(error));
         this.show = false;
-      });
+      }, error => console.log(error));
   }
 
 }

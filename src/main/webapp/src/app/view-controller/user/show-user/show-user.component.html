@@ -42,7 +42,7 @@
 <!--    <li class="list-group-item" *ngFor="let skillLevel of user?.skillLevels">{{skillLevel?.skill?.name}}: {{skillLevel?.level}}</li>-->
 <!--  </ul>-->
 
-  <button class="btn btn-primary" id="add-skill" (click)="addSkillLevel()">Add skill</button>
+  <button class="btn btn-primary" id="add-skill"  *ngIf="!show" (click)="addSkillLevel()">Add skill</button>
 
   <form [formGroup]="addForm" (ngSubmit)="onSubmit()" *ngIf="show">
     <div class="form-group">

@@ -86,15 +86,17 @@ public class UserService {
 
         user.setSkillLevels(updatedSkillLevels);
 
-        eavService.updateEAVObj(
+        Optional<EAVObject> optionalUpdatedUser = eavService.updateEAVObj(
                 userConverter.dtoToEavObj(
                         user,
                         metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
                 ),
                 userId
         );
-        System.out.println("\n\n\n00000000\n\n" + this.getUserById(userId).orElseGet(User::new) + "\n\n\n00000000\n\n");
-        return this.getUserById(userId);
+
+        return optionalUpdatedUser.isEmpty()
+                ? Optional.empty()
+                : Optional.ofNullable(userConverter.eavObjToDto(optionalUpdatedUser.get()));
     }
 
     public void deleteUser(Integer userId) {
