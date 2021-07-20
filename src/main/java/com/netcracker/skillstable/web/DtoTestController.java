@@ -14,13 +14,14 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/data")
-public class DtoRESTController {
+public class DtoTestController {
     @Autowired
     private UserService userService;
     @Autowired
     private DepartmentService departmentService;
     @Autowired
     private TeamService teamService;
+
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
@@ -30,6 +31,16 @@ public class DtoRESTController {
     @GetMapping("/users/{userId}")
     public Optional<User> getSpecificUser(@PathVariable(value="userId") Integer userId) {
         return userService.getUserById(userId);
+    }
+
+    @PostMapping("/users")
+    public User create(@RequestBody User user){
+        return userService.createUser(user);
+    }
+
+    @DeleteMapping("/users/{userId}")
+    public void delete(@PathVariable("userId") int userId) {
+        userService.deleteUser(userId);
     }
 
     @GetMapping("/departments")

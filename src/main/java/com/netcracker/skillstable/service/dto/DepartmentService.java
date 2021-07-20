@@ -2,6 +2,8 @@ package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.model.EAVObject;
 import com.netcracker.skillstable.model.dto.Department;
+import com.netcracker.skillstable.model.dto.Team;
+import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
 import com.netcracker.skillstable.service.converter.DepartmentConverter;
@@ -18,37 +20,65 @@ public class DepartmentService {
     private EAVService eavService;
     @Autowired
     private MetamodelService metamodelService;
+    @Autowired
+    private DepartmentConverter departmentConverter;
 
 
-    public Integer createDepartment(Department department) {
-        return eavService.createEAVObj(
-                DepartmentConverter.dtoToEavObj(
+    public Department createDepartment(Department department) {
+        return departmentConverter.eavObjToDto(eavService.createEAVObj(
+                departmentConverter.dtoToEavObj(
                         department,
                         metamodelService.getEntityTypeByEntTypeId(Department.getEntTypeId())
                 )
-        ).getId();
+        ));
     }
 
     public List<Department> getAllDepartments() {
         return eavService
                 .getAllByEntTypeId(Department.getEntTypeId())
                 .stream()
-                .map(DepartmentConverter::eavObjToDto)
+                .map(departmentConverter::eavObjToDto)
                 .collect(Collectors.toList());
     }
 
     public Optional<Department> getDepartmentById(Integer departmentId) {
         Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(departmentId);
-        if (!optionalEavObj.isPresent() || !Department.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
+        if (optionalEavObj.isEmpty() || !Department.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
             return Optional.empty();
         }
 
         EAVObject departEavObj = optionalEavObj.get();
 
-        return Optional.of(DepartmentConverter.eavObjToDto(departEavObj));
+        return Optional.of(departmentConverter.eavObjToDto(departEavObj));
+    }
+
+    public Optional<Department> updateDepartment(Department department, Integer departId) {
+        EAVObject dtoEavObj = departmentConverter.dtoToEavObj(
+                department,
+                metamodelService.getEntityTypeByEntTypeId(Department.getEntTypeId())
+        );
+
+        Optional<EAVObject> optionalEAVObject = eavService.updateEAVObj(dtoEavObj, departId);
+        return optionalEAVObject.isEmpty()
+                ? Optional.empty()
+                : Optional.ofNullable(departmentConverter.eavObjToDto(optionalEAVObject.get()));
     }
 
     public void deleteDepartment(Integer departmentId) {
+        Optional<Department> optionalDepartment = this.getDepartmentById(departmentId);
+        if (optionalDepartment.isEmpty()) {
+            return;
+        }
+
+        Department department = optionalDepartment.get();
+        for (Team team : department.getTeams()) {
+            eavService.deleteEAVObj(team.getId());
+        }
+
+        for (User user : department.getMembersNoTeam()) {
+            user.setDepartment(null);
+        }
+
         eavService.deleteEAVObj(departmentId);
     }
 }

@@ -7,6 +7,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(collectionResourceRel = "entityType", path = "entityType")
 public interface EntityTypeRepo extends JpaRepository<EntityType, Integer> {
-    //EntityType findByEavObjsId(Long eavId);
 }
 

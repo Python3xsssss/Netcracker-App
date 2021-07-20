@@ -19,10 +19,17 @@ public class Team extends OrgItem {
     }
 
     @Builder
-    public Team(Integer id, String name, String about, User leader, Object department, Set<User> members) {
-        super(name, about, leader, department);
-        this.id = id;
+    public Team(Integer id, String name, String about, User leader, Department superior, Set<User> members) {
+        super(id, name, about, leader, superior);
         this.members = members;
+    }
+
+    public Team toTeamNoRefs() {
+        return Team.builder()
+                .id(this.id)
+                .name(this.name)
+                .about(this.about)
+                .build();
     }
 
     public boolean addMember(User newMember) {

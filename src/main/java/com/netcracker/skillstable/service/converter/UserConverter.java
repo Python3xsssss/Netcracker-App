@@ -1,13 +1,11 @@
 package com.netcracker.skillstable.service.converter;
 
-import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.EntityType;
-import com.netcracker.skillstable.model.Parameter;
-import com.netcracker.skillstable.model.ParameterValue;
+import com.netcracker.skillstable.model.*;
 import com.netcracker.skillstable.model.dto.*;
 import com.netcracker.skillstable.model.dto.attr.Position;
 import com.netcracker.skillstable.model.dto.attr.Role;
 import com.netcracker.skillstable.service.EAVService;
+import com.netcracker.skillstable.service.MetamodelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,44 +14,119 @@ import java.util.*;
 @Service
 public class UserConverter {
     @Autowired
-    private static EAVService eavService;
+    private EAVService eavService;
+    @Autowired
+    private MetamodelService metamodelService;
+    @Autowired
+    private SkillConverter skillConverter;
 
     private static final Role[] roleValues = Role.values();
     private static final Position[] positionValues = Position.values();
 
-    public static EAVObject dtoToEavObj(User user, EntityType entityType) {
+    public EAVObject skillLevelToEavObj(SkillLevel skillLevel, EntityType entityType) {
+        EAVObject eavObj = new EAVObject(
+                entityType,
+                "Skill Level"
+        );
+        eavObj.setId(skillLevel.getId());
+
+        eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), SkillLevel.getLevelId()),
+                        skillLevel.getLevel()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), SkillLevel.getSkillRefId()),
+                        skillLevel.getSkill().getId()
+                )
+        )));
+
+        return eavObj;
+    }
+
+    public EAVObject dtoToEavObj(User user, EntityType entityType) {
         EAVObject eavObj = new EAVObject(
                 entityType,
                 user.getUsername()
         );
+        eavObj.setId(user.getId());
 
         eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
-                new Parameter(eavObj, User.getRoleId(), Role.STAFF.ordinal()),
-                new Parameter(eavObj, User.getFirstNameId(), user.getFirstName()),
-                new Parameter(eavObj, User.getLastNameId(), user.getLastName()),
-                new Parameter(eavObj, User.getAgeId(), user.getAge()),
-                new Parameter(eavObj, User.getEmailId(), user.getEmail()),
-                new Parameter(eavObj, User.getAboutId(), user.getAbout())
-                //new Parameter(eavObj, User.getDepartmentRefId(), user.getDepartment().getId()),
-                //new Parameter(eavObj, User.getTeamRefId(), user.getTeam().getId()),
-                //new Parameter(eavObj, User.getPositionId(), user.getPosition().ordinal())
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getRoleId()),
+                        Role.STAFF.ordinal()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getFirstNameId()),
+                        user.getFirstName()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getLastNameId()),
+                        user.getLastName()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getAgeId()),
+                        user.getAge()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getEmailId()),
+                        user.getEmail()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getAboutId()),
+                        user.getAbout()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getPositionId()),
+                        (user.getPosition() != null) ? user.getPosition().ordinal() : Position.NEWCOMER.ordinal()
+                )
         )));
 
+        if (user.getDepartment() != null && user.getDepartment().getId() != null) {
+            eavObj.addParameter(
+                    new Parameter(
+                            eavObj,
+                            metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getDepartmentRefId()),
+                            user.getDepartment().getId()
+                    )
+            );
+        }
+        if (user.getTeam() != null && user.getTeam().getId() != null) {
+            eavObj.addParameter(
+                    new Parameter(
+                            eavObj,
+                            metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getTeamRefId()),
+                            user.getTeam().getId()
+                    )
+            );
+        }
+
+        Attribute skillLevelAttr = metamodelService.updateEntTypeAttrMapping(entityType.getId(), User.getSkillLevelRefId());
         List<Parameter> skillLevelsAsParams = new ArrayList<>();
         for (SkillLevel skillLevel : user.getSkillLevels()) {
-            skillLevelsAsParams.add(new Parameter(eavObj, User.getSkillLevelRefId(), skillLevel.getId()));
+            skillLevelsAsParams.add(new Parameter(
+                    eavObj,
+                    skillLevelAttr,
+                    skillLevel.getId()
+            ));
+
         }
         eavObj.addParameters(skillLevelsAsParams);
 
         return eavObj;
     }
 
-    public static User eavObjToDto(EAVObject userEavObj) {
-        Set<Role> roles = new HashSet<>();
-        List<ParameterValue> rolesAsParams = userEavObj.getMultipleParametersByAttrId(User.getRoleId());
-        for (ParameterValue roleParam : rolesAsParams) {
-            roles.add(roleValues[Math.toIntExact(roleParam.getValueInt())]);
-        }
+    public User eavObjToDto(EAVObject userEavObj) {
+        User user = this.eavObjToDtoNoRefs(userEavObj);
 
         Optional<ParameterValue> departAsParam = userEavObj.getParameterByAttrId(User.getDepartmentRefId());
         Department department = new Department();
@@ -65,7 +138,7 @@ public class UserConverter {
                     .build()
             ).orElseGet(Department::new);
         }
-
+        user.setDepartment(department);
 
         Optional<ParameterValue> teamAsParam = userEavObj.getParameterByAttrId(User.getTeamRefId());
         Team team = new Team();
@@ -77,31 +150,41 @@ public class UserConverter {
                     .build()
             ).orElseGet(Team::new);
         }
+        user.setTeam(team);
 
-        List<ParameterValue> skillsAsParams = userEavObj.getMultipleParametersByAttrId(User.getSkillLevelRefId());
+        List<ParameterValue> skillLevelsAsParams = userEavObj.getMultipleParametersByAttrId(User.getSkillLevelRefId());
         List<EAVObject> skillLevelsEavList = new ArrayList<>();
-        for (ParameterValue skillAsParam : skillsAsParams) {
-            Optional<EAVObject> optSkillEavObj = eavService.getEAVObjById(skillAsParam.getValueInt());
+        for (ParameterValue skillLevelAsParam : skillLevelsAsParams) {
+            Optional<EAVObject> optSkillEavObj = eavService.getEAVObjById(skillLevelAsParam.getValueInt());
             optSkillEavObj.ifPresent(skillLevelsEavList::add);
         }
         Set<SkillLevel> skillLevels = new HashSet<>();
-        for (EAVObject skillLevelAsEavObj : skillLevelsEavList) {
-            Optional<ParameterValue> skillAsParam = userEavObj.getParameterByAttrId(SkillLevel.getSkillRefId());
+        for (EAVObject skillLevelEavObj : skillLevelsEavList) {
+            Optional<ParameterValue> skillAsParam = skillLevelEavObj.getParameterByAttrId(SkillLevel.getSkillRefId());
             if (skillAsParam.isPresent()) {
                 Optional<EAVObject> skillEavObject = eavService.getEAVObjById(skillAsParam.get().getValueInt());
                 skillEavObject.ifPresent(eavObject -> skillLevels.add(SkillLevel.builder()
-                        .id(skillLevelAsEavObj.getId())
-                        .name(skillLevelAsEavObj.getEntName())
-                        .level(skillLevelAsEavObj
-                                .getParameterByAttrId(SkillLevel
-                                .getLevelId())
+                        .id(skillLevelEavObj.getId())
+                        .level(skillLevelEavObj
+                                .getParameterByAttrId(SkillLevel.getLevelId())
                                 .map(ParameterValue::getValueInt)
                                 .orElse(null)
                         )
-                        .skill(SkillConverter.eavObjToDto(eavObject))
+                        .skill(skillConverter.eavObjToDto(eavObject))
                         .build()
                 ));
             }
+        }
+        user.setSkillLevels(skillLevels);
+
+        return user;
+    }
+
+    public User eavObjToDtoNoRefs(EAVObject userEavObj) {
+        Set<Role> roles = new HashSet<>();
+        List<ParameterValue> rolesAsParams = userEavObj.getMultipleParametersByAttrId(User.getRoleId());
+        for (ParameterValue roleParam : rolesAsParams) {
+            roles.add(roleValues[Math.toIntExact(roleParam.getValueInt())]);
         }
 
         return User.builder()
@@ -109,22 +192,27 @@ public class UserConverter {
                 .username(userEavObj.getEntName())
                 .password(null)
                 .roles(roles)
-                .firstName(userEavObj.getParameterByAttrId(User.getFirstNameId()).map(ParameterValue::getValueStr).orElse(null))
-                .lastName(userEavObj.getParameterByAttrId(User.getLastNameId()).map(ParameterValue::getValueStr).orElse(null))
-                .age(userEavObj.getParameterByAttrId(User.getAgeId()).map(ParameterValue::getValueInt).orElse(null))
-                .email(userEavObj.getParameterByAttrId(User.getEmailId()).map(ParameterValue::getValueStr).orElse(null))
-                .about(userEavObj.getParameterByAttrId(User.getAboutId()).map(ParameterValue::getValueStr).orElse(null))
-                .department(department)
-                .team(team)
+                .firstName(userEavObj.getParameterByAttrId(User.getFirstNameId())
+                        .map(ParameterValue::getValueStr)
+                        .orElse(null))
+                .lastName(userEavObj.getParameterByAttrId(User.getLastNameId())
+                        .map(ParameterValue::getValueStr)
+                        .orElse(null))
+                .age(userEavObj.getParameterByAttrId(User.getAgeId())
+                        .map(ParameterValue::getValueInt)
+                        .orElse(null))
+                .email(userEavObj.getParameterByAttrId(User.getEmailId())
+                        .map(ParameterValue::getValueStr)
+                        .orElse(null))
+                .about(userEavObj.getParameterByAttrId(User.getAboutId())
+                        .map(ParameterValue::getValueStr)
+                        .orElse(null))
                 .position(positionValues[
-                                userEavObj
-                                        .getParameterByAttrId(User.getPositionId())
-                                        .map(ParameterValue::getValueInt)
-                                        .orElse(Position.NEWCOMER.ordinal())
+                        userEavObj
+                                .getParameterByAttrId(User.getPositionId())
+                                .map(ParameterValue::getValueInt)
+                                .orElse(Position.NEWCOMER.ordinal())
                         ])
-                .skillLevels(skillLevels)
                 .build();
     }
-
-
 }

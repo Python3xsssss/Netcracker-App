@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 public class OrgItem {
@@ -18,7 +20,7 @@ public class OrgItem {
     protected User leader;
     @Getter private static final Integer leaderRefId = 17;
 
-    protected Object superior;
+    protected OrgItem superior;
     @Getter private static final Integer superiorRefId = 19;
 
 
@@ -26,10 +28,25 @@ public class OrgItem {
     }
 
     @Builder(builderMethodName = "OrgItemBuilder")
-    public OrgItem(String name, String about, User leader, Object superior) {
+    public OrgItem(Integer id, String name, String about, User leader, OrgItem superior) {
+        this.id = id;
         this.name = name;
         this.about = about;
         this.leader = leader;
         this.superior = superior;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrgItem orgItem = (OrgItem) o;
+        return id.equals(orgItem.id) && Objects.equals(name, orgItem.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 }

@@ -79,4 +79,11 @@ public class EntityType {
     public void setEntParentId(Long entParentId) {
         this.entParentId = entParentId;
     }
+
+    @Override
+    public String toString() {
+        return "EntityType{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

@@ -1,0 +1,18 @@
+<div class="col-md-6 offset-md-3 add-depart-container">
+  <h2 class="text-center">Adding new department</h2>
+  <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Name of department</label>
+      <input type="text" formControlName="name" placeholder="Department" name="name" class="form-control"
+             id="name">
+    </div>
+
+    <div class="form-group">
+      <label for="about">About department</label>
+      <input type="text" formControlName="about" placeholder="About" name="about" class="form-control" id="about">
+    </div>
+
+    <button class="btn btn-success">Add department</button>
+  </form>
+</div>
+

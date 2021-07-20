@@ -1,6 +1,7 @@
 package com.netcracker.skillstable.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity(name="Parameter")
 @Table (name = "parameters")
@@ -19,12 +20,9 @@ public class Parameter {
     @JoinColumn(name = "ent_id")
     private EAVObject eavObject;
 
-    @Column(
-            name = "attr_id",
-            nullable = false,
-            columnDefinition = "INT"
-    )
-    private Integer attrId;
+    @ManyToOne(targetEntity = Attribute.class)
+    @JoinColumn(name = "attr_id")
+    private Attribute attribute;
 
     @Column(
             name = "attr_value_txt",
@@ -43,36 +41,36 @@ public class Parameter {
 
     }
 
-    public Parameter(Integer attrId, String attrValueTxt) {
-        this.attrId = attrId;
+    public Parameter(Attribute attribute, String attrValueTxt) {
+        this.attribute = attribute;
         this.attrValueTxt = attrValueTxt;
         this.attrValueInt = null;
     }
 
-    public Parameter(Integer attrId, Integer attrValueInt) {
-        this.attrId = attrId;
+    public Parameter(Attribute attribute, Integer attrValueInt) {
+        this.attribute = attribute;
         this.attrValueTxt = null;
         this.attrValueInt = attrValueInt;
     }
 
-    public Parameter(Integer attrId, String attrValueTxt, Integer attrValueInt) {
-        this.attrId = attrId;
+    public Parameter(Attribute attribute, String attrValueTxt, Integer attrValueInt) {
+        this.attribute = attribute;
         this.attrValueTxt = attrValueTxt;
         this.attrValueInt = attrValueInt;
     }
 
-    public Parameter(EAVObject eavObject, Integer attrId, String attrValueTxt) {
-        this(attrId, attrValueTxt);
+    public Parameter(EAVObject eavObject, Attribute attribute, String attrValueTxt) {
+        this(attribute, attrValueTxt);
         this.eavObject = eavObject;
     }
 
-    public Parameter(EAVObject eavObject, Integer attrId, Integer attrValueInt) {
-        this(attrId, attrValueInt);
+    public Parameter(EAVObject eavObject, Attribute attribute, Integer attrValueInt) {
+        this(attribute, attrValueInt);
         this.eavObject = eavObject;
     }
 
-    public Parameter(EAVObject eavObject, Integer attrId, String attrValueTxt, Integer attrValueInt) {
-        this(attrId, attrValueTxt, attrValueInt);
+    public Parameter(EAVObject eavObject, Attribute attribute, String attrValueTxt, Integer attrValueInt) {
+        this(attribute, attrValueTxt, attrValueInt);
         this.eavObject = eavObject;
     }
 
@@ -83,22 +81,6 @@ public class Parameter {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    /*public Long getEntId() {
-        return entId;
-    }
-
-    public void setEntId(Long entId) {
-        this.entId = entId;
-    }*/
-
-    public Integer getAttrId() {
-        return attrId;
-    }
-
-    public void setAttrId(Integer attrId) {
-        this.attrId = attrId;
     }
 
     public String getAttrValueTxt() {
@@ -115,5 +97,46 @@ public class Parameter {
 
     public void setAttrValueInt(Integer attrValueInt) {
         this.attrValueInt = attrValueInt;
+    }
+
+
+    public EAVObject getEavObject() {
+        return eavObject;
+    }
+
+    public void setEavObject(EAVObject eavObject) {
+        this.eavObject = eavObject;
+    }
+
+    public Attribute getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(Attribute attribute) {
+        this.attribute = attribute;
+    }
+
+    @Override
+    public String toString() {
+        return "Parameter{" +
+                "id=" + id +
+                ", eavObjectId=" + ((eavObject != null) ? eavObject.getId() : "None") +
+                ", attribute=" + ((attribute != null) ? attribute.getName() : "None") +
+                ", attrValueTxt='" + attrValueTxt + '\'' +
+                ", attrValueInt=" + attrValueInt +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Parameter parameter = (Parameter) o;
+        return eavObject.equals(parameter.eavObject) && attribute.equals(parameter.attribute) && Objects.equals(attrValueTxt, parameter.attrValueTxt) && Objects.equals(attrValueInt, parameter.attrValueInt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(eavObject, attribute, attrValueTxt, attrValueInt);
     }
 }

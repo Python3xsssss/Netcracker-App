@@ -1,6 +1,7 @@
 package com.netcracker.skillstable.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity(name="Attribute")
 @Table (name = "attributes")
@@ -35,15 +36,15 @@ public class Attribute {
     )
     private String descr;
 
+    @Column(
+            name = "attr_multiple",
+            columnDefinition = "BOOLEAN"
+    )
+    private Boolean multiple;
+
 
     public Attribute() {
 
-    }
-
-    public Attribute(String name, String type, String descr) {
-        this.name = name;
-        this.type = type;
-        this.descr = descr;
     }
 
     public Integer getId() {
@@ -76,5 +77,26 @@ public class Attribute {
 
     public void setDescr(String descr) {
         this.descr = descr;
+    }
+
+    public Boolean getMultiple() {
+        return multiple;
+    }
+
+    public void setMultiple(Boolean multiple) {
+        this.multiple = multiple;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Attribute attribute = (Attribute) o;
+        return id.equals(attribute.id) && Objects.equals(name, attribute.name) && type.equals(attribute.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, type);
     }
 }

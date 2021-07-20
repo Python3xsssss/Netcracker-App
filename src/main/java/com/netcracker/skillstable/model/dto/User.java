@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.Singular;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -83,5 +84,54 @@ public class User {
         this.team = team;
         this.position = position;
         this.skillLevels = skillLevels;
+    }
+
+    public User toUserNoRefs() {
+        return User.builder()
+                .id(this.id)
+                .username(this.username)
+                .roles(this.roles)
+                .firstName(this.firstName)
+                .lastName(this.lastName)
+                .age(this.age)
+                .about(this.about)
+                .position(this.position)
+                .build();
+    }
+
+    public void deleteSkillLevel(Skill skill) {
+        skillLevels.removeIf(level -> skill.getId().equals(level.getSkill().getId()));
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", email='" + email + '\'' +
+                ", about='" + about + '\'' +
+                ", department=" + ((department != null) ? department.name : "None") +
+                ", team=" + ((team != null) ? team.name : "None") +
+                ", position=" + position +
+                ", skillLevels=" + skillLevels +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id) && Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username);
     }
 }
