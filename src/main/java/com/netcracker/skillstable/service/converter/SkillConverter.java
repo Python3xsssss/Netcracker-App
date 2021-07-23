@@ -19,6 +19,7 @@ public class SkillConverter {
                 entityType,
                 skill.getName()
         );
+        eavObj.setId(skill.getId());
 
         eavObj.addParameter(
                 new Parameter(
@@ -32,10 +33,13 @@ public class SkillConverter {
     }
 
     public Skill eavObjToDto(EAVObject skillEavObj) {
-        return Skill.builder()
-                .id(skillEavObj.getId())
-                .name(skillEavObj.getEntName())
-                .about(skillEavObj.getParameterByAttrId(Skill.getAboutId()).map(ParameterValue::getValueStr).orElse(null))
-                .build();
+        return new Skill(
+                skillEavObj.getId(),
+                skillEavObj.getEntName(),
+                skillEavObj
+                        .getParameterByAttrId(Skill.getAboutId())
+                        .map(ParameterValue::getValueTxt)
+                        .orElse(null)
+        );
     }
 }

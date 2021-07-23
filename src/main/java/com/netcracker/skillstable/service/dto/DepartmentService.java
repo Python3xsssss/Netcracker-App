@@ -42,26 +42,21 @@ public class DepartmentService {
     }
 
     public Optional<Department> getDepartmentById(Integer departmentId) {
-        Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(departmentId);
-        if (optionalEavObj.isEmpty() || !Department.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
-            return Optional.empty();
-        }
-
-        EAVObject departEavObj = optionalEavObj.get();
+        EAVObject departEavObj = eavService.getEAVObjById(departmentId);
 
         return Optional.of(departmentConverter.eavObjToDto(departEavObj));
     }
 
-    public Optional<Department> updateDepartment(Department department, Integer departId) {
-        EAVObject dtoEavObj = departmentConverter.dtoToEavObj(
-                department,
-                metamodelService.getEntityTypeByEntTypeId(Department.getEntTypeId())
+    public Department updateDepartment(Department department) {
+        EAVObject updatedDepart = eavService.updateEAVObj(
+                departmentConverter.dtoToEavObj(
+                        department,
+                        metamodelService.getEntityTypeByEntTypeId(Department.getEntTypeId())
+                ),
+                department.getId()
         );
 
-        Optional<EAVObject> optionalEAVObject = eavService.updateEAVObj(dtoEavObj, departId);
-        return optionalEAVObject.isEmpty()
-                ? Optional.empty()
-                : Optional.ofNullable(departmentConverter.eavObjToDto(optionalEAVObject.get()));
+        return departmentConverter.eavObjToDto(updatedDepart);
     }
 
     public void deleteDepartment(Integer departmentId) {

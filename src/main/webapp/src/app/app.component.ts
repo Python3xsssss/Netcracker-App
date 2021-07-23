@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+import { Router } from '@angular/router';
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,4 +11,12 @@ import { Component } from '@angular/core';
 export class AppComponent {
   show: boolean = false;
   title = 'SkillsTable';
+
+  constructor(private router: Router) {
+  }
+
+  logout() {
+    this.router.navigate(['login']);
+  }
+
 }

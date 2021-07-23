@@ -1,15 +1,18 @@
 package com.netcracker.skillstable.service.dto;
 
+import com.netcracker.skillstable.exception.ResourceNotFoundException;
 import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.Parameter;
 import com.netcracker.skillstable.model.ParameterValue;
+import com.netcracker.skillstable.model.dto.Skill;
 import com.netcracker.skillstable.model.dto.SkillLevel;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
+import com.netcracker.skillstable.service.converter.SkillConverter;
 import com.netcracker.skillstable.service.converter.UserConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,8 +26,11 @@ public class UserService {
     private MetamodelService metamodelService;
     @Autowired
     private UserConverter userConverter;
+    @Autowired
+    private SkillConverter skillConverter;
 
 
+    @Transactional
     public User createUser(User user) {
         return userConverter.eavObjToDto(eavService.createEAVObj(
                 userConverter.dtoToEavObj(
@@ -34,6 +40,7 @@ public class UserService {
         ));
     }
 
+    @Transactional
     public List<User> getAllUsers() {
         return eavService
                 .getAllByEntTypeId(User.getEntTypeId())
@@ -42,75 +49,65 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<User> getUserById(Integer userId) {
+    @Transactional
+    public User getUserById(Integer userId) {
+        EAVObject userEavObj = eavService.getEAVObjById(userId);
 
-        Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(userId);
-        if (optionalEavObj.isEmpty() || !User.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
-            return Optional.empty();
-        }
-
-        EAVObject userEavObj = optionalEavObj.get();
-
-        return Optional.of(userConverter.eavObjToDto(userEavObj));
+        return userConverter.eavObjToDto(userEavObj);
     }
 
-    public Optional<User> updateUser(User user, Integer userId) {
-        Optional<EAVObject> optionalUserFromRepo = eavService.getEAVObjById(userId);
-        if (optionalUserFromRepo.isEmpty()) {
-            return Optional.empty();
-        }
-
-        Set<SkillLevel> updatedSkillLevels = new HashSet<>();
-        for (SkillLevel skillLevel : user.getSkillLevels()) {
-            EAVObject skillLevelAsEavObj = eavService.creatOrUpdateEAVObj(userConverter.skillLevelToEavObj(
-                    skillLevel,
-                    metamodelService.getEntityTypeByEntTypeId(SkillLevel.getEntTypeId())
-            ));
-            skillLevel.setId(skillLevelAsEavObj.getId());
-            updatedSkillLevels.add(skillLevel);
-        }
-
-        EAVObject userFromRepo = optionalUserFromRepo.get();
-        List<Integer> refsFromRepo = userFromRepo
-                .getMultipleParametersByAttrId(User.getSkillLevelRefId())
-                .stream()
-                .map(ParameterValue::getValueInt)
-                .collect(Collectors.toList());
-
-        List<Integer> refsFromDto = updatedSkillLevels.stream().map(SkillLevel::getId).collect(Collectors.toList());
-        for (Integer ref : refsFromRepo) {
-            if (!refsFromDto.contains(ref)) {
-                eavService.deleteEAVObj(ref);
-            }
-        }
-
-        user.setSkillLevels(updatedSkillLevels);
-
-        Optional<EAVObject> optionalUpdatedUser = eavService.updateEAVObj(
+    @Transactional
+    public User updateUser(User user) {
+        EAVObject updatedUser = eavService.updateEAVObj(
                 userConverter.dtoToEavObj(
                         user,
                         metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
                 ),
-                userId
+                user.getId()
         );
 
-        return optionalUpdatedUser.isEmpty()
-                ? Optional.empty()
-                : Optional.ofNullable(userConverter.eavObjToDto(optionalUpdatedUser.get()));
+        return userConverter.eavObjToDto(updatedUser);
     }
 
+    @Transactional
     public void deleteUser(Integer userId) {
-        Optional<EAVObject> optEavObj = eavService.getEAVObjById(userId);
-        if (optEavObj.isEmpty()) {
-            return;
-        }
-
-        EAVObject eavObj = optEavObj.get();
+        EAVObject eavObj = eavService.getEAVObjById(userId);
         List<ParameterValue> skillLevelRefs = eavObj.getMultipleParametersByAttrId(User.getSkillLevelRefId());
         for (ParameterValue ref : skillLevelRefs) {
             eavService.deleteEAVObj(ref.getValueInt());
         }
 
         eavService.deleteEAVObj(userId);
+    }
+
+    @Transactional
+    public SkillLevel createOrUpdateSkillLevel(Integer userId, SkillLevel skillLevel) {
+        User user = this.getUserById(userId);
+
+        SkillLevel createdSkillLevel = userConverter.eavObjToSkillLevel(
+                eavService.createOrUpdateEAVObj(
+                        userConverter.skillLevelToEavObj(
+                                skillLevel,
+                                metamodelService.getEntityTypeByEntTypeId(SkillLevel.getEntTypeId())
+                        )
+                )
+        );
+
+        if (skillLevel.getId() == null) {
+            user.addSkillLevel(createdSkillLevel);
+        }
+        this.updateUser(user);
+
+        return createdSkillLevel;
+    }
+
+    @Transactional
+    public void deleteSkillLevel(Integer userId, Integer skillLevelId) {
+        User user = this.getUserById(userId);
+
+        eavService.deleteEAVObj(skillLevelId);
+
+        user.deleteSkillLevel(skillLevelId);
+        this.updateUser(user);
     }
 }

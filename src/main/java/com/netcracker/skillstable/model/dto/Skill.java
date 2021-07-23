@@ -1,13 +1,11 @@
 package com.netcracker.skillstable.model.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Objects;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 public class Skill {
     @Getter private static final Integer entTypeId = 2;
     private Integer id;
@@ -17,10 +15,6 @@ public class Skill {
     @Getter private static final Integer aboutId = 25;
 
 
-    public Skill() {
-    }
-
-    @Builder
     public Skill(Integer id, String name, String about) {
         this.id = id;
         this.name = name;

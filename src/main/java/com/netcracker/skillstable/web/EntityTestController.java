@@ -26,7 +26,7 @@ public class EntityTestController {
     }
 
     @GetMapping("/entities/{entId}")
-    public Optional<EAVObject> getEntity(
+    public EAVObject getEntity(
             @PathVariable(value="entId") Integer entId
     ) {
         return eavService.getEAVObjById(entId);
@@ -37,8 +37,7 @@ public class EntityTestController {
             @PathVariable(value="entId") Integer entId,
             @PathVariable(value="attrId") Integer attrId
     ) {
-        Optional<EAVObject> optEntity = eavService.getEAVObjById(entId);
-        return optEntity.map(eavObject -> eavObject.getMultipleParametersByAttrId(attrId)).orElse(null);
+        return eavService.getEAVObjById(entId).getMultipleParametersByAttrId(attrId);
     }
 
     @GetMapping("/entities/{entId}/attributes")

@@ -120,24 +120,26 @@ public class EAVObject {
     public List<Parameter> updateParameters(List<Parameter> inputParams) {
 
         List<Parameter> newParameters = new ArrayList<>();
+        System.out.println("Input params: " + inputParams);
+        System.out.println("Old params: " + this.parameters);
 
         for (Parameter inputParam : inputParams) {
             boolean contains = false;
             for (ListIterator<Parameter> iter = this.parameters.listIterator(); iter.hasNext(); ) {
                 Parameter param = iter.next();
                 if (inputParam.getAttribute().equals(param.getAttribute())) {
-                    contains = true;
                     if (param.getAttribute().getMultiple()) {
-                        if (!Objects.equals(param, inputParam)) {
-                            newParameters.add(inputParam);
+                        if (param.equals(inputParam)) {
+                            contains = true;
+                            break;
                         }
                     } else {
+                        contains = true;
                         param.setAttrValueInt(inputParam.getAttrValueInt());
                         param.setAttrValueTxt(inputParam.getAttrValueTxt());
                         iter.set(param);
+                        break;
                     }
-
-                    break;
                 }
             }
             if (!contains) {
@@ -150,17 +152,13 @@ public class EAVObject {
         return newParameters;
     }
 
-    public void deleteParameter(Integer attrId) {
-        parameters.removeIf(parameter -> attrId.equals(parameter.getAttribute().getId()));
-    }
-
     @Override
     public String toString() {
         return "EAVObject{" +
-                "id=" + id +
-                ", entType=" + entType +
-                ", entName='" + entName + '\'' +
-                ", parameters=" + parameters +
+                "\nid=" + id +
+                ",\nentType=" + entType +
+                ",\nentName='" + entName + '\'' +
+                ",\nparameters=" + parameters +
                 '}';
     }
 

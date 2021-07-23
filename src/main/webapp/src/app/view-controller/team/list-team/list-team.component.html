@@ -6,16 +6,15 @@
     <tr>
       <th class="hidden">Id</th>
       <th>Name</th>
-      <th>About</th>
       <th>Department</th>
+      <th>Options</th>
       <th></th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let team of teams">
       <td class="hidden">{{team?.id}}</td>
-      <td>{{team?.name}}</td>
-      <td>{{team?.about}}</td>
+      <td><a routerLink="/team/{{team?.id}}">{{team?.name}}</a></td>
       <td>{{team?.superior?.name}}</td>
       <td>
         <button class="btn btn-danger" (click)="deleteTeam(team)">Delete</button>

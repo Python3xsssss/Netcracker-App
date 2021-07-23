@@ -1,6 +1,6 @@
-<div class="col-md-6 offset-md-3 add-depart-container">
-  <h2 class="text-center">Adding new department</h2>
-  <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+<div class="col-md-6 offset-md-3 update-depart-container">
+  <h2 class="text-center">Editing department {{department?.name}}</h2>
+  <form *ngIf="addForm" [formGroup]="addForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="name">Name of department</label>
       <input type="text" formControlName="name" placeholder="Department" name="name" class="form-control"
@@ -19,7 +19,6 @@
       </select>
     </div>
 
-    <button class="btn btn-success">Add department</button>
+    <button class="btn btn-success">Save changes</button>
   </form>
 </div>
-

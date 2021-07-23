@@ -3,11 +3,11 @@ package com.netcracker.skillstable.model;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity(name="Parameter")
-@Table (name = "parameters")
+@Entity(name = "Parameter")
+@Table(name = "parameters")
 public class Parameter {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(
             name = "id_pk",
             updatable = false,
@@ -81,6 +81,15 @@ public class Parameter {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public ParameterValue getAttrValue() {
+        return new ParameterValue(this.attrValueInt, this.attrValueTxt);
+    }
+
+    public void setAttrValue(ParameterValue attrValue) {
+        this.attrValueInt = attrValue.getValueInt();
+        this.attrValueTxt = attrValue.getValueTxt();
     }
 
     public String getAttrValueTxt() {

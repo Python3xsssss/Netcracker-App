@@ -29,7 +29,7 @@ public class DtoTestController {
     }
 
     @GetMapping("/users/{userId}")
-    public Optional<User> getSpecificUser(@PathVariable(value="userId") Integer userId) {
+    public User getSpecificUser(@PathVariable(value="userId") Integer userId) {
         return userService.getUserById(userId);
     }
 

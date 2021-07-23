@@ -45,11 +45,14 @@ public class DepartmentController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Department> updateDepart(@RequestBody Department department) {
+    public ApiResponse<Department> updateDepart(
+            @RequestBody Department department,
+            @PathVariable(value = "id") Integer departId
+            ) {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Department updated successfully.",
-                departmentService.createDepartment(department)
+                departmentService.updateDepartment(department)
         );
     }
 

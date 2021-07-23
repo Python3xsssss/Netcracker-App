@@ -31,8 +31,7 @@ public class MetamodelService {
     }
 
     public EntityType getEntityTypeByEntId(Integer entId) {
-        Optional<EAVObject> optionalEAVObject = eavService.getEAVObjById(entId);
-        return optionalEAVObject.map(EAVObject::getEntType).orElse(null);
+        return eavService.getEAVObjById(entId).getEntType();
     }
 
     public List<Attribute> getAttributesByEntTypeId(Integer entTypeId) {

@@ -42,26 +42,18 @@ public class SkillService {
     }
 
     public Optional<Skill> getSkillById(Integer skillId) {
-        Optional<EAVObject> optionalEavObj = eavService.getEAVObjById(skillId);
-        if (optionalEavObj.isEmpty() || !Skill.getEntTypeId().equals(optionalEavObj.get().getEntType().getId())) {
-            return Optional.empty();
-        }
-
-        EAVObject skillEavObj = optionalEavObj.get();
+        EAVObject skillEavObj = eavService.getEAVObjById(skillId);;
 
         return Optional.of(skillConverter.eavObjToDto(skillEavObj));
     }
 
-    public Optional<Skill> updateSkill(Skill skill, Integer skillId) {
+    public Skill updateSkill(Skill skill, Integer skillId) {
         EAVObject dtoEavObj = skillConverter.dtoToEavObj(
                 skill,
                 metamodelService.getEntityTypeByEntTypeId(Team.getEntTypeId())
         );
 
-        Optional<EAVObject> optionalEAVObject = eavService.updateEAVObj(dtoEavObj, skillId);
-        return optionalEAVObject.isEmpty()
-                ? Optional.empty()
-                : Optional.ofNullable(skillConverter.eavObjToDto(optionalEAVObject.get()));
+        return skillConverter.eavObjToDto(eavService.updateEAVObj(dtoEavObj, skillId));
     }
 
     public void deleteSkill(Integer skillId) {
@@ -73,7 +65,7 @@ public class SkillService {
         Skill skill = optionalSkill.get();
         for (User user : userService.getAllUsers()) {
             user.deleteSkillLevel(skill);
-            userService.updateUser(user, user.getId());
+            userService.updateUser(user);
         }
 
         for (EAVObject skillLevelEav: eavService.getAllByEntTypeId(SkillLevel.getEntTypeId())) {

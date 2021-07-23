@@ -29,6 +29,7 @@ public class TeamConverter {
                 entityType,
                 team.getName()
         );
+        eavObj.setId(team.getId());
 
         OrgItem superior = team.getSuperior();
         eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
@@ -72,20 +73,16 @@ public class TeamConverter {
         Optional<ParameterValue> leaderAsParam = teamEavObj.getParameterByAttrId(Team.getLeaderRefId());
         User leader = new User();
         if (leaderAsParam.isPresent()) {
-            Optional<EAVObject> leaderEavObject = eavService.getEAVObjById(leaderAsParam.get().getValueInt());
-            leader = leaderEavObject
-                    .map(eavObject -> userConverter.eavObjToDtoNoRefs(eavObject))
-                    .orElseGet(User::new);
+            EAVObject leaderEavObject = eavService.getEAVObjById(leaderAsParam.get().getValueInt());
+            leader = userConverter.eavObjToDtoNoRefs(leaderEavObject);
         }
         team.setLeader(leader);
 
         Optional<ParameterValue> departAsParam = teamEavObj.getParameterByAttrId(Team.getSuperiorRefId());
         Department department = new Department();
         if (departAsParam.isPresent()) {
-            Optional<EAVObject> departEavObject = eavService.getEAVObjById(departAsParam.get().getValueInt());
-            department = departEavObject
-                    .map(eavObject -> departmentConverter.eavObjToDtoNoRefs(eavObject))
-                    .orElseGet(Department::new);
+            EAVObject departEavObject = eavService.getEAVObjById(departAsParam.get().getValueInt());
+            department = departmentConverter.eavObjToDtoNoRefs(departEavObject);
         }
         team.setSuperior(department);
 
@@ -101,10 +98,13 @@ public class TeamConverter {
     }
 
     public Team eavObjToDtoNoRefs(EAVObject teamEavObj) {
-        return Team.builder()
-                .id(teamEavObj.getId())
-                .name(teamEavObj.getEntName())
-                .about(teamEavObj.getParameterByAttrId(Team.getAboutId()).map(ParameterValue::getValueStr).orElse(null))
-                .build();
+        return new Team(
+                teamEavObj.getId(),
+                teamEavObj.getEntName(),
+                teamEavObj
+                        .getParameterByAttrId(Team.getAboutId())
+                        .map(ParameterValue::getValueTxt)
+                        .orElse(null)
+        );
     }
 }

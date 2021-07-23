@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {HttpClientModule} from "@angular/common/http";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {ReactiveFormsModule} from "@angular/forms";
 
 import {AppComponent} from './app.component';
 import {HomeComponent} from './view-controller/home/home.component';
@@ -17,6 +17,9 @@ import {ListSkillComponent} from "./view-controller/skill/list-skill/list-skill.
 import {ShowTeamComponent} from "./view-controller/team/show-team/show-team.component";
 import { ShowUserComponent } from './view-controller/user/show-user/show-user.component';
 import { UpdateUserComponent } from './view-controller/user/update-user/update-user.component';
+import { LoginComponent } from './view-controller/login/login.component';
+import { UpdateDepartComponent } from './view-controller/department/update-depart/update-depart.component';
+import { ShowReportComponent } from './view-controller/team/show-report/show-report.component';
 
 
 @NgModule({
@@ -33,14 +36,16 @@ import { UpdateUserComponent } from './view-controller/user/update-user/update-u
     ListSkillComponent,
     ShowTeamComponent,
     ShowUserComponent,
-    UpdateUserComponent
+    UpdateUserComponent,
+    LoginComponent,
+    UpdateDepartComponent,
+    ShowReportComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    //FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
