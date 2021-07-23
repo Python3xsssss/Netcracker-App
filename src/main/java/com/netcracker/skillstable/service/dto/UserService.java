@@ -1,24 +1,23 @@
 package com.netcracker.skillstable.service.dto;
 
-import com.netcracker.skillstable.exception.ResourceNotFoundException;
 import com.netcracker.skillstable.model.EAVObject;
 import com.netcracker.skillstable.model.ParameterValue;
-import com.netcracker.skillstable.model.dto.Skill;
 import com.netcracker.skillstable.model.dto.SkillLevel;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
-import com.netcracker.skillstable.service.converter.SkillConverter;
 import com.netcracker.skillstable.service.converter.UserConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
 @Service
+@Transactional(propagation = Propagation.REQUIRED)
 public class UserService {
     @Autowired
     private EAVService eavService;
@@ -26,11 +25,8 @@ public class UserService {
     private MetamodelService metamodelService;
     @Autowired
     private UserConverter userConverter;
-    @Autowired
-    private SkillConverter skillConverter;
 
 
-    @Transactional
     public User createUser(User user) {
         return userConverter.eavObjToDto(eavService.createEAVObj(
                 userConverter.dtoToEavObj(
@@ -40,7 +36,6 @@ public class UserService {
         ));
     }
 
-    @Transactional
     public List<User> getAllUsers() {
         return eavService
                 .getAllByEntTypeId(User.getEntTypeId())
@@ -49,14 +44,12 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
     public User getUserById(Integer userId) {
         EAVObject userEavObj = eavService.getEAVObjById(userId);
 
         return userConverter.eavObjToDto(userEavObj);
     }
 
-    @Transactional
     public User updateUser(User user) {
         EAVObject updatedUser = eavService.updateEAVObj(
                 userConverter.dtoToEavObj(
@@ -69,7 +62,6 @@ public class UserService {
         return userConverter.eavObjToDto(updatedUser);
     }
 
-    @Transactional
     public void deleteUser(Integer userId) {
         EAVObject eavObj = eavService.getEAVObjById(userId);
         List<ParameterValue> skillLevelRefs = eavObj.getMultipleParametersByAttrId(User.getSkillLevelRefId());
@@ -80,7 +72,6 @@ public class UserService {
         eavService.deleteEAVObj(userId);
     }
 
-    @Transactional
     public SkillLevel createOrUpdateSkillLevel(Integer userId, SkillLevel skillLevel) {
         User user = this.getUserById(userId);
 
@@ -101,13 +92,12 @@ public class UserService {
         return createdSkillLevel;
     }
 
-    @Transactional
     public void deleteSkillLevel(Integer userId, Integer skillLevelId) {
         User user = this.getUserById(userId);
 
         eavService.deleteEAVObj(skillLevelId);
-
         user.deleteSkillLevel(skillLevelId);
+
         this.updateUser(user);
     }
 }

@@ -17,4 +17,10 @@ export class OrgItem {
     this.leader = leader;
     this.superior = superior;
   }
+
+  public equals(obj: OrgItem): boolean {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    return this.id === obj.id && this.name === obj.name;
+  }
 }

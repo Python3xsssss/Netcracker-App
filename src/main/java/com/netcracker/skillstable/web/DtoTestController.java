@@ -49,7 +49,7 @@ public class DtoTestController {
     }
 
     @GetMapping("/departments/{departId}")
-    public Optional<Department> getSpecificDepart(@PathVariable(value="departId") Integer departId) {
+    public Department getSpecificDepart(@PathVariable(value="departId") Integer departId) {
         return departmentService.getDepartmentById(departId);
     }
 
@@ -59,7 +59,7 @@ public class DtoTestController {
     }
 
     @GetMapping("/teams/{teamId}")
-    public Optional<Team> getSpecificTeam(@PathVariable(value="teamId") Integer teamId) {
+    public Team getSpecificTeam(@PathVariable(value="teamId") Integer teamId) {
         return teamService.getTeamById(teamId);
     }
 

@@ -2,13 +2,14 @@ package com.netcracker.skillstable.web;
 
 import com.netcracker.skillstable.model.ApiResponse;
 import com.netcracker.skillstable.model.dto.Department;
+import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.dto.DepartmentService;
+import com.netcracker.skillstable.service.dto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
@@ -16,13 +17,28 @@ import java.util.Optional;
 public class DepartmentController {
     @Autowired
     private DepartmentService departmentService;
+    @Autowired
+    private UserService userService;
+
+    private void updateLeader(Department department) {
+        if (department.getLeader() != null && department.getLeader().getId() != null) {
+            User leader = userService.getUserById(department.getLeader().getId());
+            if (!department.equals(leader.getDepartment())) {
+                leader.setDepartment(department);
+                userService.updateUser(leader);
+            }
+        }
+    }
 
     @PostMapping
     public ApiResponse<Department> saveDepart(@RequestBody Department department) {
+        Department createdDepartment = departmentService.createDepartment(department);
+        updateLeader(createdDepartment);
+
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Department saved successfully.",
-                departmentService.createDepartment(department)
+                createdDepartment
         );
     }
 
@@ -36,7 +52,7 @@ public class DepartmentController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<Optional<Department>> getDepart(@PathVariable(value = "id") Integer departId) {
+    public ApiResponse<Department> getDepart(@PathVariable(value = "id") Integer departId) {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Department fetched successfully.",
@@ -49,10 +65,13 @@ public class DepartmentController {
             @RequestBody Department department,
             @PathVariable(value = "id") Integer departId
             ) {
+        Department updatedDepartment = departmentService.updateDepartment(department);
+        updateLeader(updatedDepartment);
+
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Department updated successfully.",
-                departmentService.updateDepartment(department)
+                updatedDepartment
         );
     }
 

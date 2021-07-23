@@ -23,12 +23,9 @@ public class Attribute {
     )
     private String name;
 
-    @Column(
-            name = "attr_type",
-            nullable = false,
-            columnDefinition = "TEXT"
-    )
-    private String type;
+    @ManyToOne(targetEntity = AttrType.class)
+    @JoinColumn(name="attr_type_id")
+    private AttrType attrType;
 
     @Column(
             name = "attr_descr",
@@ -63,12 +60,12 @@ public class Attribute {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public AttrType getAttrType() {
+        return attrType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setAttrType(AttrType attrType) {
+        this.attrType = attrType;
     }
 
     public String getDescr() {
@@ -92,11 +89,11 @@ public class Attribute {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Attribute attribute = (Attribute) o;
-        return id.equals(attribute.id) && Objects.equals(name, attribute.name) && type.equals(attribute.type);
+        return id.equals(attribute.id) && Objects.equals(name, attribute.name) && attrType.equals(attribute.attrType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, type);
+        return Objects.hash(id, name, attrType);
     }
 }

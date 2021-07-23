@@ -7,6 +7,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Team extends OrgItem {
     @Getter private static final Integer entTypeId = 5;
     private Set<User> members = new HashSet<>();

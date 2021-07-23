@@ -11,4 +11,10 @@ export class SkillLevel {
     this.skill = skill;
     this.level = level;
   }
+
+  public equals(obj: SkillLevel): boolean {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    return this.id == obj.id;
+  }
 }

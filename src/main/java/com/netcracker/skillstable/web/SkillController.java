@@ -36,7 +36,7 @@ public class SkillController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<Optional<Skill>> getSkill(@PathVariable(value = "id") Integer skillId) {
+    public ApiResponse<Skill> getSkill(@PathVariable(value = "id") Integer skillId) {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Skill fetched successfully.",

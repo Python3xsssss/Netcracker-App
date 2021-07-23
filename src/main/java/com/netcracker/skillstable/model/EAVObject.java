@@ -120,8 +120,6 @@ public class EAVObject {
     public List<Parameter> updateParameters(List<Parameter> inputParams) {
 
         List<Parameter> newParameters = new ArrayList<>();
-        System.out.println("Input params: " + inputParams);
-        System.out.println("Old params: " + this.parameters);
 
         for (Parameter inputParam : inputParams) {
             boolean contains = false;

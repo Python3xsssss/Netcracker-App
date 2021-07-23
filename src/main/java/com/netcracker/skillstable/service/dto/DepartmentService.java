@@ -3,18 +3,19 @@ package com.netcracker.skillstable.service.dto;
 import com.netcracker.skillstable.model.EAVObject;
 import com.netcracker.skillstable.model.dto.Department;
 import com.netcracker.skillstable.model.dto.Team;
-import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
 import com.netcracker.skillstable.service.converter.DepartmentConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(propagation = Propagation.REQUIRED)
 public class DepartmentService {
     @Autowired
     private EAVService eavService;
@@ -41,10 +42,8 @@ public class DepartmentService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<Department> getDepartmentById(Integer departmentId) {
-        EAVObject departEavObj = eavService.getEAVObjById(departmentId);
-
-        return Optional.of(departmentConverter.eavObjToDto(departEavObj));
+    public Department getDepartmentById(Integer departmentId) {
+        return departmentConverter.eavObjToDto(eavService.getEAVObjById(departmentId));
     }
 
     public Department updateDepartment(Department department) {
@@ -60,18 +59,10 @@ public class DepartmentService {
     }
 
     public void deleteDepartment(Integer departmentId) {
-        Optional<Department> optionalDepartment = this.getDepartmentById(departmentId);
-        if (optionalDepartment.isEmpty()) {
-            return;
-        }
+        Department department = this.getDepartmentById(departmentId);
 
-        Department department = optionalDepartment.get();
         for (Team team : department.getTeams()) {
             eavService.deleteEAVObj(team.getId());
-        }
-
-        for (User user : department.getMembersNoTeam()) {
-            user.setDepartment(null);
         }
 
         eavService.deleteEAVObj(departmentId);

@@ -7,6 +7,7 @@ import java.util.Objects;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrgItem {
     protected Integer id;
     @Getter private static final Integer entTypeId = 3;
@@ -34,11 +35,11 @@ public class OrgItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrgItem orgItem = (OrgItem) o;
-        return id.equals(orgItem.id) && Objects.equals(name, orgItem.name);
+        return id.equals(orgItem.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id);
     }
 }

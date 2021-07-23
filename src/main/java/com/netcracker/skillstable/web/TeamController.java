@@ -1,14 +1,16 @@
 package com.netcracker.skillstable.web;
 
 import com.netcracker.skillstable.model.ApiResponse;
+import com.netcracker.skillstable.model.dto.Department;
 import com.netcracker.skillstable.model.dto.Team;
+import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.dto.TeamService;
+import com.netcracker.skillstable.service.dto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
@@ -16,13 +18,28 @@ import java.util.Optional;
 public class TeamController {
     @Autowired
     private TeamService teamService;
+    @Autowired
+    private UserService userService;
+
+    private void updateLeader(Team team) {
+        if (team.getLeader() != null && team.getLeader().getId() != null) {
+            User leader = userService.getUserById(team.getLeader().getId());
+            if (!team.equals(leader.getTeam())) {
+                leader.setTeam(team);
+                userService.updateUser(leader);
+            }
+        }
+    }
 
     @PostMapping
     public ApiResponse<Team> saveTeam(@RequestBody Team team) {
+        Team createdTeam = teamService.createTeam(team);
+        updateLeader(createdTeam);
+
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Team saved successfully.",
-                teamService.createTeam(team)
+                createdTeam
         );
     }
 
@@ -36,7 +53,7 @@ public class TeamController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<Optional<Team>> getTeam(@PathVariable(value = "id") Integer teamId) {
+    public ApiResponse<Team> getTeam(@PathVariable(value = "id") Integer teamId) {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Team fetched successfully.",
@@ -46,10 +63,13 @@ public class TeamController {
 
     @PutMapping("/{id}")
     public ApiResponse<Team> updateTeam(@RequestBody Team team) {
+        Team updatedTeam = teamService.updateTeam(team);
+        updateLeader(updatedTeam);
+
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Team updated successfully.",
-                teamService.createTeam(team)
+                updatedTeam
         );
     }
 

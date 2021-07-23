@@ -11,4 +11,9 @@ export class Team extends OrgItem{
     this.members = members;
     this.superior = superior;
   }
+
+  public equals(obj: Team): boolean {
+    if (this == obj) return true;
+    return super.equals(obj);
+  }
 }

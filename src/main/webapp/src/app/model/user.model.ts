@@ -51,4 +51,10 @@ export class User {
     this.position = position;
     this.skillLevels = skillLevels;
   }
+
+  public equals(obj: User): boolean {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    return this.id == obj.id;
+  }
 }

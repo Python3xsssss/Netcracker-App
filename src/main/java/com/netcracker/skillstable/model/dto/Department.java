@@ -6,8 +6,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Department extends OrgItem {
     @Getter private static final Integer entTypeId = 4;
 

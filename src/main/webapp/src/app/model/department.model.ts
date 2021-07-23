@@ -19,4 +19,9 @@ export class Department extends OrgItem{
     this.membersNoTeam = membersNoTeam;
   }
 
+  public equals(obj: Department): boolean {
+    if (this == obj) return true;
+    return super.equals(obj);
+  }
+
 }

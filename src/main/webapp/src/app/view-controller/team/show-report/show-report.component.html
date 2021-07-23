@@ -11,7 +11,7 @@
     <tbody>
     <tr *ngFor="let member of members">
       <td>
-        <a routerLink="/user/{{member?.id}}">{{member?.firstName}} {{member?.lastName}}</a>
+        <a routerLink="/user/{{member?.id}}">{{member?.username}} {{member?.firstName}} {{member?.lastName}}</a>
       </td>
       <td *ngFor="let skill of skills">
         {{getSkillLevel(member, skill)}}
