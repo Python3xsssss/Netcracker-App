@@ -9,4 +9,10 @@ export class Skill {
     this.name = name;
     this.about = about;
   }
+
+  public equals(obj: Skill): boolean {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    return this.id == obj.id;
+  }
 }

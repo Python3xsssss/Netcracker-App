@@ -29,4 +29,12 @@ export class ShowTeamComponent implements OnInit {
     this.teamService.deleteTeam(team.id);
   };
 
+  addMember(): void {
+    this.router.navigate(['add-user']);
+  }
+
+  showReport(): void {
+    this.router.navigate([this.router.url + "/show-report"]);
+  }
+
 }

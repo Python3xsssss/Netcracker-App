@@ -34,7 +34,6 @@ export class ShowUserComponent implements OnInit {
     this.userService.getUserById(this.id)
       .subscribe(data => {
         this.user = data.result;
-        this.user.id = this.id;
       }, error => console.log(error));
   }
 
@@ -43,8 +42,10 @@ export class ShowUserComponent implements OnInit {
   };
 
   deleteUser(): void {
-    this.userService.deleteUser(this.id).subscribe(data => {}, error => console.log(error));
-    this.router.navigate(['users']);
+    this.userService.deleteUser(this.id).subscribe(data => {
+      this.router.navigate(['users']);
+    }, error => console.log(error));
+
   };
 
   addSkillLevel(): void {
@@ -64,7 +65,7 @@ export class ShowUserComponent implements OnInit {
   deleteSkillLevel(idToDelete: number): void {
     this.user.skillLevels = this.user.skillLevels.filter(sl => sl.id !== idToDelete);
     console.log(this.user);
-    this.userService.updateUser(this.user)
+    this.userService.deleteSkillLevel(this.user.id, idToDelete)
       .subscribe(data => {
         this.userService.getUserById(this.id)
           .subscribe(data => {
@@ -85,14 +86,14 @@ export class ShowUserComponent implements OnInit {
 
     let skillLevel: SkillLevel = value;
 
-    this.user.skillLevels.push(skillLevel);
     console.log(this.user);
-    this.userService.updateUser(this.user)
+    this.userService.createSkillLevel(skillLevel, this.user.id)
       .subscribe(data => {
+        console.log(data.message);
         this.userService.getUserById(this.id)
           .subscribe(data => {
             this.user = data.result;
-        }, error => console.log(error));
+          }, error => console.log(error));
         this.show = false;
       }, error => console.log(error));
   }

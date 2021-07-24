@@ -1,0 +1,24 @@
+<div class="col-md-6 offset-md-3 update-depart-container">
+  <h2 class="text-center">Editing department {{department?.name}}</h2>
+  <form *ngIf="addForm" [formGroup]="addForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Name of department</label>
+      <input type="text" formControlName="name" placeholder="Department" name="name" class="form-control"
+             id="name">
+    </div>
+
+    <div class="form-group">
+      <label for="about">About department</label>
+      <input type="text" formControlName="about" placeholder="About" name="about" class="form-control" id="about">
+    </div>
+
+    <div class="form-group">
+      <label for="leader-select">Choose leader</label>
+      <select formControlName="leader" class="form-select" id="leader-select">
+        <option *ngFor="let user of users" [value]=user?.id>{{user?.username}} - {{user?.firstName}} {{user?.lastName}}</option>
+      </select>
+    </div>
+
+    <button class="btn btn-success">Save changes</button>
+  </form>
+</div>

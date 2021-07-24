@@ -1,14 +1,13 @@
 package com.netcracker.skillstable.model.dto;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Objects;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrgItem {
     protected Integer id;
     @Getter private static final Integer entTypeId = 3;
@@ -24,16 +23,10 @@ public class OrgItem {
     @Getter private static final Integer superiorRefId = 19;
 
 
-    public OrgItem() {
-    }
-
-    @Builder(builderMethodName = "OrgItemBuilder")
-    public OrgItem(Integer id, String name, String about, User leader, OrgItem superior) {
+    public OrgItem(Integer id, String name, String about) {
         this.id = id;
         this.name = name;
         this.about = about;
-        this.leader = leader;
-        this.superior = superior;
     }
 
 
@@ -42,11 +35,11 @@ public class OrgItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrgItem orgItem = (OrgItem) o;
-        return id.equals(orgItem.id) && Objects.equals(name, orgItem.name);
+        return id.equals(orgItem.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id);
     }
 }

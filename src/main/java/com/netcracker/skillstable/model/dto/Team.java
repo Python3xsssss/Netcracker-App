@@ -1,35 +1,24 @@
 package com.netcracker.skillstable.model.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Team extends OrgItem {
     @Getter private static final Integer entTypeId = 5;
     private Set<User> members = new HashSet<>();
     @Getter private static final Integer memberRefId = 20;
 
-
-    public Team() {
-    }
-
-    @Builder
-    public Team(Integer id, String name, String about, User leader, Department superior, Set<User> members) {
-        super(id, name, about, leader, superior);
-        this.members = members;
+    public Team(Integer id, String name, String about) {
+        super(id, name, about);
     }
 
     public Team toTeamNoRefs() {
-        return Team.builder()
-                .id(this.id)
-                .name(this.name)
-                .about(this.about)
-                .build();
+        return new Team(this.id, this.name, this.about);
     }
 
     public boolean addMember(User newMember) {
@@ -38,5 +27,17 @@ public class Team extends OrgItem {
 
     public boolean deleteMember(User member) {
         return members.remove(member);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Department)) return false;
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

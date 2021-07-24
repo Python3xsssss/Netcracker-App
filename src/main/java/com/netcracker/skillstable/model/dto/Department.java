@@ -1,47 +1,33 @@
 package com.netcracker.skillstable.model.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Department extends OrgItem {
     @Getter private static final Integer entTypeId = 4;
 
     private Set<Team> teams = new HashSet<>();
-    @Getter private static final Integer teamRefId = 22;
+    @Getter private static final Integer teamRefId = 4;
 
     private Set<User> membersNoTeam = new HashSet<>();
     @Getter private static final Integer memberRefId = 20;
 
-    public Department() {
+    public Department(Integer id, String name, String about) {
+        super(id, name, about);
     }
 
-    @Builder
-    public Department(
-            Integer id,
-            String name,
-            String about,
-            User leader,
-            OrgItem superior,
-            Set<Team> teams,
-            Set<User> membersNoTeam
-    ) {
-        super(id, name, about, leader, superior);
-        this.teams = teams;
-        this.membersNoTeam = membersNoTeam;
+    public Department(OrgItem orgItem) {
+        super(orgItem.id, orgItem.name, orgItem.about);
     }
 
     public Department toDepartNoRefs() {
-        return Department.builder()
-                .id(this.id)
-                .name(this.name)
-                .about(this.about)
-                .build();
+        return new Department(this.id, this.name, this.about);
     }
 
     public boolean addTeam(Team newTeam) {
@@ -50,5 +36,17 @@ public class Department extends OrgItem {
 
     public boolean deleteTeam(Team team) {
         return teams.remove(team);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Department)) return false;
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

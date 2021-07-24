@@ -2,7 +2,6 @@ package com.netcracker.skillstable.service.converter;
 
 import com.netcracker.skillstable.model.*;
 import com.netcracker.skillstable.model.dto.Department;
-import com.netcracker.skillstable.model.dto.Skill;
 import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
@@ -26,18 +25,23 @@ public class DepartmentConverter {
     @Autowired
     private UserConverter userConverter;
     @Autowired
+    private TeamConverter teamConverter;
+    @Autowired
     private MetamodelService metamodelService;
 
-    public EAVObject dtoToEavObj(Department department, EntityType entityType) {
+
+    public EAVObject dtoToEavObj(Department department) {
+        final EntityType depEntityType = metamodelService.getEntityTypeByEntTypeId(Department.getEntTypeId());
         EAVObject eavObj = new EAVObject(
-                entityType,
+                depEntityType,
                 department.getName()
         );
+        eavObj.setId(department.getId());
 
         eavObj.addParameter(
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), Department.getAboutId()),
+                        metamodelService.updateEntTypeAttrMapping(depEntityType.getId(), Department.getAboutId()),
                         department.getAbout()
                 )
         );
@@ -46,20 +50,20 @@ public class DepartmentConverter {
             eavObj.addParameter(
                     new Parameter(
                             eavObj,
-                            metamodelService.updateEntTypeAttrMapping(entityType.getId(), Department.getLeaderRefId()),
-                            department.getLeader().getId()
+                            metamodelService.updateEntTypeAttrMapping(depEntityType.getId(), Department.getLeaderRefId()),
+                            eavService.getEAVObjById(department.getLeader().getId())
                     )
             );
         }
 
-        Attribute teamAttr = metamodelService.updateEntTypeAttrMapping(entityType.getId(), Department.getLeaderRefId());
+        Attribute teamAttr = metamodelService.updateEntTypeAttrMapping(depEntityType.getId(), Department.getTeamRefId());
         List<Parameter> teamsAsParams = new ArrayList<>();
         for (Team team : department.getTeams()) {
             teamsAsParams.add(
                     new Parameter(
                             eavObj,
                             teamAttr,
-                            team.getId()
+                            eavService.getEAVObjById(team.getId())
                     )
             );
         }
@@ -71,13 +75,10 @@ public class DepartmentConverter {
     public Department eavObjToDto(EAVObject departEavObj) {
         Department department = this.eavObjToDtoNoRefs(departEavObj);
 
-        Optional<ParameterValue> leaderAsParam = departEavObj.getParameterByAttrId(Department.getLeaderRefId());
+        Optional<Parameter> leaderAsParam = departEavObj.getParameterByAttrId(Department.getLeaderRefId());
         User leader = new User();
         if (leaderAsParam.isPresent()) {
-            Optional<EAVObject> leaderEavObject = eavService.getEAVObjById(leaderAsParam.get().getValueInt());
-            leader = leaderEavObject
-                    .map(eavObject -> userConverter.eavObjToDtoNoRefs(eavObject))
-                    .orElseGet(User::new);
+            leader = userConverter.eavObjToDtoNoRefs(leaderAsParam.get().getReferenced());
         }
         department.setLeader(leader);
 
@@ -106,12 +107,13 @@ public class DepartmentConverter {
     }
 
     public Department eavObjToDtoNoRefs(EAVObject departEavObj) {
-        return Department.builder()
-                .id(departEavObj.getId())
-                .name(departEavObj.getEntName())
-                .about(departEavObj.getParameterByAttrId(Department.getAboutId())
-                        .map(ParameterValue::getValueStr)
-                        .orElse(null))
-                .build();
+        return new Department(
+                departEavObj.getId(),
+                departEavObj.getEntName(),
+                departEavObj
+                        .getParameterByAttrId(Department.getAboutId())
+                        .map(Parameter::getAttrValueTxt)
+                        .orElse("")
+        );
     }
 }

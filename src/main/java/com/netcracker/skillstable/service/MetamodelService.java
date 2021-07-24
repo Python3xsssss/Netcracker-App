@@ -1,9 +1,8 @@
 package com.netcracker.skillstable.service;
 
-import com.netcracker.skillstable.model.Attribute;
-import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.EntTypeAttr;
-import com.netcracker.skillstable.model.EntityType;
+import com.netcracker.skillstable.exception.ResourceNotFoundException;
+import com.netcracker.skillstable.model.*;
+import com.netcracker.skillstable.repos.AttrTypeRepo;
 import com.netcracker.skillstable.repos.AttributeRepo;
 import com.netcracker.skillstable.repos.EntTypeAttrRepo;
 import com.netcracker.skillstable.repos.EntityTypeRepo;
@@ -21,6 +20,8 @@ public class MetamodelService {
     @Autowired
     private AttributeRepo attributeRepo;
     @Autowired
+    private AttrTypeRepo attrTypeRepo;
+    @Autowired
     private EntTypeAttrRepo entTypeAttrRepo;
 
     @Autowired
@@ -31,8 +32,13 @@ public class MetamodelService {
     }
 
     public EntityType getEntityTypeByEntId(Integer entId) {
-        Optional<EAVObject> optionalEAVObject = eavService.getEAVObjById(entId);
-        return optionalEAVObject.map(EAVObject::getEntType).orElse(null);
+        return eavService.getEAVObjById(entId).getEntType();
+    }
+
+    public AttrType getAttrTypeByAttrTypeId(Integer attrTypeId) {
+        return attrTypeRepo.findById(attrTypeId).orElseThrow(
+                () -> new ResourceNotFoundException("The attribute type with id=" + attrTypeId + " not found!")
+        );
     }
 
     public List<Attribute> getAttributesByEntTypeId(Integer entTypeId) {

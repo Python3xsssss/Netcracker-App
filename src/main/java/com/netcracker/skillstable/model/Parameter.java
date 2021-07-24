@@ -3,11 +3,11 @@ package com.netcracker.skillstable.model;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity(name="Parameter")
-@Table (name = "parameters")
+@Entity(name = "Parameter")
+@Table(name = "parameters")
 public class Parameter {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(
             name = "id_pk",
             updatable = false,
@@ -36,6 +36,10 @@ public class Parameter {
     )
     private Integer attrValueInt;
 
+    @ManyToOne(targetEntity = EAVObject.class)
+    @JoinColumn(name = "attr_value_ref")
+    private EAVObject referenced;
+
 
     public Parameter() {
 
@@ -44,19 +48,16 @@ public class Parameter {
     public Parameter(Attribute attribute, String attrValueTxt) {
         this.attribute = attribute;
         this.attrValueTxt = attrValueTxt;
-        this.attrValueInt = null;
     }
 
     public Parameter(Attribute attribute, Integer attrValueInt) {
         this.attribute = attribute;
-        this.attrValueTxt = null;
         this.attrValueInt = attrValueInt;
     }
 
-    public Parameter(Attribute attribute, String attrValueTxt, Integer attrValueInt) {
+    public Parameter(Attribute attribute, EAVObject referenced) {
         this.attribute = attribute;
-        this.attrValueTxt = attrValueTxt;
-        this.attrValueInt = attrValueInt;
+        this.referenced = referenced;
     }
 
     public Parameter(EAVObject eavObject, Attribute attribute, String attrValueTxt) {
@@ -69,8 +70,8 @@ public class Parameter {
         this.eavObject = eavObject;
     }
 
-    public Parameter(EAVObject eavObject, Attribute attribute, String attrValueTxt, Integer attrValueInt) {
-        this(attribute, attrValueTxt, attrValueInt);
+    public Parameter(EAVObject eavObject, Attribute attribute, EAVObject referenced) {
+        this(attribute, referenced);
         this.eavObject = eavObject;
     }
 
@@ -81,6 +82,31 @@ public class Parameter {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public ParameterValue getAttrValue() {
+        return new ParameterValue(this.attrValueInt, this.attrValueTxt);
+    }
+
+    public void setAttrValue(ParameterValue attrValue) {
+        this.attrValueInt = attrValue.getValueInt();
+        this.attrValueTxt = attrValue.getValueTxt();
+    }
+
+    public EAVObject getEavObject() {
+        return eavObject;
+    }
+
+    public void setEavObject(EAVObject eavObject) {
+        this.eavObject = eavObject;
+    }
+
+    public Attribute getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(Attribute attribute) {
+        this.attribute = attribute;
     }
 
     public String getAttrValueTxt() {
@@ -99,21 +125,12 @@ public class Parameter {
         this.attrValueInt = attrValueInt;
     }
 
-
-    public EAVObject getEavObject() {
-        return eavObject;
+    public EAVObject getReferenced() {
+        return referenced;
     }
 
-    public void setEavObject(EAVObject eavObject) {
-        this.eavObject = eavObject;
-    }
-
-    public Attribute getAttribute() {
-        return attribute;
-    }
-
-    public void setAttribute(Attribute attribute) {
-        this.attribute = attribute;
+    public void setReferenced(EAVObject referenced) {
+        this.referenced = referenced;
     }
 
     @Override
@@ -132,11 +149,15 @@ public class Parameter {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Parameter parameter = (Parameter) o;
-        return eavObject.equals(parameter.eavObject) && attribute.equals(parameter.attribute) && Objects.equals(attrValueTxt, parameter.attrValueTxt) && Objects.equals(attrValueInt, parameter.attrValueInt);
+        return eavObject.equals(parameter.eavObject)
+                && attribute.equals(parameter.attribute)
+                && Objects.equals(attrValueTxt, parameter.attrValueTxt)
+                && Objects.equals(attrValueInt, parameter.attrValueInt)
+                && Objects.equals(referenced, parameter.referenced);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(eavObject, attribute, attrValueTxt, attrValueInt);
+        return Objects.hash(eavObject, attribute, attrValueTxt, attrValueInt, referenced);
     }
 }

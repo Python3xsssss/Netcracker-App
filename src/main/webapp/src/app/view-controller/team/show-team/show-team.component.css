@@ -1,7 +1,7 @@
 .show-team-container {
   position: relative;
 }
-#add-team {
+#delete-team {
   position: absolute;
   right: 10px;
   top: 5px;

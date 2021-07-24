@@ -22,8 +22,8 @@ export class UpdateUserComponent implements OnInit {
   teams: Team[] = [];
   teamsInDepart: Team[] = [];
   roles = Object.keys(Role).filter(key => isNaN(Number(key)));
-  depSelected!: number;
-  teamSelected!: number;
+  depSelectedId!: number;
+  teamSelectedId!: number;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,11 +40,21 @@ export class UpdateUserComponent implements OnInit {
 
     this.userService.getUserById(this.id).subscribe(data => {
       this.user = data.result;
-      this.depSelected = this.user.department.id;
-      this.teamSelected = this.user.team.id;
+      this.depSelectedId = this.user.department.id;
+      this.teamSelectedId = this.user.team.id;
+
+      this.departService.getDepartments()
+        .subscribe(data => {
+          this.departs = data.result;
+        }, error => console.log(error));
+
+      this.teamService.getTeams()
+        .subscribe(data => {
+          this.teams = data.result;
+        }, error => console.log(error));
 
       this.addForm = this.formBuilder.group({
-        id: [],
+        id: [this.user.id],
         username: [this.user.username, Validators.required],
         password: [this.user.password, Validators.required],
         //role: [null, Validators.required],
@@ -54,19 +64,12 @@ export class UpdateUserComponent implements OnInit {
         email: [this.user.email, Validators.required],
         about: [this.user.about, Validators.required],
         department: [this.user.department.id, Validators.required],
-        team: [this.user.team.id, Validators.required]
+        team: [this.user.team.id, Validators.required],
+        skillLevels: [this.user.skillLevels]
       });
+
+      this.onDepartSelect(this.user.department.id);
     }, error => console.log(error));
-
-    this.departService.getDepartments()
-      .subscribe(data => {
-        this.departs = data.result;
-      });
-
-    this.teamService.getTeams()
-      .subscribe(data => {
-        this.teams = data.result;
-      });
   }
 
   onDepartSelect(departId: any) {
@@ -93,12 +96,10 @@ export class UpdateUserComponent implements OnInit {
       }
     }
 
-    let user: User = value;
-    user.id = this.id;
-    console.log(user);
-    this.userService.updateUser(user)
+    Object.assign(this.user, value);
+    this.userService.updateUser(this.user)
       .subscribe(data => {
         this.router.navigate(['user', this.id]);
-      });
+      }, error => console.log(error));
   }
 }

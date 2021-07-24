@@ -32,6 +32,14 @@ export class ListDepartComponent implements OnInit {
       });
   }
 
+  addDepart(): void {
+    this.router.navigate(['add-depart']);
+  };
+
+  updateDepart(id: number): void {
+    this.router.navigate(['update-depart', id]);
+  }
+
   deleteDepart(department: Department): void {
     this.departService.deleteDepartment(department.id)
       .subscribe(data => {
@@ -39,7 +47,12 @@ export class ListDepartComponent implements OnInit {
       }, error => console.log(error))
   };
 
-  addDepart(): void {
-    this.router.navigate(['add-depart']);
-  };
+  addTeam(): void {
+    this.router.navigate(['add-team']);
+  }
+
+  addMember(): void {
+    this.router.navigate(['add-user']);
+  }
+
 }

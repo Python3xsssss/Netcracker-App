@@ -49,11 +49,11 @@ export class AddUserComponent implements OnInit {
       .subscribe(data => {
         this.departs = data.result;
       });
+
     this.teamService.getTeams()
       .subscribe(data => {
         this.teams = data.result;
       });
-
   }
 
   onDepartSelect(departId: any) {

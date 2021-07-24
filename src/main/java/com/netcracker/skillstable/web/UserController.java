@@ -1,6 +1,7 @@
 package com.netcracker.skillstable.web;
 
 import com.netcracker.skillstable.model.ApiResponse;
+import com.netcracker.skillstable.model.dto.SkillLevel;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.dto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,18 @@ public class UserController {
         );
     }
 
+    @PostMapping("/{id}/skillLevels")
+    public ApiResponse<SkillLevel> saveSkillLevel(
+            @RequestBody SkillLevel skillLevel,
+            @PathVariable(value = "id") Integer userId
+    ) {
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Skill Level saved successfully.",
+                userService.createOrUpdateSkillLevel(userId, skillLevel)
+        );
+    }
+
     @GetMapping
     public ApiResponse<List<User>> getAllUsers() {
         return new ApiResponse<>(
@@ -36,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<Optional<User>> getUser(@PathVariable(value = "id") Integer userId) {
+    public ApiResponse<User> getUser(@PathVariable(value = "id") Integer userId) {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "User fetched successfully.",
@@ -45,11 +58,25 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Optional<User>> updateUser(@PathVariable(value = "id") Integer userId, @RequestBody User user){
+    public ApiResponse<User> updateUser(@PathVariable(value = "id") Integer userId, @RequestBody User user){
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "User (id: " + userId + ") updated successfully.",
-                userService.updateUser(user, userId)
+                userService.updateUser(user)
+        );
+    }
+
+    @PutMapping("/{userId}/skillLevels/{levelId}")
+    public ApiResponse<SkillLevel> updateSkillLevel(
+            @RequestBody SkillLevel skillLevel,
+            @PathVariable(value = "userId") Integer userId,
+            @PathVariable(value = "levelId") Integer skillLevelId
+    ) {
+        skillLevel.setId(skillLevelId);
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Skill Level (id: " + skillLevelId + ") of user (id: " + userId + ") updated successfully.",
+                userService.createOrUpdateSkillLevel(userId, skillLevel)
         );
     }
 
@@ -59,6 +86,19 @@ public class UserController {
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "User deleted successfully.",
+                null
+        );
+    }
+
+    @DeleteMapping("/{userId}/skillLevels/{levelId}")
+    public ApiResponse<Void> deleteSkillLevel(
+            @PathVariable(value = "userId") Integer userId,
+            @PathVariable(value = "levelId") Integer skillLevelId
+    ) {
+        userService.deleteSkillLevel(userId, skillLevelId);
+        return new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Skill Level of user (id: " + userId + ") deleted successfully.",
                 null
         );
     }

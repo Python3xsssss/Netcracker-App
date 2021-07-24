@@ -1,0 +1,19 @@
+<div class="col-md-6 offset-md-3 add-user-container">
+  <h2 class="text-center">Sign in</h2>
+  <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" formControlName="username" placeholder="Username" name="username" class="form-control"
+             id="username">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" formControlName="password" placeholder="Password" name="password" class="form-control"
+             id="password">
+    </div>
+    <div class="col text-center">
+      <button class="btn btn-success" ng-click="onSubmit()">Sign in</button>
+    </div>
+  </form>
+</div>

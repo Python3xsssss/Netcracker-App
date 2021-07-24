@@ -1,13 +1,12 @@
 package com.netcracker.skillstable.model.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Objects;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SkillLevel {
     @Getter private static final Integer entTypeId = 7;
     private Integer id;
@@ -18,25 +17,24 @@ public class SkillLevel {
     private Skill skill;
     @Getter private static final Integer skillRefId = 5;
 
-
-    @Builder
-    SkillLevel(Integer id, Integer level, Skill skill) {
-        this.id = id;
-        this.level = level;
-        this.skill = skill;
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SkillLevel that = (SkillLevel) o;
-        return id.equals(that.id) && Objects.equals(level, that.level) && skill.equals(that.skill);
+        return id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, level, skill);
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "SkillLevel{" +
+                "level=" + level +
+                ", skill=" + skill.getName() +
+                '}';
     }
 }
