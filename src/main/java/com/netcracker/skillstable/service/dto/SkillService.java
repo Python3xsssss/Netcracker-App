@@ -1,6 +1,7 @@
 package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.model.EAVObject;
+import com.netcracker.skillstable.model.Parameter;
 import com.netcracker.skillstable.model.ParameterValue;
 import com.netcracker.skillstable.model.dto.Skill;
 import com.netcracker.skillstable.model.dto.SkillLevel;
@@ -32,10 +33,7 @@ public class SkillService {
 
     public Skill createSkill(Skill skill) {
         return skillConverter.eavObjToDto(eavService.createEAVObj(
-                skillConverter.dtoToEavObj(
-                        skill,
-                        metamodelService.getEntityTypeByEntTypeId(Skill.getEntTypeId())
-                )
+                skillConverter.dtoToEavObj(skill)
         ));
     }
 
@@ -52,10 +50,7 @@ public class SkillService {
     }
 
     public Skill updateSkill(Skill skill, Integer skillId) {
-        EAVObject dtoEavObj = skillConverter.dtoToEavObj(
-                skill,
-                metamodelService.getEntityTypeByEntTypeId(Team.getEntTypeId())
-        );
+        EAVObject dtoEavObj = skillConverter.dtoToEavObj(skill);
 
         return skillConverter.eavObjToDto(eavService.updateEAVObj(dtoEavObj, skillId));
     }
@@ -71,11 +66,10 @@ public class SkillService {
         List<EAVObject> skillLevelEavList = eavService.getAllByEntTypeId(SkillLevel.getEntTypeId());
         for (EAVObject skillLevelEav : skillLevelEavList) {
             if (skillId.equals(
-                    (
                             skillLevelEav
                                     .getParameterByAttrId(SkillLevel.getSkillRefId())
-                                    .orElseGet(ParameterValue::new)
-                    ).getValueInt()
+                                    .orElseGet(Parameter::new)
+                                    .getAttrValueInt()
             )) {
                 eavService.deleteEAVObj(skillLevelEav.getId());
             }

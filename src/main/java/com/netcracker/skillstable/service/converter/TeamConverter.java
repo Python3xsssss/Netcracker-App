@@ -24,24 +24,26 @@ public class TeamConverter {
     @Autowired
     private MetamodelService metamodelService;
 
-    public EAVObject dtoToEavObj(Team team, EntityType entityType) {
+
+    public EAVObject dtoToEavObj(Team team) {
+        final EntityType teamEntityType = metamodelService.getEntityTypeByEntTypeId(Team.getEntTypeId());
         EAVObject eavObj = new EAVObject(
-                entityType,
+                teamEntityType,
                 team.getName()
         );
         eavObj.setId(team.getId());
 
-        OrgItem superior = team.getSuperior();
-        eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
+        Department superior = new Department(team.getSuperior());
+        eavObj.addParameters(new ArrayList<>(Arrays.asList(
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), Team.getAboutId()),
+                        metamodelService.updateEntTypeAttrMapping(teamEntityType.getId(), Team.getAboutId()),
                         team.getAbout()
                 ),
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), Team.getSuperiorRefId()),
-                        superior.getId()
+                        metamodelService.updateEntTypeAttrMapping(teamEntityType.getId(), Team.getSuperiorRefId()),
+                        eavService.getEAVObjById(superior.getId())
                 )
         )));
 
@@ -49,17 +51,19 @@ public class TeamConverter {
             eavObj.addParameter(
                     new Parameter(
                             eavObj,
-                            metamodelService.updateEntTypeAttrMapping(entityType.getId(), Team.getLeaderRefId()),
-                            team.getLeader().getId()
+                            metamodelService.updateEntTypeAttrMapping(teamEntityType.getId(), Team.getLeaderRefId()),
+                            eavService.getEAVObjById(team.getLeader().getId())
                     )
             );
         }
 
-        Attribute memberAttr = metamodelService.updateEntTypeAttrMapping(entityType.getId(), Team.getMemberRefId());
+        Attribute memberAttr = metamodelService.updateEntTypeAttrMapping(teamEntityType.getId(), Team.getMemberRefId());
         List<Parameter> membersAsParams = new ArrayList<>();
         for (User member : team.getMembers()) {
             membersAsParams.add(new Parameter(
-                    eavObj, memberAttr, member.getId()
+                    eavObj,
+                    memberAttr,
+                    eavService.getEAVObjById(member.getId())
             ));
         }
         eavObj.addParameters(membersAsParams);
@@ -70,19 +74,17 @@ public class TeamConverter {
     public Team eavObjToDto(EAVObject teamEavObj) {
         Team team = this.eavObjToDtoNoRefs(teamEavObj);
 
-        Optional<ParameterValue> leaderAsParam = teamEavObj.getParameterByAttrId(Team.getLeaderRefId());
+        Optional<Parameter> leaderAsParam = teamEavObj.getParameterByAttrId(Team.getLeaderRefId());
         User leader = new User();
         if (leaderAsParam.isPresent()) {
-            EAVObject leaderEavObject = eavService.getEAVObjById(leaderAsParam.get().getValueInt());
-            leader = userConverter.eavObjToDtoNoRefs(leaderEavObject);
+            leader = userConverter.eavObjToDtoNoRefs(leaderAsParam.get().getReferenced());
         }
         team.setLeader(leader);
 
-        Optional<ParameterValue> departAsParam = teamEavObj.getParameterByAttrId(Team.getSuperiorRefId());
+        Optional<Parameter> departAsParam = teamEavObj.getParameterByAttrId(Team.getSuperiorRefId());
         Department department = new Department();
         if (departAsParam.isPresent()) {
-            EAVObject departEavObject = eavService.getEAVObjById(departAsParam.get().getValueInt());
-            department = departmentConverter.eavObjToDtoNoRefs(departEavObject);
+            department = departmentConverter.eavObjToDtoNoRefs(departAsParam.get().getReferenced());
         }
         team.setSuperior(department);
 
@@ -103,8 +105,8 @@ public class TeamConverter {
                 teamEavObj.getEntName(),
                 teamEavObj
                         .getParameterByAttrId(Team.getAboutId())
-                        .map(ParameterValue::getValueTxt)
-                        .orElse(null)
+                        .map(Parameter::getAttrValueTxt)
+                        .orElse("")
         );
     }
 }

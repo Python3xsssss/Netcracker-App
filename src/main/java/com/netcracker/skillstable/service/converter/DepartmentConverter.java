@@ -25,11 +25,15 @@ public class DepartmentConverter {
     @Autowired
     private UserConverter userConverter;
     @Autowired
+    private TeamConverter teamConverter;
+    @Autowired
     private MetamodelService metamodelService;
 
-    public EAVObject dtoToEavObj(Department department, EntityType entityType) {
+
+    public EAVObject dtoToEavObj(Department department) {
+        final EntityType depEntityType = metamodelService.getEntityTypeByEntTypeId(Department.getEntTypeId());
         EAVObject eavObj = new EAVObject(
-                entityType,
+                depEntityType,
                 department.getName()
         );
         eavObj.setId(department.getId());
@@ -37,7 +41,7 @@ public class DepartmentConverter {
         eavObj.addParameter(
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), Department.getAboutId()),
+                        metamodelService.updateEntTypeAttrMapping(depEntityType.getId(), Department.getAboutId()),
                         department.getAbout()
                 )
         );
@@ -46,20 +50,20 @@ public class DepartmentConverter {
             eavObj.addParameter(
                     new Parameter(
                             eavObj,
-                            metamodelService.updateEntTypeAttrMapping(entityType.getId(), Department.getLeaderRefId()),
-                            department.getLeader().getId()
+                            metamodelService.updateEntTypeAttrMapping(depEntityType.getId(), Department.getLeaderRefId()),
+                            eavService.getEAVObjById(department.getLeader().getId())
                     )
             );
         }
 
-        Attribute teamAttr = metamodelService.updateEntTypeAttrMapping(entityType.getId(), Department.getTeamRefId());
+        Attribute teamAttr = metamodelService.updateEntTypeAttrMapping(depEntityType.getId(), Department.getTeamRefId());
         List<Parameter> teamsAsParams = new ArrayList<>();
         for (Team team : department.getTeams()) {
             teamsAsParams.add(
                     new Parameter(
                             eavObj,
                             teamAttr,
-                            team.getId()
+                            eavService.getEAVObjById(team.getId())
                     )
             );
         }
@@ -71,11 +75,10 @@ public class DepartmentConverter {
     public Department eavObjToDto(EAVObject departEavObj) {
         Department department = this.eavObjToDtoNoRefs(departEavObj);
 
-        Optional<ParameterValue> leaderAsParam = departEavObj.getParameterByAttrId(Department.getLeaderRefId());
+        Optional<Parameter> leaderAsParam = departEavObj.getParameterByAttrId(Department.getLeaderRefId());
         User leader = new User();
         if (leaderAsParam.isPresent()) {
-            EAVObject leaderEavObject = eavService.getEAVObjById(leaderAsParam.get().getValueInt());
-            leader = userConverter.eavObjToDtoNoRefs(leaderEavObject);
+            leader = userConverter.eavObjToDtoNoRefs(leaderAsParam.get().getReferenced());
         }
         department.setLeader(leader);
 
@@ -109,8 +112,8 @@ public class DepartmentConverter {
                 departEavObj.getEntName(),
                 departEavObj
                         .getParameterByAttrId(Department.getAboutId())
-                        .map(ParameterValue::getValueTxt)
-                        .orElse(null)
+                        .map(Parameter::getAttrValueTxt)
+                        .orElse("")
         );
     }
 }

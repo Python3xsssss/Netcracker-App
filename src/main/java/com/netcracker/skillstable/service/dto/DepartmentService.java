@@ -1,8 +1,10 @@
 package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.model.EAVObject;
+import com.netcracker.skillstable.model.EntityType;
 import com.netcracker.skillstable.model.dto.Department;
 import com.netcracker.skillstable.model.dto.Team;
+import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
 import com.netcracker.skillstable.service.converter.DepartmentConverter;
@@ -27,10 +29,7 @@ public class DepartmentService {
 
     public Department createDepartment(Department department) {
         return departmentConverter.eavObjToDto(eavService.createEAVObj(
-                departmentConverter.dtoToEavObj(
-                        department,
-                        metamodelService.getEntityTypeByEntTypeId(Department.getEntTypeId())
-                )
+                departmentConverter.dtoToEavObj(department)
         ));
     }
 
@@ -48,10 +47,7 @@ public class DepartmentService {
 
     public Department updateDepartment(Department department) {
         EAVObject updatedDepart = eavService.updateEAVObj(
-                departmentConverter.dtoToEavObj(
-                        department,
-                        metamodelService.getEntityTypeByEntTypeId(Department.getEntTypeId())
-                ),
+                departmentConverter.dtoToEavObj(department),
                 department.getId()
         );
 

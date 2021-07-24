@@ -5,6 +5,7 @@ import com.netcracker.skillstable.model.EntityType;
 import com.netcracker.skillstable.model.Parameter;
 import com.netcracker.skillstable.model.ParameterValue;
 import com.netcracker.skillstable.model.dto.Skill;
+import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.MetamodelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,11 @@ public class SkillConverter {
     @Autowired
     private MetamodelService metamodelService;
 
-    public EAVObject dtoToEavObj(Skill skill, EntityType entityType) {
+
+    public EAVObject dtoToEavObj(Skill skill) {
+        final EntityType skillEntityType = metamodelService.getEntityTypeByEntTypeId(Skill.getEntTypeId());
         EAVObject eavObj = new EAVObject(
-                entityType,
+                skillEntityType,
                 skill.getName()
         );
         eavObj.setId(skill.getId());
@@ -24,7 +27,7 @@ public class SkillConverter {
         eavObj.addParameter(
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(entityType.getId(), Skill.getAboutId()),
+                        metamodelService.updateEntTypeAttrMapping(skillEntityType.getId(), Skill.getAboutId()),
                         skill.getAbout()
                 )
         );
@@ -38,8 +41,8 @@ public class SkillConverter {
                 skillEavObj.getEntName(),
                 skillEavObj
                         .getParameterByAttrId(Skill.getAboutId())
-                        .map(ParameterValue::getValueTxt)
-                        .orElse(null)
+                        .map(Parameter::getAttrValueTxt)
+                        .orElse("")
         );
     }
 }

@@ -60,21 +60,5 @@ public class EAVService {
 
     public void deleteEAVObj(Integer entId) {
         eavRepo.deleteById(entId);
-
-        List<Parameter> possibleRefs = parameterRepo.findByAttrValueInt(entId);
-        System.out.println("Possible refs: " + possibleRefs);
-        for (Parameter possibleRef : possibleRefs) {
-            if (possibleRef
-                    .getAttribute()
-                    .getAttrType()
-                    .equals(
-                            metamodelService
-                                    .getAttrTypeByAttrTypeId(refTypeId)
-                    )
-            ) {
-                System.out.println("Ref to delete: " + possibleRef);
-                parameterRepo.deleteById(possibleRef.getId());
-            }
-        }
     }
 }

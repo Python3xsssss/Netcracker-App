@@ -22,6 +22,10 @@ public class Department extends OrgItem {
         super(id, name, about);
     }
 
+    public Department(OrgItem orgItem) {
+        super(orgItem.id, orgItem.name, orgItem.about);
+    }
+
     public Department toDepartNoRefs() {
         return new Department(this.id, this.name, this.about);
     }

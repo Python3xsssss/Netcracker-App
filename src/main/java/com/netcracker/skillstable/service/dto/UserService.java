@@ -1,6 +1,7 @@
 package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.model.EAVObject;
+import com.netcracker.skillstable.model.Parameter;
 import com.netcracker.skillstable.model.ParameterValue;
 import com.netcracker.skillstable.model.dto.SkillLevel;
 import com.netcracker.skillstable.model.dto.User;
@@ -29,10 +30,7 @@ public class UserService {
 
     public User createUser(User user) {
         return userConverter.eavObjToDto(eavService.createEAVObj(
-                userConverter.dtoToEavObj(
-                        user,
-                        metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
-                )
+                userConverter.dtoToEavObj(user)
         ));
     }
 
@@ -52,10 +50,7 @@ public class UserService {
 
     public User updateUser(User user) {
         EAVObject updatedUser = eavService.updateEAVObj(
-                userConverter.dtoToEavObj(
-                        user,
-                        metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
-                ),
+                userConverter.dtoToEavObj(user),
                 user.getId()
         );
 
@@ -64,9 +59,9 @@ public class UserService {
 
     public void deleteUser(Integer userId) {
         EAVObject eavObj = eavService.getEAVObjById(userId);
-        List<ParameterValue> skillLevelRefs = eavObj.getMultipleParametersByAttrId(User.getSkillLevelRefId());
-        for (ParameterValue ref : skillLevelRefs) {
-            eavService.deleteEAVObj(ref.getValueInt());
+        List<Parameter> skillLevelRefParams = eavObj.getMultipleParametersByAttrId(User.getSkillLevelRefId());
+        for (Parameter refParam : skillLevelRefParams) {
+            eavService.deleteEAVObj(refParam.getReferenced().getId());
         }
 
         eavService.deleteEAVObj(userId);
@@ -77,10 +72,7 @@ public class UserService {
 
         SkillLevel createdSkillLevel = userConverter.eavObjToSkillLevel(
                 eavService.createOrUpdateEAVObj(
-                        userConverter.skillLevelToEavObj(
-                                skillLevel,
-                                metamodelService.getEntityTypeByEntTypeId(SkillLevel.getEntTypeId())
-                        )
+                        userConverter.skillLevelToEavObj(skillLevel)
                 )
         );
 
@@ -93,11 +85,6 @@ public class UserService {
     }
 
     public void deleteSkillLevel(Integer userId, Integer skillLevelId) {
-        User user = this.getUserById(userId);
-
         eavService.deleteEAVObj(skillLevelId);
-        user.deleteSkillLevel(skillLevelId);
-
-        this.updateUser(user);
     }
 }

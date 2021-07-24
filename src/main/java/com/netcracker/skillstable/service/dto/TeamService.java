@@ -1,6 +1,8 @@
 package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.model.EAVObject;
+import com.netcracker.skillstable.model.EntityType;
+import com.netcracker.skillstable.model.dto.Skill;
 import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
@@ -26,10 +28,7 @@ public class TeamService {
 
     public Team createTeam(Team team) {
         return teamConverter.eavObjToDto(eavService.createEAVObj(
-                teamConverter.dtoToEavObj(
-                        team,
-                        metamodelService.getEntityTypeByEntTypeId(Team.getEntTypeId())
-                )
+                teamConverter.dtoToEavObj(team)
         ));
     }
 
@@ -46,10 +45,7 @@ public class TeamService {
     }
 
     public Team updateTeam(Team team) {
-        EAVObject dtoEavObj = teamConverter.dtoToEavObj(
-                team,
-                metamodelService.getEntityTypeByEntTypeId(Team.getEntTypeId())
-        );
+        EAVObject dtoEavObj = teamConverter.dtoToEavObj(team);
 
         return teamConverter.eavObjToDto(eavService.updateEAVObj(dtoEavObj, team.getId()));
     }

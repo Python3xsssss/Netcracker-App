@@ -30,7 +30,7 @@ public class EAVObject {
     )
     private String entName;
 
-    @OneToMany(mappedBy="eavObject", fetch=FetchType.LAZY, cascade=CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy="eavObject", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
     private List<Parameter> parameters = new ArrayList<>();
 
 
@@ -90,27 +90,21 @@ public class EAVObject {
         return parameters;
     }
 
-    public Optional<ParameterValue> getParameterByAttrId(Integer attrId) {
+    public Optional<Parameter> getParameterByAttrId(Integer attrId) {
         for (Parameter parameter : parameters) {
             if (attrId.equals(parameter.getAttribute().getId())) {
-                return Optional.of(new ParameterValue(
-                        parameter.getAttrValueInt(),
-                        parameter.getAttrValueTxt()
-                ));
+                return  Optional.of(parameter);
             }
         }
 
         return Optional.empty();
     }
 
-    public List<ParameterValue> getMultipleParametersByAttrId(Integer attrId) { // id exception?
-        List<ParameterValue> listOfValues = new ArrayList<>();
+    public List<Parameter> getMultipleParametersByAttrId(Integer attrId) { // id exception?
+        List<Parameter> listOfValues = new ArrayList<>();
         for (Parameter parameter : parameters) {
             if (attrId.equals(parameter.getAttribute().getId())) {
-                listOfValues.add(new ParameterValue(
-                        parameter.getAttrValueInt(),
-                        parameter.getAttrValueTxt()
-                ));
+                listOfValues.add(parameter);
             }
         }
 
@@ -135,6 +129,7 @@ public class EAVObject {
                         contains = true;
                         param.setAttrValueInt(inputParam.getAttrValueInt());
                         param.setAttrValueTxt(inputParam.getAttrValueTxt());
+                        param.setReferenced(inputParam.getReferenced());
                         iter.set(param);
                         break;
                     }
