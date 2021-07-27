@@ -1,5 +1,6 @@
 package com.netcracker.skillstable.service.dto;
 
+import com.netcracker.skillstable.exception.ResourceNotFoundException;
 import com.netcracker.skillstable.model.EAVObject;
 import com.netcracker.skillstable.model.Parameter;
 import com.netcracker.skillstable.model.ParameterValue;
@@ -44,6 +45,15 @@ public class UserService {
 
     public User getUserById(Integer userId) {
         EAVObject userEavObj = eavService.getEAVObjById(userId);
+
+        return userConverter.eavObjToDto(userEavObj);
+    }
+
+    public User getUserByUsername(String username) {
+        EAVObject userEavObj = eavService.getEAVObjByNameAndType(
+                username,
+                metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
+        );
 
         return userConverter.eavObjToDto(userEavObj);
     }

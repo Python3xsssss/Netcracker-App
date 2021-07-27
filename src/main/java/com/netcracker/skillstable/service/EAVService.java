@@ -2,6 +2,7 @@ package com.netcracker.skillstable.service;
 
 import com.netcracker.skillstable.exception.ResourceNotFoundException;
 import com.netcracker.skillstable.model.EAVObject;
+import com.netcracker.skillstable.model.EntityType;
 import com.netcracker.skillstable.model.Parameter;
 import com.netcracker.skillstable.repos.EAVObjectRepo;
 import com.netcracker.skillstable.repos.ParameterRepo;
@@ -44,6 +45,10 @@ public class EAVService {
         return eavRepo.findById(eavObjId).orElseThrow(
                 () -> new ResourceNotFoundException("EAVObject with id=" + eavObjId + " not found!")
         );
+    }
+
+    public EAVObject getEAVObjByNameAndType(String name, EntityType entityType) {
+        return eavRepo.findAllByEntNameAndEntType(name, entityType);
     }
 
     public EAVObject updateEAVObj(EAVObject dtoEavObj, Integer eavObjId) {
