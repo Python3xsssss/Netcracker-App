@@ -25,7 +25,7 @@ const routerOptions: ExtraOptions = {
 
 const ROUTES: Routes = [
   {path: 'home', component: HomeComponent},
-  {path: 'login', component: LoginComponent},
+  {path: 'auth/sign-in', component: LoginComponent},
 
   {path: 'user/:id', component: ShowUserComponent},
   {path: 'add-user', component: AddUserComponent},

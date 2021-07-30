@@ -10,11 +10,13 @@ import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
 import com.netcracker.skillstable.service.converter.UserConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -27,6 +29,8 @@ public class UserService {
     private MetamodelService metamodelService;
     @Autowired
     private UserConverter userConverter;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     public User createUser(User user) {
@@ -56,6 +60,23 @@ public class UserService {
         );
 
         return userConverter.eavObjToDto(userEavObj);
+    }
+
+    public User getUserByUsernameAndPassword(String username, String password) {
+
+        EAVObject userEavObj = eavService.getEAVObjByNameAndType(
+                username,
+                metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
+        );
+
+        User user = userConverter.eavObjToDto(userEavObj);
+
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            return user;
+        }
+        else {
+            throw new ResourceNotFoundException("Invalid password");
+        }
     }
 
     public User updateUser(User user) {

@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Role} from "../../model/role.model";
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
+import {AuthService} from '../../service/auth.service';
+import {TokenStorageService} from '../../service/token-storage.service';
+import {AuthRequest} from "../../model/auth.request";
 
 @Component({
   selector: 'app-login',
@@ -9,13 +12,17 @@ import {Router} from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
   addForm!: FormGroup;
-  roles = Object.keys(Role).filter(key => isNaN(Number(key)));
+  roles: Role[] = [];
+  isLoggedIn = false;
+  isLoginFailed = false;
+  errorMessage = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
+    private authService: AuthService,
+    private tokenStorage: TokenStorageService
   ) {
   }
 
@@ -24,10 +31,30 @@ export class LoginComponent implements OnInit {
       username: ['', Validators.required],
       password: ['', Validators.required],
     });
+
+    if (this.tokenStorage.getToken()) {
+      this.isLoggedIn = true;
+      this.roles = this.tokenStorage.getUser().roles;
+    }
   }
 
   onSubmit() {
-    this.router.navigate(['home']);
+    let request: AuthRequest = this.addForm.value;
+    this.authService.login(request).subscribe(
+      data => {
+        this.tokenStorage.saveToken(data.accessToken);
+        this.tokenStorage.saveUser(data);
+
+        this.isLoginFailed = false;
+        this.isLoggedIn = true;
+        this.roles = this.tokenStorage.getUser().roles;
+        this.router.navigate(['home']);
+      },
+      err => {
+        this.errorMessage = err.error.message;
+        this.isLoginFailed = true;
+      }
+    );
   }
 }
 

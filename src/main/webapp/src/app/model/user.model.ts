@@ -8,7 +8,7 @@ export class User {
   id: number;
   username: string;
   password: string;
-  roles: Set<Role>;
+  roles: Role[] = [];
 
   // Personal info
   firstName: string;
@@ -27,7 +27,7 @@ export class User {
   constructor(id: number,
               username: string,
               password: string,
-              roles: Set<Role>,
+              roles: Role[],
               firstName: string,
               lastName: string,
               age: number,
