@@ -73,6 +73,11 @@ public class MetamodelService {
     }
 
     public Attribute updateEntTypeAttrMapping(Integer entTypeId, Integer attrId) {
+        Integer parentId = this.getEntityTypeByEntTypeId(entTypeId).getEntParentId();
+        if (parentId != null) {
+            return this.updateEntTypeAttrMapping(parentId, attrId);
+        }
+
         if (this.getEntTypeAttrMapping(entTypeId, attrId).isEmpty()) {
             this.setEntTypeAttrMapping(entTypeId, attrId);
         }

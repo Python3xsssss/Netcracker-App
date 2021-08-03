@@ -1,10 +1,15 @@
 package com.netcracker.skillstable.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity(name="Attribute")
 @Table (name = "attributes")
+@Getter
+@Setter
 public class Attribute {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -42,46 +47,6 @@ public class Attribute {
 
     public Attribute() {
 
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public AttrType getAttrType() {
-        return attrType;
-    }
-
-    public void setAttrType(AttrType attrType) {
-        this.attrType = attrType;
-    }
-
-    public String getDescr() {
-        return descr;
-    }
-
-    public void setDescr(String descr) {
-        this.descr = descr;
-    }
-
-    public Boolean getMultiple() {
-        return multiple;
-    }
-
-    public void setMultiple(Boolean multiple) {
-        this.multiple = multiple;
     }
 
     @Override

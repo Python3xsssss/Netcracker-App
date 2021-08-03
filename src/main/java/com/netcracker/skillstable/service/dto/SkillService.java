@@ -2,10 +2,8 @@ package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.model.EAVObject;
 import com.netcracker.skillstable.model.Parameter;
-import com.netcracker.skillstable.model.ParameterValue;
 import com.netcracker.skillstable.model.dto.Skill;
 import com.netcracker.skillstable.model.dto.SkillLevel;
-import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;

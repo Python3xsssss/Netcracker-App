@@ -25,6 +25,7 @@ public class AuthController {
         String token = jwtProvider.generateToken(user.getUsername());
         return new ApiResponse<>(
                 HttpStatus.OK.value(),
+                HttpStatus,
                 "Successfully signed in as " + user.getUsername() + ".",
                 token
         );

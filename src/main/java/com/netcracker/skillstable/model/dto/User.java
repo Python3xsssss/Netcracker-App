@@ -1,5 +1,6 @@
 package com.netcracker.skillstable.model.dto;
 
+import com.netcracker.skillstable.model.dto.attr.Authority;
 import com.netcracker.skillstable.model.dto.attr.Position;
 import com.netcracker.skillstable.model.dto.attr.Role;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,6 +29,9 @@ public class User implements UserDetails {
     private Set<Role> roles = new HashSet<>();
     @Getter private static final Integer roleId = 14;
 
+    private Set<Authority> authorities = new HashSet<>();
+    @Getter private static final Integer authId = 7;
+
     // Personal info
     private String firstName, lastName;
     @Getter private static final Integer firstNameId = 1, lastNameId = 2;
@@ -53,6 +57,13 @@ public class User implements UserDetails {
 
     private Set<SkillLevel> skillLevels = new HashSet<>();
     @Getter private static final Integer skillLevelRefId = 6;
+
+    //Other
+    private boolean isActive;
+    @Getter private static final Integer isActiveId = 8;
+
+    private boolean isLocked;
+    @Getter private static final Integer isLockedId = 9;
 
 
     public User(
@@ -98,8 +109,6 @@ public class User implements UserDetails {
     }
 
     public void addSkillLevel(SkillLevel skillLevel) {
-        System.out.println("\n\n\n00000000\n\n" + skillLevel);
-        System.out.println("\n\n\n00000000\n\n" + skillLevels);
         skillLevels.add(skillLevel);
     }
 
@@ -150,7 +159,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
@@ -160,7 +169,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override

@@ -1,13 +1,15 @@
 package com.netcracker.skillstable.model;
 
-import org.hibernate.annotations.DynamicUpdate;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity(name="EAVObject")
-@DynamicUpdate
 @Table (name = "entities")
+@Getter
+@Setter
 public class EAVObject {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -54,40 +56,12 @@ public class EAVObject {
     }
 
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public EntityType getEntType() {
-        return entType;
-    }
-
-    public void setEntType(EntityType entType) {
-        this.entType = entType;
-    }
-
-    public String getEntName() {
-        return entName;
-    }
-
-    public void setEntName(String entName) {
-        this.entName = entName;
-    }
-
     public void addParameter(Parameter inputParam) {
         parameters.add(inputParam);
     }
 
     public void addParameters(List<Parameter> inputParams) {
         parameters.addAll(inputParams);
-    }
-
-    public List<Parameter> getParameters() {
-        return parameters;
     }
 
     public Optional<Parameter> getParameterByAttrId(Integer attrId) {
@@ -127,9 +101,10 @@ public class EAVObject {
                         }
                     } else {
                         contains = true;
-                        param.setAttrValueInt(inputParam.getAttrValueInt());
-                        param.setAttrValueTxt(inputParam.getAttrValueTxt());
-                        param.setReferenced(inputParam.getReferenced());
+                        param.setParameterValues(inputParam);
+//                        param.setAttrValueInt(inputParam.getAttrValueInt());
+//                        param.setAttrValueTxt(inputParam.getAttrValueTxt());
+//                        param.setReferenced(inputParam.getReferenced());
                         iter.set(param);
                         break;
                     }
@@ -148,10 +123,10 @@ public class EAVObject {
     @Override
     public String toString() {
         return "EAVObject{" +
-                "\nid=" + id +
-                ",\nentType=" + entType +
-                ",\nentName='" + entName + '\'' +
-                ",\nparameters=" + parameters +
+                "id=" + id +
+                ", entType=" + entType +
+                ", entName='" + entName + '\'' +
+                ", parameters=" + parameters +
                 '}';
     }
 

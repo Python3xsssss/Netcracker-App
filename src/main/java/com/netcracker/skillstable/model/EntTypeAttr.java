@@ -1,9 +1,14 @@
 package com.netcracker.skillstable.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity(name="EntTypeAttr")
 @Table (name = "entity_type_attr")
+@Getter
+@Setter
 public class EntTypeAttr {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -30,22 +35,5 @@ public class EntTypeAttr {
     public EntTypeAttr(EntityType entityType, Attribute attribute) {
         this.entityType = entityType;
         this.attribute = attribute;
-    }
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public EntityType getEntType() {
-        return entityType;
-    }
-
-    public Attribute getAttribute() {
-        return attribute;
     }
 }

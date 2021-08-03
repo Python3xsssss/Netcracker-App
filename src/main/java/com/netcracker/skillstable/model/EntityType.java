@@ -1,11 +1,14 @@
 package com.netcracker.skillstable.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity(name="EntityType")
 @Table (name = "entity_types")
+@Getter
+@Setter
 public class EntityType {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -33,47 +36,15 @@ public class EntityType {
     @Column(
             name = "ent_parent_id"
     )
-    private Long entParentId;
+    private Integer entParentId;
 
     public EntityType() {
 
     }
 
-    public EntityType(String name, String descr, Long entParentId) {
+    public EntityType(String name, String descr, Integer entParentId) {
         this.name = name;
         this.descr = descr;
-        this.entParentId = entParentId;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescr() {
-        return descr;
-    }
-
-    public void setDescr(String descr) {
-        this.descr = descr;
-    }
-
-    public Long getEntParentId() {
-        return entParentId;
-    }
-
-    public void setEntParentId(Long entParentId) {
         this.entParentId = entParentId;
     }
 

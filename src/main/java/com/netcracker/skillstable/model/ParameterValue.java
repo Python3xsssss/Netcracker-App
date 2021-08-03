@@ -2,6 +2,7 @@ package com.netcracker.skillstable.model;
 
 import java.util.Objects;
 
+// old
 public class ParameterValue {
     private Integer valueInt;
     private String valueStr;
