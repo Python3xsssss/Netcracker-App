@@ -1,0 +1,10 @@
+<div class="home-list" *ngIf="checkIfLoggedIn()">
+  <app-list-depart></app-list-depart>
+</div>
+
+<div class="container" id="title-default" *ngIf="!checkIfLoggedIn()">
+  <div class="center-element">
+    <h1 class="display-1"><i class="bi bi-table"></i> Skills Table</h1>
+    <button class="btn btn-primary" id="sign-in" (click)="signIn()">Sign in</button>
+  </div>
+</div>

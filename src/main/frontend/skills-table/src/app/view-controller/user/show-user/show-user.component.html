@@ -1,0 +1,137 @@
+<div class="col-md-6 offset-md-3 show-user-container">
+  <button class="btn btn-success" id="edit-profile"><i class="bi bi-pencil-square"></i> Edit profile</button>
+  <h2>{{user?.username}}</h2>
+  <br>
+  <h4>{{user?.firstName}} {{user?.lastName}}</h4>
+  <br>
+  <h5>Roles: </h5>
+  <p *ngFor="let role of user?.roles">
+    {{role}}
+    <button class="btn-sm btn-outline-danger" (click)="deleteRole(user.id, role)"><i class="bi bi-dash"></i></button>
+  </p>
+  <button class="btn btn-primary" id="add-role" *ngIf="!showRoleForm" (click)="onShowRoleForm(user)">
+    <i class="bi bi-plus-lg"></i> Role
+  </button>
+  <form [formGroup]="roleForm" (ngSubmit)="addRole()" *ngIf="showRoleForm">
+    <div class="form-group">
+      <select formControlName="role" class="form-select" id="role-select">
+        <option *ngFor="let role of roles" [value]=role>{{role}}</option>
+      </select>
+    </div>
+    <button class="btn-sm btn-primary" ng-click="addRole()">Save</button>
+    <button class="btn-sm btn-outline-dark" (click)="showRoleForm=!showRoleForm">Cancel</button>
+  </form>
+  <!--  <button class="btn btn-success" id="edit-user" (click)="updateUser(user.id)">Edit user</button>-->
+  <!--  <button class="btn btn-danger" id="delete-user" (click)="deleteUser()">Delete user</button>-->
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      E-mail: {{user?.email}}
+    </li>
+    <li class="list-group-item">
+      About me: {{user?.about}}
+    </li>
+    <li class="list-group-item">
+      Department:
+      <a routerLink="/home" fragment="{{user?.department?.id}}" *ngIf="user?.department?.id !== null">
+        {{user?.department?.name}}
+      </a>
+      <a *ngIf="user?.department?.id === null">No department</a>
+    </li>
+    <li class="list-group-item">
+      Team:
+      <a routerLink="/team/{{user?.team?.id}}" *ngIf="user?.team?.id !== null">
+        {{user?.team?.name}}
+      </a>
+      <a *ngIf="user?.team?.id === null">No team</a>
+    </li>
+    <li class="list-group-item">
+      Position: {{user?.position}}
+    </li>
+  </ul>
+
+  <h3>Skills</h3>
+  <div class="d-flex justify-content-end mb-4">
+    <div class="form-outline">
+      <input
+        data-mdb-search
+        data-mdb-target="#table_1"
+        type="text"
+        id="search_table_1"
+        class="form-control"
+      />
+      <label class="form-label" for="search_table_1">Search</label>
+    </div>
+    <button class="btn btn-primary btn-sm ms-3" data-mdb-add-entry data-mdb-target="#table_1">
+      <i class="fas fa-plus"></i>
+    </button>
+  </div>
+  <hr />
+  <div
+    class="table-editor"
+    id="table_1"
+    data-mdb-mode="modal"
+    data-mdb-entries="5"
+    data-mdb-entries-options="[5, 10, 15]"
+  >
+    <table></table>
+  </div>
+
+  <table class="table table-bordered table-light">
+    <thead>
+    <tr>
+      <th>Skill</th>
+      <th>Level</th>
+      <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let skillLevel of user?.skillLevels">
+      <td>{{skillLevel?.skill?.name}}</td>
+      <td>{{skillLevel?.level}}</td>
+      <td>
+        <button class="btn btn-danger" id="delete-skill-level" (click)="deleteSkillLevel(skillLevel.id)"><i
+          class="bi bi-trash"></i></button>
+      </td>
+    </tr>
+    <tr>
+<!--      <form [formGroup]="addSkillLevelForm" (ngSubmit)="addSkillLevel()">-->
+        <td>
+          <button class="btn btn-primary" id="add-skill" (click)="onShowSkillLevelForm()" *ngIf="!showSkillLevelForm">
+            <i class="bi bi-plus-lg"></i> Add skill
+          </button>
+
+          <div class="form-group" *ngIf="showSkillLevelForm">
+            <label for="skill-select">Choose skill</label>
+            <select formControlName="skill" class="form-select" id="skill-select">
+              <option *ngFor="let skill of skills" [value]=skill?.id>{{skill?.name}}</option>
+            </select>
+          </div>
+          <div *ngIf="showSkillLevelForm">
+            <button class="btn btn-primary"><i class="bi bi-plus-lg"></i> New skill</button>
+          </div>
+        </td>
+        <td>
+          <div class="form-group" *ngIf="showSkillLevelForm">
+            <label for="level">Level</label>
+            <input type="number" min="0" max="5" formControlName="level" placeholder="0" name="level"
+                   class="form-control"
+                   id="level">
+          </div>
+        </td>
+        <td>
+          <button class="btn btn-dark" ng-click="onSubmit()" *ngIf="showSkillLevelForm">Save skill</button>
+          <button class="btn btn-outline-dark" (click)="showSkillLevelForm=!showSkillLevelForm"
+                  *ngIf="showSkillLevelForm">Cancel
+          </button>
+        </td>
+<!--      </form>-->
+    </tr>
+    </tbody>
+  </table>
+  <!--  <ul class="list-group list-group-flush">-->
+  <!--    <li class="list-group-item" *ngFor="let skillLevel of user?.skillLevels">{{skillLevel?.skill?.name}}: {{skillLevel?.level}}</li>-->
+  <!--  </ul>-->
+
+
+</div>
+

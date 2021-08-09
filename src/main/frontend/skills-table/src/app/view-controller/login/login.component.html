@@ -1,0 +1,32 @@
+<div class="container" id="box-default">
+  <div class="card" id="sign-in">
+    <article class="card-header text-center">
+
+      <h1 class="display-5"><i class="bi bi-table"></i> Skills Table</h1>
+    </article>
+    <article class="card-body">
+      <h4 class="card-title mb-4 mt-1 text-center">Sign in to Skills Table</h4>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" formControlName="username" class="form-control" id="username"
+                 [ngClass]="{ 'is-invalid': submitted && f.username.errors }"/>
+          <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+            <div *ngIf="f.username.errors.required">Username is required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" formControlName="password" class="form-control" id="password"
+                 [ngClass]="{ 'is-invalid': submitted && f.password.errors }"/>
+          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+            <div *ngIf="f.password.errors.required">Password is required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <button [disabled]="loading" class="btn btn-primary">Sign In</button>
+        </div>
+      </form>
+    </article>
+  </div> <!-- card.// -->
+</div>
