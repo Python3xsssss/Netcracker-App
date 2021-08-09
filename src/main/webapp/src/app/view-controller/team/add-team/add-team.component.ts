@@ -51,7 +51,6 @@ export class AddTeamComponent implements OnInit {
     }
 
     let team: Team = value;
-    console.log(team);
     this.teamService.createTeam(team)
       .subscribe(data => {
         this.router.navigate(['teams']);

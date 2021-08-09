@@ -14,8 +14,8 @@ public class ApiResponse<T> {
     private T result;
 
     @Builder
-    public ApiResponse(int httpStatusCode, HttpStatus status, String message, T result) {
-        this.httpStatusCode = httpStatusCode;
+    public ApiResponse(HttpStatus status, String message, T result) {
+        this.httpStatusCode = status.value();
         this.status = status;
         this.message = message;
         this.result = result;

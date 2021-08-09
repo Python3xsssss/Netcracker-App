@@ -21,7 +21,7 @@ public class Parameter {
     )
     private Integer id;
 
-    @ManyToOne(targetEntity = EAVObject.class)
+    @ManyToOne(targetEntity = EAVObject.class, fetch=FetchType.LAZY)
     @JoinColumn(name = "ent_id")
     private EAVObject eavObject;
 
@@ -47,7 +47,7 @@ public class Parameter {
     )
     private Boolean attrValueBool;
 
-    @ManyToOne(targetEntity = EAVObject.class)
+    @ManyToOne(targetEntity = EAVObject.class, fetch=FetchType.LAZY)
     @JoinColumn(name = "attr_value_ref")
     private EAVObject referenced;
 

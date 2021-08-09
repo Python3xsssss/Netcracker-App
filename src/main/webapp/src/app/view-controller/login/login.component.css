@@ -1,3 +1,13 @@
 .form-group{
   margin-bottom: 10px;
 }
+
+#box-default {
+  position: relative;
+}
+
+#sign-in {
+  width: 20vw;
+  margin: 0 auto;
+  float: none;
+}

@@ -3,6 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {User} from "../../../model/user.model";
 import {UserService} from "../../../service/user.service";
+import {RoleService} from "../../../service/role.service";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Position} from "../../../model/position.model";
+import {Role} from "../../../model/role.model";
 
 @Component({
   selector: 'app-list-user',
@@ -10,11 +14,14 @@ import {UserService} from "../../../service/user.service";
   styleUrls: ['./list-user.component.css']
 })
 export class ListUserComponent implements OnInit {
-
-  constructor(private router: Router, private userService: UserService) {
-  }
-
   users: User[] = [];
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private userService: UserService,
+  ) {
+  }
 
   ngOnInit() {
     this.userService.getUsers()

@@ -46,7 +46,6 @@ export class ShowReportComponent implements OnInit {
 
             }
           }
-          console.log(this.skills);
         }
       )
   }

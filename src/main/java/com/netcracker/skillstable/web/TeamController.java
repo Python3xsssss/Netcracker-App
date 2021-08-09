@@ -8,6 +8,7 @@ import com.netcracker.skillstable.service.dto.TeamService;
 import com.netcracker.skillstable.service.dto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,52 +33,57 @@ public class TeamController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('team:create')")
     public ApiResponse<Team> saveTeam(@RequestBody Team team) {
         Team createdTeam = teamService.createTeam(team);
         updateLeader(createdTeam);
 
         return new ApiResponse<>(
-                HttpStatus.OK.value(),
+                HttpStatus.OK,
                 "Team saved successfully.",
                 createdTeam
         );
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('CREATOR', 'ADMIN', 'TEAMLEAD')")
     public ApiResponse<List<Team>> getAllTeams() {
         return new ApiResponse<>(
-                HttpStatus.OK.value(),
+                HttpStatus.OK,
                 "Team list fetched successfully.",
                 teamService.getAllTeams()
         );
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('team:read')")
     public ApiResponse<Team> getTeam(@PathVariable(value = "id") Integer teamId) {
         return new ApiResponse<>(
-                HttpStatus.OK.value(),
+                HttpStatus.OK,
                 "Team fetched successfully.",
                 teamService.getTeamById(teamId)
         );
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('team:update')")
     public ApiResponse<Team> updateTeam(@RequestBody Team team) {
         Team updatedTeam = teamService.updateTeam(team);
         updateLeader(updatedTeam);
 
         return new ApiResponse<>(
-                HttpStatus.OK.value(),
+                HttpStatus.OK,
                 "Team updated successfully.",
                 updatedTeam
         );
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('team:delete')")
     public ApiResponse<Void> deleteTeam(@PathVariable(value = "id") Integer teamId) {
         teamService.deleteTeam(teamId);
         return new ApiResponse<>(
-                HttpStatus.OK.value(),
+                HttpStatus.OK,
                 "Team deleted successfully.",
                 null
         );

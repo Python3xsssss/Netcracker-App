@@ -7,6 +7,7 @@ import com.netcracker.skillstable.service.dto.DepartmentService;
 import com.netcracker.skillstable.service.dto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,36 +32,40 @@ public class DepartmentController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('depart:create')")
     public ApiResponse<Department> saveDepart(@RequestBody Department department) {
         Department createdDepartment = departmentService.createDepartment(department);
         updateLeader(createdDepartment);
 
         return new ApiResponse<>(
-                HttpStatus.OK.value(),
+                HttpStatus.OK,
                 "Department saved successfully.",
                 createdDepartment
         );
     }
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ApiResponse<List<Department>> getAllDeparts() {
         return new ApiResponse<>(
-                HttpStatus.OK.value(),
+                HttpStatus.OK,
                 "Department list fetched successfully.",
                 departmentService.getAllDepartments()
         );
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('depart:read')")
     public ApiResponse<Department> getDepart(@PathVariable(value = "id") Integer departId) {
         return new ApiResponse<>(
-                HttpStatus.OK.value(),
+                HttpStatus.OK,
                 "Department fetched successfully.",
                 departmentService.getDepartmentById(departId)
         );
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('depart:update')")
     public ApiResponse<Department> updateDepart(
             @RequestBody Department department,
             @PathVariable(value = "id") Integer departId
@@ -69,17 +74,18 @@ public class DepartmentController {
         updateLeader(updatedDepartment);
 
         return new ApiResponse<>(
-                HttpStatus.OK.value(),
+                HttpStatus.OK,
                 "Department updated successfully.",
                 updatedDepartment
         );
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('depart:delete')")
     public ApiResponse<Void> deleteDepart(@PathVariable(value = "id") Integer departId) {
         departmentService.deleteDepartment(departId);
         return new ApiResponse<>(
-                HttpStatus.OK.value(),
+                HttpStatus.OK,
                 "Department deleted successfully.",
                 null
         );

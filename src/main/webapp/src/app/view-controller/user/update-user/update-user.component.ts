@@ -51,13 +51,14 @@ export class UpdateUserComponent implements OnInit {
       this.teamService.getTeams()
         .subscribe(data => {
           this.teams = data.result;
+          this.onDepartSelect(this.user.department.id);
         }, error => console.log(error));
 
       this.addForm = this.formBuilder.group({
         id: [this.user.id],
         username: [this.user.username, Validators.required],
         password: [this.user.password, Validators.required],
-        //role: [null, Validators.required],
+        role: [this.user.roles[0], Validators.required],
         firstName: [this.user.firstName, Validators.required],
         lastName: [this.user.lastName, Validators.required],
         age: [this.user.age, Validators.required],
@@ -67,8 +68,6 @@ export class UpdateUserComponent implements OnInit {
         team: [this.user.team.id, Validators.required],
         skillLevels: [this.user.skillLevels]
       });
-
-      this.onDepartSelect(this.user.department.id);
     }, error => console.log(error));
   }
 
@@ -97,6 +96,9 @@ export class UpdateUserComponent implements OnInit {
     }
 
     Object.assign(this.user, value);
+    this.user.roles = [];
+    this.user.roles.push(value.role);
+    console.log(this.user);
     this.userService.updateUser(this.user)
       .subscribe(data => {
         this.router.navigate(['user', this.id]);

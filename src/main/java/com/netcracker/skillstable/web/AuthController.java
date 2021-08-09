@@ -5,7 +5,9 @@ import com.netcracker.skillstable.model.ApiResponse;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.security.JwtProvider;
 import com.netcracker.skillstable.service.dto.UserService;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,20 +22,29 @@ public class AuthController {
     private JwtProvider jwtProvider;
 
     @PostMapping("/sign-in")
-    public ApiResponse<String> auth(@RequestBody AuthRequest request) {
-        User user = userService.getUserByUsernameAndPassword(request.getLogin(), request.getPassword());
-        String token = jwtProvider.generateToken(user.getUsername());
+    public ApiResponse<JwtResponse> auth(@RequestBody AuthRequest request) {
+        User user = userService.getUserByUsernameAndPassword(request.getUsername(), request.getPassword());
+        String jwtToken = jwtProvider.generateToken(user.getUsername());
         return new ApiResponse<>(
-                HttpStatus.OK.value(),
-                HttpStatus,
+                HttpStatus.OK,
                 "Successfully signed in as " + user.getUsername() + ".",
-                token
+                new JwtResponse(jwtToken, user)
         );
     }
 }
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 class AuthRequest {
-    private String login;
+    private String username;
     private String password;
+}
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+class JwtResponse {
+    private String jwtToken;
+    private User user;
 }

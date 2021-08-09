@@ -1,3 +1,7 @@
+.show-user-container {
+  position: relative;
+}
+
 .form-group{
   margin-bottom: 10px;
 }
@@ -8,4 +12,10 @@ button {
 
 h3 {
   margin-top: 30px;
+}
+
+#edit-profile {
+  position: absolute;
+  right: 1vh;
+  top: 1vw;
 }

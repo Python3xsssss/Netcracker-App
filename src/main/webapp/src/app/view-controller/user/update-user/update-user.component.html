@@ -13,15 +13,12 @@
              class="form-control" id="password">
     </div>
 
-    <!--    <div class="form-group">-->
-    <!--      <label for="role-select">Choose role</label>-->
-    <!--      <select formControlName="role" class="form-select" id="role-select">-->
-    <!--        <option *ngFor="let role of roles"-->
-    <!--                [value]="role">-->
-    <!--          {{role}}-->
-    <!--        </option>-->
-    <!--      </select>-->
-    <!--    </div>-->
+    <div class="form-group">
+      <label for="role-select">Choose role</label>
+      <select formControlName="role" class="form-select" id="role-select">
+        <option *ngFor="let role of roles" [value]=[role]>{{role}}</option>
+      </select>
+    </div>
 
     <div class="form-group">
       <label for="firstName">First Name</label>
@@ -57,6 +54,7 @@
       <label for="depart-select">Choose department</label>
       <select formControlName="department" class="form-select" id="depart-select"
               (ngModelChange)="onDepartSelect($event)">
+        <option [value]="null">None</option>
         <option *ngFor="let depart of departs" [value]=depart?.id>{{depart?.name}}</option>
       </select>
     </div>
@@ -64,6 +62,7 @@
     <div class="form-group">
       <label for="team-select">Choose team</label>
       <select formControlName="team" class="form-select" id="team-select">
+        <option [value]="null">None</option>
         <option *ngFor="let team of teamsInDepart" [value]=team?.id>{{team?.name}}</option>
       </select>
     </div>

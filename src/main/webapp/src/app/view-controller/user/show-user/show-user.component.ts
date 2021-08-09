@@ -7,6 +7,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {SkillService} from "../../../service/skill.service";
 import {Skill} from "../../../model/skill.model";
 import {SkillLevel} from "../../../model/skillLevel.model";
+import {RoleService} from "../../../service/role.service";
 
 @Component({
   selector: 'app-show-user',
@@ -17,8 +18,12 @@ export class ShowUserComponent implements OnInit {
   id!: number;
   user!: User;
   skills: Skill[] = [];
-  addForm!: FormGroup;
-  show: boolean = false;
+  roles: string[] = [];
+  addSkillLevelForm!: FormGroup;
+  editUserForm!: FormGroup;
+  roleForm!: FormGroup;
+  showSkillLevelForm: boolean = false;
+  showRoleForm: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -26,6 +31,7 @@ export class ShowUserComponent implements OnInit {
     private route: ActivatedRoute,
     private userService: UserService,
     private skillService: SkillService,
+    private roleService: RoleService
   ) {
   }
 
@@ -48,9 +54,9 @@ export class ShowUserComponent implements OnInit {
 
   };
 
-  addSkillLevel(): void {
-    this.show = true;
-    this.addForm = this.formBuilder.group({
+  onShowSkillLevelForm(): void {
+    this.showSkillLevelForm = true;
+    this.addSkillLevelForm = this.formBuilder.group({
       id: [],
       skill: [null, Validators.required],
       level: [0, Validators.required]
@@ -63,19 +69,23 @@ export class ShowUserComponent implements OnInit {
   }
 
   deleteSkillLevel(idToDelete: number): void {
-    this.user.skillLevels = this.user.skillLevels.filter(sl => sl.id !== idToDelete);
-    console.log(this.user);
     this.userService.deleteSkillLevel(this.user.id, idToDelete)
       .subscribe(data => {
-        this.userService.getUserById(this.id)
-          .subscribe(data => {
-            this.user = data.result;
-          }, error => console.log(error));
+        if (data.httpStatusCode === 200) {
+          this.user.skillLevels = this.user.skillLevels.filter(sl => sl.id !== idToDelete);
+          this.userService.getUserById(this.id)
+            .subscribe(data => {
+              this.user = data.result;
+            }, error => console.log(error));
+        } else {
+          console.log("Status: " + data.status + ", Message: " + data.message);
+        }
+
       }, error => console.log(error));
   }
 
-  onSubmit() {
-    let value = this.addForm.value;
+  addSkillLevel() {
+    let value = this.addSkillLevelForm.value;
 
     for (let skill of this.skills) {
       if (skill.id === Number(value.skill)) {
@@ -86,16 +96,59 @@ export class ShowUserComponent implements OnInit {
 
     let skillLevel: SkillLevel = value;
 
-    console.log(this.user);
     this.userService.createSkillLevel(skillLevel, this.user.id)
       .subscribe(data => {
-        console.log(data.message);
-        this.userService.getUserById(this.id)
-          .subscribe(data => {
-            this.user = data.result;
-          }, error => console.log(error));
-        this.show = false;
+        if (data.httpStatusCode === 200) {
+          this.userService.getUserById(this.id)
+            .subscribe(data => {
+              this.user = data.result;
+            }, error => console.log(error));
+        } else {
+          console.log("Status: " + data.status + ", Message: " + data.message);
+        }
+        this.showSkillLevelForm = false;
       }, error => console.log(error));
   }
 
+  deleteRole(userId: number, role: string) {
+    this.roleService.deleteRole(userId, role)
+      .subscribe(data => {
+        if (data.httpStatusCode == 200) {
+          this.user.roles.filter(r => r != role);
+          this.userService.getUserById(this.id)
+            .subscribe(data => {
+              this.user = data.result;
+            }, error => console.log(error));
+        } else {
+          console.log("Status: " + data.status + ", Message: " + data.message);
+        }
+      });
+  }
+
+  onShowRoleForm(user: User): void {
+    this.roleService.getAllRoles()
+      .subscribe(data => {
+        this.roles = data.result;
+        this.showRoleForm = true;
+        this.roleForm = this.formBuilder.group({
+          role: ['USER', Validators.required],
+        });
+      }, error => console.log(error));
+  }
+
+  addRole() {
+    let newRole: string = this.roleForm.value.role;
+    this.roleService.addRole(this.user, newRole)
+      .subscribe(data => {
+        if (data.httpStatusCode == 200) {
+          this.userService.getUserById(this.id)
+            .subscribe(data => {
+              this.user = data.result;
+            }, error => console.log(error));
+        } else {
+          console.log("Status: " + data.status + ", Message: " + data.message);
+        }
+        this.showRoleForm = false;
+      });
+  }
 }

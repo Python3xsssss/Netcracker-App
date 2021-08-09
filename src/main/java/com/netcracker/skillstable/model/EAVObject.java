@@ -32,7 +32,7 @@ public class EAVObject {
     )
     private String entName;
 
-    @OneToMany(mappedBy="eavObject", fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy="eavObject", cascade=CascadeType.ALL, orphanRemoval = true)
     private List<Parameter> parameters = new ArrayList<>();
 
 
@@ -86,7 +86,6 @@ public class EAVObject {
     }
 
     public List<Parameter> updateParameters(List<Parameter> inputParams) {
-
         List<Parameter> newParameters = new ArrayList<>();
 
         for (Parameter inputParam : inputParams) {
@@ -118,6 +117,10 @@ public class EAVObject {
         this.parameters.removeIf(param -> !inputParams.contains(param));
 
         return newParameters;
+    }
+
+    public void deleteParameter(Parameter parameter) {
+        this.parameters.remove(parameter);
     }
 
     @Override

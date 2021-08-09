@@ -8,7 +8,7 @@ export class User {
   id: number;
   username: string;
   password: string;
-  roles: Role[] = [];
+  roles: string[] = [];
 
   // Personal info
   firstName: string;
@@ -23,24 +23,34 @@ export class User {
   position: Position;
   skillLevels: SkillLevel[] = [];
 
+  //Other info
+  isNonLocked: boolean;
+  isActive: boolean;
 
-  constructor(id: number,
-              username: string,
-              password: string,
-              roles: Role[],
-              firstName: string,
-              lastName: string,
-              age: number,
-              email: string,
-              about: string,
-              department: Department,
-              team: Team,
-              position: Position,
-              skillLevels: SkillLevel[]) {
+
+  constructor(
+    id: number,
+    username: string,
+    password: string,
+    roles: string[],
+    firstName: string,
+    lastName: string,
+    age: number,
+    email: string,
+    about: string,
+    department: Department,
+    team: Team,
+    position: Position,
+    skillLevels: SkillLevel[],
+    isNonLocked: boolean,
+    isActive: boolean
+  ) {
     this.id = id;
     this.username = username;
     this.password = password;
-    this.roles = roles;
+    if (this.roles.length > 0) {
+      this.roles = roles;
+    }
     this.firstName = firstName;
     this.lastName = lastName;
     this.age = age;
@@ -49,7 +59,11 @@ export class User {
     this.department = department;
     this.team = team;
     this.position = position;
-    this.skillLevels = skillLevels;
+    if (this.skillLevels.length > 0) {
+      this.skillLevels = skillLevels;
+    }
+    this.isNonLocked = isNonLocked;
+    this.isActive = isActive;
   }
 
   public equals(obj: User): boolean {

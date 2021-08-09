@@ -1,3 +1,3 @@
 export enum Role {
-  STAFF, TEAMLEAD, ADMIN
+  USER, TEAMLEAD, ADMIN
 }

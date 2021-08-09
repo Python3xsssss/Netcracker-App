@@ -1,9 +1,11 @@
 export class ApiResponse {
-  status: number;
-  message: number;
+  httpStatusCode: number;
+  status: string;
+  message: string;
   result: any;
 
-  constructor(status: number, message: number, result: any) {
+  constructor(httpStatusCode: number, status: string, message: string, result: any) {
+    this.httpStatusCode = httpStatusCode;
     this.status = status;
     this.message = message;
     this.result = result;

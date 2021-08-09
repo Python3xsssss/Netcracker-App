@@ -3,11 +3,15 @@ package com.netcracker.skillstable.service.converter;
 import com.netcracker.skillstable.exception.ResourceNotFoundException;
 import com.netcracker.skillstable.model.*;
 import com.netcracker.skillstable.model.dto.*;
+import com.netcracker.skillstable.model.dto.attr.Authority;
 import com.netcracker.skillstable.model.dto.attr.Position;
 import com.netcracker.skillstable.model.dto.attr.Role;
 import com.netcracker.skillstable.service.EAVService;
 import com.netcracker.skillstable.service.MetamodelService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -25,8 +29,11 @@ public class UserConverter {
     private DepartmentConverter departmentConverter;
     @Autowired
     private TeamConverter teamConverter;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private static final Role[] roleValues = Role.values();
+    private static final Authority[] authValues = Authority.values();
     private static final Position[] positionValues = Position.values();
 
 
@@ -82,12 +89,26 @@ public class UserConverter {
         );
         eavObj.setId(user.getId());
 
+        if (user.getPassword() != null && user.getPassword().length() != 0) {
+            eavObj.addParameters(new ArrayList<>(Collections.singletonList(new Parameter(
+                    eavObj,
+                    metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getPasswordId()),
+                    passwordEncoder.encode(user.getPassword())
+            ))));
+        } else if (user.getId() == null) {
+            throw new NullPointerException("User should have a non-empty password!");
+        } else {
+            String password = eavService.getEAVObjById(user.getId()).getParameterByAttrId(User.getPasswordId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User " + user.getUsername() + " has an empty password!"))
+                    .getAttrValueTxt();
+            eavObj.addParameters(new ArrayList<>(Collections.singletonList(new Parameter(
+                    eavObj,
+                    metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getPasswordId()),
+                    password
+            ))));
+        }
+
         eavObj.addParameters(new ArrayList<>(Arrays.asList(
-                new Parameter(
-                        eavObj,
-                        metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getRoleId()),
-                        Role.STAFF.ordinal()
-                ),
                 new Parameter(
                         eavObj,
                         metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getFirstNameId()),
@@ -117,6 +138,16 @@ public class UserConverter {
                         eavObj,
                         metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getPositionId()),
                         (user.getPosition() != null) ? user.getPosition().ordinal() : Position.NEWCOMER.ordinal()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getIsNonLockedId()),
+                        user.isNonLocked()
+                ),
+                new Parameter(
+                        eavObj,
+                        metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getIsActiveId()),
+                        user.isActive()
                 )
         )));
 
@@ -137,6 +168,17 @@ public class UserConverter {
                             eavService.getEAVObjById(user.getTeam().getId())
                     )
             );
+        }
+
+        if (user.getId() == null) {
+            eavObj.addParameters(new ArrayList<>(Collections.singletonList(new Parameter(
+                    eavObj,
+                    metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getRoleId()),
+                    Role.USER.ordinal()
+            ))));
+        } else {
+            List<Parameter> roleParams = eavService.getEAVObjById(user.getId()).getMultipleParametersByAttrId(User.getRoleId());
+            eavObj.addParameters(roleParams);
         }
 
         Attribute skillLevelAttr = metamodelService.updateEntTypeAttrMapping(
@@ -183,7 +225,11 @@ public class UserConverter {
             roles.add(roleValues[Math.toIntExact(roleParam.getAttrValueInt())]);
         }
 
-        List<Parameter> skillLevelsAsParams = userEavObj.getMultipleParametersByAttrId(User.getSkillLevelRefId());
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        for (Role role : roles) {
+            authorities.addAll(role.getGrantedAuthorities());
+        }
+
         List<EAVObject> skillLevelsEavList = userEavObj
                 .getMultipleParametersByAttrId(User.getSkillLevelRefId())
                 .stream()
@@ -212,6 +258,7 @@ public class UserConverter {
                 userEavObj.getEntName(),
                 null,
                 roles,
+                authorities,
                 userEavObj.getParameterByAttrId(User.getFirstNameId())
                         .map(Parameter::getAttrValueTxt)
                         .orElse(""),
@@ -233,7 +280,13 @@ public class UserConverter {
                                 .map(Parameter::getAttrValueInt)
                                 .orElse(Position.NEWCOMER.ordinal())
                         ],
-                skillLevels
+                skillLevels,
+                userEavObj.getParameterByAttrId(User.getIsNonLockedId())
+                        .map(Parameter::getAttrValueBool)
+                        .orElse(false),
+                userEavObj.getParameterByAttrId(User.getIsActiveId())
+                        .map(Parameter::getAttrValueBool)
+                        .orElse(false)
         );
     }
 }

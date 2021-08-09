@@ -8,6 +8,7 @@ import {DepartmentService} from "../../../service/department.service";
 import {TeamService} from "../../../service/team.service";
 import {Role} from "../../../model/role.model";
 import {User} from "../../../model/user.model";
+import {Position} from "../../../model/position.model";
 
 @Component({
   selector: 'app-add-user',
@@ -19,7 +20,7 @@ export class AddUserComponent implements OnInit {
   departs: Department[] = [];
   teams: Team[] = [];
   teamsInDepart: Team[] = [];
-  roles = Object.keys(Role).filter(key => isNaN(Number(key)));
+  positions = Object.keys(Position).filter(key => isNaN(Number(key)));
 
   constructor(
     private formBuilder: FormBuilder,
@@ -32,17 +33,16 @@ export class AddUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.addForm = this.formBuilder.group({
-      id: [],
       username: ['', Validators.required],
       password: ['', Validators.required],
-      //role: [null, Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       age: [0, Validators.required],
       email: ['', Validators.required],
       about: ['', Validators.required],
       department: [null, Validators.required],
-      team: [null, Validators.required]
+      team: [null, Validators.required],
+      position: ['NEWCOMER', Validators.required]
     });
 
     this.departService.getDepartments()
@@ -81,6 +81,11 @@ export class AddUserComponent implements OnInit {
     }
 
     let user: User = value;
+    user.isNonLocked = true;
+    user.isActive = true;
+    user.roles = [];
+    user.roles.push('USER');
+
     console.log(user);
     this.userService.createUser(user)
       .subscribe(data => {

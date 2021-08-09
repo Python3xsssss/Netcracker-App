@@ -1,23 +1,20 @@
 <div class="col-md-6 offset-md-3 list-team-container">
   <h2>Teams</h2>
-  <button class="btn btn-success" (click)="addTeam()">Add Team</button>
+  <button class="btn btn-success" (click)="addTeam()"><i class="bi bi-plus-lg"></i> Add Team</button>
   <table class="table table-striped">
     <thead>
     <tr>
-      <th class="hidden">Id</th>
       <th>Name</th>
       <th>Department</th>
       <th>Options</th>
-      <th></th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let team of teams">
-      <td class="hidden">{{team?.id}}</td>
       <td><a routerLink="/team/{{team?.id}}">{{team?.name}}</a></td>
       <td>{{team?.superior?.name}}</td>
       <td>
-        <button class="btn btn-danger" (click)="deleteTeam(team)">Delete</button>
+        <button class="btn btn-danger" (click)="deleteTeam(team)"><i class="bi bi-trash"></i></button>
       </td>
     </tr>
     </tbody>

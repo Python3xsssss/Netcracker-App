@@ -48,7 +48,9 @@ public class EAVService {
     }
 
     public EAVObject getEAVObjByNameAndType(String name, EntityType entityType) {
-        return eavRepo.findAllByEntNameAndEntType(name, entityType);
+        return eavRepo.findAllByEntNameAndEntType(name, entityType).orElseThrow(
+                () -> new ResourceNotFoundException("EAVObject with name=" + name + " not found!")
+        );
     }
 
     public EAVObject updateEAVObj(EAVObject dtoEavObj, Integer eavObjId) {
@@ -63,7 +65,7 @@ public class EAVService {
         return eavRepo.save(databaseEavObj);
     }
 
-    public void deleteEAVObj(Integer entId) {
-        eavRepo.deleteById(entId);
+    public void deleteEAVObj(Integer eavObjId) {
+        eavRepo.deleteById(eavObjId);
     }
 }

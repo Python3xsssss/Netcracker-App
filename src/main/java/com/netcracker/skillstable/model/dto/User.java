@@ -1,88 +1,110 @@
 package com.netcracker.skillstable.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.netcracker.skillstable.model.dto.attr.Authority;
 import com.netcracker.skillstable.model.dto.attr.Position;
 import com.netcracker.skillstable.model.dto.attr.Role;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import lombok.*;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"allAuthorities"})
 public class User implements UserDetails {
-    private static final long serialVersionUID = 1L;
-
     // General
     private Integer id;
-    @Getter private static final Integer entTypeId = 1;
+    @Getter
+    private static final Integer entTypeId = 1;
     private String username;
 
     private String password;
+    @Getter
+    private static final Integer passwordId = 10;
 
     private Set<Role> roles = new HashSet<>();
-    @Getter private static final Integer roleId = 14;
+    @Getter
+    private static final Integer roleId = 14;
 
-    private Set<Authority> authorities = new HashSet<>();
-    @Getter private static final Integer authId = 7;
+    @JsonIgnore
+    private Set<? extends GrantedAuthority> authorities = new HashSet<>();
+    @Getter
+    private static final Integer authId = 7;
 
     // Personal info
     private String firstName, lastName;
-    @Getter private static final Integer firstNameId = 1, lastNameId = 2;
+    @Getter
+    private static final Integer firstNameId = 1, lastNameId = 2;
 
     private Integer age;
-    @Getter private static final Integer ageId = 24;
+    @Getter
+    private static final Integer ageId = 24;
 
     private String email;
-    @Getter private static final Integer emailId = 16;
+    @Getter
+    private static final Integer emailId = 16;
 
     private String about;
-    @Getter private static final Integer aboutId = 25;
+    @Getter
+    private static final Integer aboutId = 25;
 
     // Work info
     private Department department;
-    @Getter private static final Integer departmentRefId = 18;
+    @Getter
+    private static final Integer departmentRefId = 18;
 
     private Team team;
-    @Getter private static final Integer teamRefId = 4;
+    @Getter
+    private static final Integer teamRefId = 4;
 
     private Position position;
-    @Getter private static final Integer positionId = 26;
+    @Getter
+    private static final Integer positionId = 26;
 
     private Set<SkillLevel> skillLevels = new HashSet<>();
-    @Getter private static final Integer skillLevelRefId = 6;
+    @Getter
+    private static final Integer skillLevelRefId = 6;
 
     //Other
     private boolean isActive;
-    @Getter private static final Integer isActiveId = 8;
+    @Getter
+    private static final Integer isActiveId = 8;
 
-    private boolean isLocked;
-    @Getter private static final Integer isLockedId = 9;
+    private boolean isNonLocked;
+    @Getter
+    private static final Integer isNonLockedId = 9;
 
 
+    // Constructor for User w/o OrgItem references
     public User(
             Integer id,
             String username,
             String password,
             Set<Role> roles,
+            Set<? extends GrantedAuthority> authorities,
             String firstName,
             String lastName,
             Integer age,
             String email,
             String about,
             Position position,
-            Set<SkillLevel> skillLevels
+            Set<SkillLevel> skillLevels,
+            boolean isActive,
+            boolean isNonLocked
     ) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.authorities = authorities;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
@@ -90,7 +112,10 @@ public class User implements UserDetails {
         this.about = about;
         this.position = position;
         this.skillLevels = skillLevels;
+        this.isActive = isActive;
+        this.isNonLocked = isNonLocked;
     }
+
 
     public User toUserNoRefs() {
         return new User(
@@ -98,13 +123,16 @@ public class User implements UserDetails {
                 this.username,
                 this.password,
                 this.roles,
+                this.authorities,
                 this.firstName,
                 this.lastName,
                 this.age,
                 this.email,
                 this.about,
                 this.position,
-                this.skillLevels
+                this.skillLevels,
+                this.isActive,
+                this.isNonLocked
         );
     }
 
@@ -118,6 +146,10 @@ public class User implements UserDetails {
 
     public void deleteSkillLevel(Skill skill) {
         skillLevels.removeIf(level -> skill.getId().equals(level.getSkill().getId()));
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 
     @Override
@@ -152,9 +184,13 @@ public class User implements UserDetails {
         return Objects.hash(id);
     }
 
+    public Set<? extends GrantedAuthority> getAllAuthorities() {
+        return this.authorities;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override
@@ -164,7 +200,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true; //isNonLocked;
     }
 
     @Override
@@ -174,6 +210,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true; //isActive;
     }
 }
