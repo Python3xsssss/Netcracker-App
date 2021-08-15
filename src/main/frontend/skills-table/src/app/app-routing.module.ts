@@ -29,7 +29,6 @@ const ROUTES: Routes = [
 
   {path: 'user/:id', component: ShowUserComponent},
   {path: 'add-user', component: AddUserComponent},
-  {path: 'update-user/:id', component: UpdateUserComponent},
   {path: 'add-depart', component: AddDepartComponent},
   {path: 'update-depart/:id', component: UpdateDepartComponent},
   {path: 'add-team', component: AddTeamComponent},

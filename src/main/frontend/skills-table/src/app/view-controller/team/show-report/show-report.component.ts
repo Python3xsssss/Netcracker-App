@@ -5,6 +5,17 @@ import {MySet} from "../../../utils/myset";
 import {User} from "../../../model/user.model";
 import {Skill} from "../../../model/skill.model";
 import {Team} from "../../../model/team.model";
+import {Plotly} from "angular-plotly.js/lib/plotly.interface";
+
+class CountAvg {
+  count: number;
+  average: number;
+
+  constructor(count: number, average: number) {
+    this.count = count;
+    this.average = average;
+  }
+}
 
 @Component({
   selector: 'app-show-report',
@@ -14,8 +25,10 @@ import {Team} from "../../../model/team.model";
 export class ShowReportComponent implements OnInit {
   id!: number;
   team!: Team;
-  members: Set<User> = new Set<User>(); // todo: MySet?
-  skills: Set<Skill> = new Set<Skill>();
+  members: User[] = [];
+  skills: Skill[] = [];
+  hist: any[] = [];
+  showPlot = false;
 
   constructor(
     private router: Router,
@@ -41,13 +54,15 @@ export class ShowReportComponent implements OnInit {
                 }
               }
               if (!contains) {
-                this.skills.add(skillLevel.skill);
+                this.skills.push(skillLevel.skill);
               }
 
             }
           }
+          this.dataHist();
         }
-      )
+      );
+
   }
 
   getSkillLevel(member: User, skill: Skill): string {
@@ -56,6 +71,40 @@ export class ShowReportComponent implements OnInit {
         return String(skillLevel.level);
     }
     return "-";
+  }
+
+  getCountAndAverage(skill: Skill): CountAvg {
+    let average: number = 0;
+    let count: number = 0;
+    for (let member of this.members) {
+      let level = Number(this.getSkillLevel(member, skill));
+      if (!isNaN(level)) {
+        average += level;
+        count++;
+      }
+    }
+    return {count: count, average: (count == 0) ? 0 : average / count};
+  }
+
+  dataHist() {
+    let skillNames = this.skills.map(skill => skill.name);
+    let result = this.skills.map(skill => this.getCountAndAverage(skill));
+    let traceCounts = {
+      x: skillNames,
+      y: result.map(obj => obj.count),
+      name: 'People with skill',
+      type: 'bar'
+    };
+    let traceAverages = {
+      x: skillNames,
+      y: result.map(obj => obj.average),
+      name: 'Average level of skill',
+      type: 'bar'
+    };
+    console.log(traceCounts);
+    console.log(traceAverages);
+    this.hist = [traceCounts, traceAverages];
+    this.showPlot = true;
   }
 
   backToTeam(): void {

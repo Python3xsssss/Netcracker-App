@@ -3,16 +3,16 @@ import {Team} from "./team.model";
 import {User} from "./user.model";
 
 export class Department extends OrgItem{
-  teams: Set<Team>;
-  membersNoTeam: Set<User>;
+  teams: Team[];
+  membersNoTeam: User[];
 
   constructor(
-    id: number,
+    id: number | null,
     name: string,
     about: string,
-    leader: User,
-    teams: Set<Team>,
-    membersNoTeam: Set<User>
+    leader: User | null,
+    teams: Team[],
+    membersNoTeam: User[]
   ) {
     super(id, name, about, leader, null);
     this.teams = teams;

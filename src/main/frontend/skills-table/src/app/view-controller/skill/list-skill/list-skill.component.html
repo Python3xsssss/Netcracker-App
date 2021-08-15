@@ -1,6 +1,6 @@
 <div class="col-md-6 offset-md-3 list-skill-container">
   <h2>Skills</h2>
-  <button class="btn btn-success" (click)="addSkill()"><i class="bi bi-plus-lg"></i> Add Skill</button>
+  <button class="btn btn-success" (click)="addSkill()"><i class="fas fa-plus"></i> New Skill</button>
   <table class="table table-striped">
     <thead>
     <tr>
@@ -14,7 +14,7 @@
       <td>{{skill?.name}}</td>
       <td>{{skill?.about}}</td>
       <td>
-        <button class="btn btn-danger" (click)="deleteSkill(skill)"><i class="bi bi-trash"></i></button>
+        <button class="btn btn-danger" (click)="deleteSkill(skill)"><i class="fas fa-trash-alt"></i></button>
       </td>
     </tr>
     </tbody>

@@ -1,4 +1,4 @@
-.show-user-container {
+.user-page {
   position: relative;
 }
 
@@ -14,12 +14,25 @@ h3 {
   margin-top: 30px;
 }
 
-#edit-profile {
+.roles {
+  position: relative;
+}
+
+#edit-profile, #add-role {
   position: absolute;
   right: 1vh;
   top: 1vw;
 }
 
-#skill-select {
-  display: flex;
+#add-role, #add-skill {
+  margin-bottom: 10px;
+}
+
+.list-group {
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+#add-skill-form {
+  margin-bottom: 20px;
 }

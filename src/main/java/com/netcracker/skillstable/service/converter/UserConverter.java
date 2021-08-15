@@ -121,11 +121,6 @@ public class UserConverter {
                 ),
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getAgeId()),
-                        user.getAge()
-                ),
-                new Parameter(
-                        eavObj,
                         metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getEmailId()),
                         user.getEmail()
                 ),
@@ -265,9 +260,6 @@ public class UserConverter {
                 userEavObj.getParameterByAttrId(User.getLastNameId())
                         .map(Parameter::getAttrValueTxt)
                         .orElse(""),
-                userEavObj.getParameterByAttrId(User.getAgeId())
-                        .map(Parameter::getAttrValueInt)
-                        .orElse(null),
                 userEavObj.getParameterByAttrId(User.getEmailId())
                         .map(Parameter::getAttrValueTxt)
                         .orElse(""),

@@ -4,9 +4,9 @@ import {Department} from "./department.model";
 
 export class Team extends OrgItem{
   superior: Department;
-  members: Set<User>;
+  members: User[];
 
-  constructor(id: number, name: string, about: string, leader: User, superior: Department, members: Set<User>) {
+  constructor(id: number | null, name: string, about: string, leader: User | null, superior: Department, members: User[]) {
     super(id, name, about, leader, superior);
     this.members = members;
     this.superior = superior;

@@ -1,5 +1,4 @@
-
-<div class="col-md-6 offset-md-3 show-team-container">
+<div class="col-md-12 show-team-container">
   <h2>Report for the team "{{team?.name}}"</h2>
   <table class="table table-striped">
     <thead>
@@ -19,6 +18,9 @@
     </tr>
     </tbody>
   </table>
+
+  <div id="plot"></div>
+  <plotly-plot [data]="hist" [layout]="{barmode: 'group', title: 'Skills summary'}" *ngIf="showPlot"></plotly-plot>
 
   <button class="btn btn-primary" id="back-to-team" (click)="backToTeam()">Back to team</button>
 </div>

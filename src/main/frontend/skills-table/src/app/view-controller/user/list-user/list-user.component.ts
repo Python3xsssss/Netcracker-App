@@ -31,17 +31,19 @@ export class ListUserComponent implements OnInit {
   }
 
   deleteUser(user: User): void {
-    this.userService.deleteUser(user.id)
-      .subscribe(data => {
-        this.users = this.users.filter(u => u !== user);
-      }, error => console.log(error))
+    if (user.id !== null) {
+      this.userService.deleteUser(user.id)
+        .subscribe(data => {
+          this.users = this.users.filter(u => u !== user);
+        }, error => console.log(error))
+    }
   };
 
   addUser(): void {
     this.router.navigate(['add-user']);
   };
 
-  updateUser(id: number): void {
-    this.router.navigate(['update-user', id]);
+  updateUser(id: number | null): void {
+    this.router.navigate(['user', id]);
   };
 }

@@ -44,10 +44,6 @@ public class User implements UserDetails {
     @Getter
     private static final Integer firstNameId = 1, lastNameId = 2;
 
-    private Integer age;
-    @Getter
-    private static final Integer ageId = 24;
-
     private String email;
     @Getter
     private static final Integer emailId = 16;
@@ -92,7 +88,6 @@ public class User implements UserDetails {
             Set<? extends GrantedAuthority> authorities,
             String firstName,
             String lastName,
-            Integer age,
             String email,
             String about,
             Position position,
@@ -107,7 +102,6 @@ public class User implements UserDetails {
         this.authorities = authorities;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
         this.email = email;
         this.about = about;
         this.position = position;
@@ -126,7 +120,6 @@ public class User implements UserDetails {
                 this.authorities,
                 this.firstName,
                 this.lastName,
-                this.age,
                 this.email,
                 this.about,
                 this.position,
@@ -161,7 +154,6 @@ public class User implements UserDetails {
                 ",\nroles=" + roles +
                 ",\nfirstName='" + firstName + '\'' +
                 ",\nlastName='" + lastName + '\'' +
-                ",\nage=" + age +
                 ",\nemail='" + email + '\'' +
                 ",\nabout='" + about + '\'' +
                 ",\ndepartment=" + ((department != null) ? department.name : "None") +
@@ -182,10 +174,6 @@ public class User implements UserDetails {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    public Set<? extends GrantedAuthority> getAllAuthorities() {
-        return this.authorities;
     }
 
     @Override

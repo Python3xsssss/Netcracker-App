@@ -1,6 +1,6 @@
 <div class="col-md-6 offset-md-3 list-team-container">
   <h2>Teams</h2>
-  <button class="btn btn-success" (click)="addTeam()"><i class="bi bi-plus-lg"></i> Add Team</button>
+  <button class="btn btn-success" (click)="addTeam()"><i class="fas fa-plus"></i> New Team</button>
   <table class="table table-striped">
     <thead>
     <tr>
@@ -14,7 +14,7 @@
       <td><a routerLink="/team/{{team?.id}}">{{team?.name}}</a></td>
       <td>{{team?.superior?.name}}</td>
       <td>
-        <button class="btn btn-danger" (click)="deleteTeam(team)"><i class="bi bi-trash"></i></button>
+        <button class="btn btn-danger" (click)="deleteTeam(team)"><i class="fas fa-trash-alt"></i></button>
       </td>
     </tr>
     </tbody>

@@ -48,7 +48,6 @@ public class Application {
                         null,
                         "Mikhail",
                         "Gerasimov",
-                        20,
                         "biathloner2@mail.ru",
                         "Admin of this application",
                         Position.NEWCOMER,

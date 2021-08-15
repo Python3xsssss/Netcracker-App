@@ -55,7 +55,7 @@ export class AddUserComponent implements OnInit {
       });
   }
 
-  onDepartSelect(departId: any) {
+  onDepartSelect(departId: number | null) {
     this.teamsInDepart = [];
     for (let team of this.teams) {
       if (team.superior.id === Number(departId)) {
@@ -66,6 +66,13 @@ export class AddUserComponent implements OnInit {
 
   onSubmit() {
     let value = this.addForm.value;
+    if (value.department === "null") {
+      value.department = null;
+      value.team = null;
+    }
+    if (value.team === "null") {
+      value.team = null;
+    }
 
     for (let depart of this.departs) {
       if (depart.id === Number(value.department)) {

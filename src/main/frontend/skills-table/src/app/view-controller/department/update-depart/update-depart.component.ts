@@ -32,19 +32,21 @@ export class UpdateDepartComponent implements OnInit {
 
     this.departmentService.getDepartmentById(this.id).subscribe(data => {
       this.department = data.result;
-      this.leaderSelectedId = this.department.leader.id;
+      if (this.department.leader !== null && this.department.leader.id !== null) {
+        this.leaderSelectedId = this.department.leader.id;
 
-      this.addForm = this.formBuilder.group({
-        id: [this.department.id],
-        name: [this.department.name, Validators.required],
-        about: [this.department.about, Validators.required],
-        leader: [this.department.leader.id, Validators.required]
-      });
-
-      this.userService.getUsers()
-        .subscribe(data => {
-          this.users = data.result;
+        this.addForm = this.formBuilder.group({
+          id: [this.department.id],
+          name: [this.department.name, Validators.required],
+          about: [this.department.about, Validators.required],
+          leader: [this.department.leader.id, Validators.required]
         });
+
+        this.userService.getUsers()
+          .subscribe(data => {
+            this.users = data.result;
+          });
+      }
     }, error => console.log(error));
   }
 

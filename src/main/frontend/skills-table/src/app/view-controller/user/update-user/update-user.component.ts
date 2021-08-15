@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {User} from "../../../model/user.model";
 import {UserService} from "../../../service/user.service";
@@ -8,11 +8,13 @@ import {Role} from "../../../model/role.model";
 import {DepartmentService} from "../../../service/department.service";
 import {TeamService} from "../../../service/team.service";
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Position} from "../../../model/position.model";
 
 @Component({
   selector: 'app-update-user',
   templateUrl: './update-user.component.html',
-  styleUrls: ['./update-user.component.scss']
+  styleUrls: ['./update-user.component.scss'],
+  outputs: ['onUserUpdated']
 })
 export class UpdateUserComponent implements OnInit {
   id!: number;
@@ -21,9 +23,10 @@ export class UpdateUserComponent implements OnInit {
   departs: Department[] = [];
   teams: Team[] = [];
   teamsInDepart: Team[] = [];
-  roles = Object.keys(Role).filter(key => isNaN(Number(key)));
-  depSelectedId!: number;
-  teamSelectedId!: number;
+  positions = Object.keys(Position).filter(key => isNaN(Number(key)));
+  depSelectedId!: number | null;
+  teamSelectedId!: number | null;
+  onUserUpdated: EventEmitter<boolean>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,6 +36,7 @@ export class UpdateUserComponent implements OnInit {
     private departService: DepartmentService,
     private teamService: TeamService
   ) {
+    this.onUserUpdated = new EventEmitter();
   }
 
   ngOnInit(): void {
@@ -40,8 +44,17 @@ export class UpdateUserComponent implements OnInit {
 
     this.userService.getUserById(this.id).subscribe(data => {
       this.user = data.result;
-      this.depSelectedId = this.user.department.id;
-      this.teamSelectedId = this.user.team.id;
+      if (this.user.department !== null) {
+        this.depSelectedId = this.user.department.id;
+      } else {
+        this.depSelectedId = null;
+      }
+      if (this.user.team !== null) {
+        this.teamSelectedId = this.user.team.id;
+      } else {
+        this.teamSelectedId = null;
+      }
+
 
       this.departService.getDepartments()
         .subscribe(data => {
@@ -51,21 +64,17 @@ export class UpdateUserComponent implements OnInit {
       this.teamService.getTeams()
         .subscribe(data => {
           this.teams = data.result;
-          this.onDepartSelect(this.user.department.id);
+          this.onDepartSelect(this.depSelectedId);
         }, error => console.log(error));
 
       this.addForm = this.formBuilder.group({
-        id: [this.user.id],
-        username: [this.user.username, Validators.required],
-        password: [this.user.password, Validators.required],
-        role: [this.user.roles[0], Validators.required],
         firstName: [this.user.firstName, Validators.required],
         lastName: [this.user.lastName, Validators.required],
         email: [this.user.email, Validators.required],
         about: [this.user.about, Validators.required],
-        department: [this.user.department.id, Validators.required],
-        team: [this.user.team.id, Validators.required],
-        skillLevels: [this.user.skillLevels]
+        department: [this.depSelectedId, Validators.required],
+        team: [this.teamSelectedId, Validators.required],
+        position: [this.user.position, Validators.required],
       });
     }, error => console.log(error));
   }
@@ -81,6 +90,13 @@ export class UpdateUserComponent implements OnInit {
 
   onSubmit() {
     let value = this.addForm.value;
+    if (value.department === "null") {
+      value.department = null;
+      value.team = null;
+    }
+    if (value.team === "null") {
+      value.team = null;
+    }
 
     for (let depart of this.departs) {
       if (depart.id === Number(value.department)) {
@@ -95,12 +111,14 @@ export class UpdateUserComponent implements OnInit {
     }
 
     Object.assign(this.user, value);
-    this.user.roles = [];
-    this.user.roles.push(value.role);
     console.log(this.user);
     this.userService.updateUser(this.user)
       .subscribe(data => {
-        this.router.navigate(['user', this.id]);
+        this.onUserUpdated.emit(true);
       }, error => console.log(error));
+  }
+
+  onCancel() {
+    this.onUserUpdated.emit(false);
   }
 }

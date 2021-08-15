@@ -24,10 +24,12 @@ export class ListSkillComponent implements OnInit {
   }
 
   deleteSkill(skill: Skill): void {
-    this.skillService.deleteSkill(skill.id)
-      .subscribe(data => {
-        this.skills = this.skills.filter(s => s !== skill);
-      }, error => console.log(error))
+    if (skill.id !== null) {
+      this.skillService.deleteSkill(skill.id)
+        .subscribe(data => {
+          this.skills = this.skills.filter(s => s !== skill);
+        }, error => console.log(error))
+    }
   };
 
   addSkill(): void {

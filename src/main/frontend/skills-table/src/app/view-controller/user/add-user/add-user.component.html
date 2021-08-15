@@ -29,14 +29,15 @@
     </div>
 
     <div class="form-group">
-      <label for="about">About user</label>
-      <input type="text" formControlName="about" placeholder="About" name="about" class="form-control" id="about">
+      <label for="about">About</label>
+      <textarea formControlName="about" type="text" placeholder="About user..."
+                name="about" class="form-control" id="about" rows="4"></textarea>
     </div>
 
     <div class="form-group">
       <label for="depart-select">Choose department</label>
       <select formControlName="department" class="form-select" id="depart-select" (ngModelChange)="onDepartSelect($event)">
-        <option [value]="null">None</option>
+        <option [value]=null>None</option>
         <option *ngFor="let depart of departs" [value]=depart?.id>{{depart?.name}}</option>
       </select>
     </div>
@@ -44,7 +45,7 @@
     <div class="form-group">
       <label for="team-select">Choose team</label>
       <select formControlName="team" class="form-select" id="team-select">
-        <option [value]="null">None</option>
+        <option [value]=null>None</option>
         <option *ngFor="let team of teamsInDepart" [value]=team?.id>{{team?.name}}</option>
       </select>
     </div>

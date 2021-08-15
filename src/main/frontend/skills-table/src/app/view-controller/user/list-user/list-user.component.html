@@ -1,6 +1,6 @@
 <div class="col-md-10 offset-md-1 list-user-container">
   <h2>Users</h2>
-  <button class="btn btn-success" (click)="addUser()"><i class="bi bi-person-plus-fill"></i></button>
+  <button class="btn btn-success" (click)="addUser()"><i class="fas fa-user-plus"></i></button>
   <table class="table table-striped">
     <thead>
     <tr>
@@ -23,10 +23,10 @@
       <td>{{user?.team?.name}}</td>
       <td>{{user?.position}}</td>
       <td>
-        <button class="btn btn-success" (click)="updateUser(user.id)"><i class="bi bi-pencil-square"></i></button>
+        <button class="btn btn-success" (click)="updateUser(user.id)"><i class="fas fa-user"></i></button>
       </td>
       <td>
-        <button class="btn btn-danger" (click)="deleteUser(user)"><i class="bi bi-trash"></i></button>
+        <button class="btn btn-danger" (click)="deleteUser(user)"><i class="fas fa-trash-alt"></i></button>
       </td>
     </tr>
     </tbody>

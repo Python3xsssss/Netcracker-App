@@ -1,16 +1,16 @@
 import {User} from "./user.model";
 
 export class OrgItem {
-  id: number;
+  id: number | null;
   name: string;
 
   about: string;
 
-  leader: User;
+  leader: User | null;
   superior: OrgItem | null;
 
 
-  constructor(id: number, name: string, about: string, leader: User, superior: OrgItem | null) {
+  constructor(id: number | null, name: string, about: string, leader: User | null, superior: OrgItem | null) {
     this.id = id;
     this.name = name;
     this.about = about;

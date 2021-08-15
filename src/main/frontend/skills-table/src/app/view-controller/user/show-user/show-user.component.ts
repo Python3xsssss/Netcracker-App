@@ -22,10 +22,12 @@ export class ShowUserComponent implements OnInit {
   skills: Skill[] = [];
   roles: string[] = [];
   addSkillLevelForm!: FormGroup;
-  editUserForm!: FormGroup;
   roleForm!: FormGroup;
-  showSkillLevelForm: boolean = false;
+  showEditForm: boolean = false;
   showRoleForm: boolean = false;
+  showSkillLevelForm: boolean = false;
+  showNewSkillForm: boolean = false;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -45,23 +47,14 @@ export class ShowUserComponent implements OnInit {
       }, error => console.log(error));
   }
 
-  updateUser(id: number): void {
-    this.router.navigate(['update-user', id]);
-  };
-
-  deleteUser(): void {
-    this.userService.deleteUser(this.id).subscribe(data => {
-      this.router.navigate(['users']);
-    }, error => console.log(error));
-
-  };
-
   onShowSkillLevelForm(): void {
     this.showSkillLevelForm = true;
     this.addSkillLevelForm = this.formBuilder.group({
       id: [],
       skill: [null, Validators.required],
-      level: [0, Validators.required]
+      level: [0, Validators.required],
+      name: ["", Validators.required],
+      about: ["", Validators.required]
     });
 
     this.skillService.getSkills()
@@ -70,61 +63,85 @@ export class ShowUserComponent implements OnInit {
       }, error => console.log(error));
   }
 
-  deleteSkillLevel(idToDelete: number): void {
-    this.userService.deleteSkillLevel(this.user.id, idToDelete)
-      .subscribe(data => {
-        if (data.httpStatusCode === 200) {
-          this.user.skillLevels = this.user.skillLevels.filter(sl => sl.id !== idToDelete);
-          this.userService.getUserById(this.id)
-            .subscribe(data => {
-              this.user = data.result;
-            }, error => console.log(error));
-        } else {
-          console.log("Status: " + data.status + ", Message: " + data.message);
-        }
+  deleteSkillLevel(idToDelete: number | null): void {
+    if (this.user.id !== null && idToDelete !== null) {
+      this.userService.deleteSkillLevel(this.user.id, idToDelete)
+        .subscribe(data => {
+          if (data.httpStatusCode === 200) {
+            this.user.skillLevels = this.user.skillLevels.filter(sl => sl.id !== idToDelete);
+            this.userService.getUserById(this.id)
+              .subscribe(data => {
+                this.user = data.result;
+              }, error => console.log(error));
+          } else {
+            console.log("Status: " + data.status + ", Message: " + data.message);
+          }
 
-      }, error => console.log(error));
+        }, error => console.log(error));
+    }
   }
 
   addSkillLevel() {
     let value = this.addSkillLevelForm.value;
 
-    for (let skill of this.skills) {
-      if (skill.id === Number(value.skill)) {
-        value.skill = skill;
-        break;
-      }
-    }
-
-    let skillLevel: SkillLevel = value;
-
-    this.userService.createSkillLevel(skillLevel, this.user.id)
-      .subscribe(data => {
-        if (data.httpStatusCode === 200) {
-          this.userService.getUserById(this.id)
-            .subscribe(data => {
-              this.user = data.result;
-            }, error => console.log(error));
-        } else {
-          console.log("Status: " + data.status + ", Message: " + data.message);
+    if (!this.showNewSkillForm) {
+      for (let skill of this.skills) {
+        if (skill.id === Number(value.skill)) {
+          value.skill = skill;
+          break;
         }
-        this.showSkillLevelForm = false;
-      }, error => console.log(error));
+      }
+      let skillLevel: SkillLevel = value;
+      this.pushSkillLevel(skillLevel);
+    } else {
+      let newSkill: Skill = value;
+      this.skillService.createSkill(newSkill)
+        .subscribe(data => {
+          if (data.httpStatusCode === 200) {
+            let skillLevel: SkillLevel = value;
+            skillLevel.skill = data.result;
+            console.log(skillLevel);
+            this.pushSkillLevel(skillLevel);
+          } else {
+            console.log("Status: " + data.status + ", Message: " + data.message);
+          }
+        })
+    }
   }
 
-  deleteRole(userId: number, role: string) {
-    this.roleService.deleteRole(userId, role)
-      .subscribe(data => {
-        if (data.httpStatusCode == 200) {
-          this.user.roles.filter(r => r != role);
-          this.userService.getUserById(this.id)
-            .subscribe(data => {
-              this.user = data.result;
-            }, error => console.log(error));
-        } else {
-          console.log("Status: " + data.status + ", Message: " + data.message);
-        }
-      });
+  pushSkillLevel(skillLevel: SkillLevel) {
+    if (this.user.id !== null) {
+      this.userService.createSkillLevel(skillLevel, this.user.id)
+        .subscribe(data => {
+          if (data.httpStatusCode === 200) {
+            this.userService.getUserById(this.id)
+              .subscribe(data => {
+                this.user = data.result;
+              }, error => console.log(error));
+          } else {
+            console.log("Status: " + data.status + ", Message: " + data.message);
+          }
+          this.showSkillLevelForm = false;
+          this.showNewSkillForm = false;
+        }, error => console.log(error));
+    }
+  }
+
+  deleteRole(userId: number | null, role: string) {
+    if (userId !== null) {
+      this.roleService.deleteRole(userId, role)
+        .subscribe(data => {
+          if (data.httpStatusCode == 200) {
+            this.user.roles.filter(r => r != role);
+            this.userService.getUserById(this.id)
+              .subscribe(data => {
+                this.user = data.result;
+              }, error => console.log(error));
+          } else {
+            console.log("Status: " + data.status + ", Message: " + data.message);
+          }
+        });
+    }
   }
 
   onShowRoleForm(user: User): void {
@@ -152,5 +169,9 @@ export class ShowUserComponent implements OnInit {
         }
         this.showRoleForm = false;
       });
+  }
+
+  hideEditForm($event: boolean) {
+    this.showEditForm = false;
   }
 }

@@ -5,7 +5,7 @@ import {Position} from "./position.model";
 import {SkillLevel} from "./skillLevel.model";
 
 export class User {
-  id: number;
+  id: number | null;
   username: string;
   password: string;
   roles: string[] = [];
@@ -17,8 +17,8 @@ export class User {
   about: string;
 
   // Work info
-  department: Department;
-  team: Team;
+  department: Department | null;
+  team: Team | null;
   position: Position;
   skillLevels: SkillLevel[] = [];
 
@@ -28,7 +28,7 @@ export class User {
 
 
   constructor(
-    id: number,
+    id: number | null,
     username: string,
     password: string,
     roles: string[],
@@ -37,8 +37,8 @@ export class User {
     age: number,
     email: string,
     about: string,
-    department: Department,
-    team: Team,
+    department: Department | null,
+    team: Team | null,
     position: Position,
     skillLevels: SkillLevel[],
     isNonLocked: boolean,

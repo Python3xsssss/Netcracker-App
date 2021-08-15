@@ -26,7 +26,9 @@ export class ShowTeamComponent implements OnInit {
   }
 
   deleteTeam(team: Team): void {
-    this.teamService.deleteTeam(team.id);
+    if (team.id !== null) {
+      this.teamService.deleteTeam(team.id);
+    }
   };
 
   addMember(): void {

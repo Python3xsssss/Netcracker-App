@@ -3,6 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {DepartmentService} from "../../../service/department.service";
 import {Department} from "../../../model/department.model";
+import {ErrorResponse} from "../../../model/error.response";
 
 @Component({
   selector: 'app-list-depart',
@@ -15,6 +16,7 @@ export class ListDepartComponent implements OnInit {
   }
 
   departments: Department[] = [];
+  errResponse: ErrorResponse = new ErrorResponse("");
 
   ngOnInit() {
     this.departService.getDepartments()
@@ -36,15 +38,20 @@ export class ListDepartComponent implements OnInit {
     this.router.navigate(['add-depart']);
   };
 
-  updateDepart(id: number): void {
+  updateDepart(id: number | null): void {
     this.router.navigate(['update-depart', id]);
   }
 
   deleteDepart(department: Department): void {
-    this.departService.deleteDepartment(department.id)
-      .subscribe(data => {
-        this.departments = this.departments.filter(d => d !== department);
-      }, error => console.log(error))
+    if (department.id !== null) {
+      this.departService.deleteDepartment(department.id)
+        .subscribe(data => {
+          this.departments = this.departments.filter(d => d !== department);
+        }, error => {
+          let errResponse: ErrorResponse = error;
+          console.log(errResponse.message);
+        })
+    }
   };
 
   addTeam(): void {

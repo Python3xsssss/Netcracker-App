@@ -24,10 +24,12 @@ export class ListTeamComponent implements OnInit {
   }
 
   deleteTeam(team: Team): void {
-    this.teamService.deleteTeam(team.id)
-      .subscribe(data => {
-        this.teams = this.teams.filter(t => t !== team);
-      }, error => console.log(error))
+    if (team.id !== null) {
+      this.teamService.deleteTeam(team.id)
+        .subscribe(data => {
+          this.teams = this.teams.filter(t => t !== team);
+        }, error => console.log(error))
+    }
   };
 
   addTeam(): void {
