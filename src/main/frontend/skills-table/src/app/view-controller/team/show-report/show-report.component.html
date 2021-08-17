@@ -19,8 +19,14 @@
     </tbody>
   </table>
 
-  <div id="plot"></div>
-  <plotly-plot [data]="hist" [layout]="{barmode: 'group', title: 'Skills summary'}" *ngIf="showPlot"></plotly-plot>
+  <div id="plot">
+    <select [ngModel]="selectedSkill" (ngModelChange)="dataHist($event)">
+      <option [value]="'None'">None</option>
+      <option *ngFor="let skill of skills" [value]="skill?.name">{{skill?.name}}</option>
+    </select>
+    <plotly-plot [data]="hist" [layout]="{barmode: 'group', title: 'Skills summary'}"></plotly-plot>
+  </div>
+
 
   <button class="btn btn-primary" id="back-to-team" (click)="backToTeam()">Back to team</button>
 </div>

@@ -27,6 +27,7 @@ export class ShowReportComponent implements OnInit {
   team!: Team;
   members: User[] = [];
   skills: Skill[] = [];
+  selectedSkill = 'None';
   hist: any[] = [];
   showPlot = false;
 
@@ -59,7 +60,6 @@ export class ShowReportComponent implements OnInit {
 
             }
           }
-          this.dataHist();
         }
       );
 
@@ -86,25 +86,28 @@ export class ShowReportComponent implements OnInit {
     return {count: count, average: (count == 0) ? 0 : average / count};
   }
 
-  dataHist() {
-    let skillNames = this.skills.map(skill => skill.name);
-    let result = this.skills.map(skill => this.getCountAndAverage(skill));
-    let traceCounts = {
-      x: skillNames,
-      y: result.map(obj => obj.count),
-      name: 'People with skill',
-      type: 'bar'
-    };
-    let traceAverages = {
-      x: skillNames,
-      y: result.map(obj => obj.average),
-      name: 'Average level of skill',
-      type: 'bar'
-    };
-    console.log(traceCounts);
-    console.log(traceAverages);
-    this.hist = [traceCounts, traceAverages];
-    this.showPlot = true;
+  dataHist(skillName: string) {
+    let usernames = this.members.map(member => member.username);
+    let optionalSkill = this.skills.filter(skill => skill.name === skillName).pop();
+    if (optionalSkill !== undefined) {
+      let skill: Skill = optionalSkill;
+      let skillLevels = this.members.map(member => this.getSkillLevel(member, skill)).map(level => {
+        let numLevel = Number(level);
+        if (isNaN(numLevel)) {
+          numLevel = 0;
+        }
+        return numLevel;
+      });
+      let trace = {
+        x: usernames,
+        y: skillLevels,
+        name: 'Skill level',
+        type: 'bar'
+      };
+      this.hist = [trace];
+    }
+
+
   }
 
   backToTeam(): void {
