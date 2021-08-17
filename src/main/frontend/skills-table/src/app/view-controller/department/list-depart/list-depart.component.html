@@ -1,3 +1,8 @@
+<div class="col-md-6 offset-md-3 card bg-danger" *ngIf="errResponse.message.length">
+  <div class="card-body">
+    {{errResponse.message}}
+  </div>
+</div>
 <div class="col-md-6 offset-md-3 list-depart-container">
   <h2>Departments</h2>
   <button class="btn btn-success" id="add-dep" (click)="addDepart()"><i class="fas fa-plus"></i> New Department</button>
@@ -9,9 +14,6 @@
           class="fas fa-edit"></i></button>
         <button class="btn btn-danger" id="delete-dep" (click)="deleteDepart(department)"><i
           class="fas fa-trash-alt"></i></button>
-        <div class="card bg-danger" *ngIf="errResponse.message.length">
-          {{errResponse.message}}
-        </div>
       </h3>
     </div>
     <div class="card-body">

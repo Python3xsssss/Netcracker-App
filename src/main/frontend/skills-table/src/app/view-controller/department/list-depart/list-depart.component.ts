@@ -48,8 +48,8 @@ export class ListDepartComponent implements OnInit {
         .subscribe(data => {
           this.departments = this.departments.filter(d => d !== department);
         }, error => {
-          let errResponse: ErrorResponse = error;
-          console.log(errResponse.message);
+          this.errResponse = error;
+          console.log(this.errResponse.message);
         })
     }
   };
