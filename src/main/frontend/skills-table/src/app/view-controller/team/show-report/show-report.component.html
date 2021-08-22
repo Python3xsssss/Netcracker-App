@@ -1,6 +1,7 @@
-<div class="col-md-12 show-team-container">
+<div class="col-md-12 show-report-container">
   <h2>Report for the team "{{team?.name}}"</h2>
-  <table class="table table-striped">
+  <h4>Competence matrix</h4>
+  <table class="table table-striped" id="comp-matrix">
     <thead>
     <tr>
       <th>Member</th>
@@ -10,7 +11,7 @@
     <tbody>
     <tr *ngFor="let member of members">
       <td>
-        <a routerLink="/user/{{member?.id}}">{{member?.username}} {{member?.firstName}} {{member?.lastName}}</a>
+        <a routerLink="/user/{{member?.id}}">{{member?.username}} - {{member?.firstName}} {{member?.lastName}}</a>
       </td>
       <td *ngFor="let skill of skills">
         {{getSkillLevel(member, skill)}}
@@ -19,12 +20,15 @@
     </tbody>
   </table>
 
-  <div id="plot">
-    <select [ngModel]="selectedSkill" (ngModelChange)="dataHist($event)">
+  <h4>Skill histogram</h4>
+  <div id="skill-hist">
+    <label for="skill-select" id="label-skill-select">Skill:</label>
+    <select [ngModel]="selectedSkill" (ngModelChange)="dataHist($event)" id="skill-select">
       <option [value]="'None'">None</option>
       <option *ngFor="let skill of skills" [value]="skill?.name">{{skill?.name}}</option>
     </select>
-    <plotly-plot [data]="hist" [layout]="{barmode: 'group', title: 'Skills summary'}"></plotly-plot>
+
+    <plotly-plot [data]="hist"></plotly-plot>
   </div>
 
 

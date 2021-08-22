@@ -29,7 +29,6 @@ export class ShowReportComponent implements OnInit {
   skills: Skill[] = [];
   selectedSkill = 'None';
   hist: any[] = [];
-  showPlot = false;
 
   constructor(
     private router: Router,
@@ -57,12 +56,10 @@ export class ShowReportComponent implements OnInit {
               if (!contains) {
                 this.skills.push(skillLevel.skill);
               }
-
             }
           }
         }
       );
-
   }
 
   getSkillLevel(member: User, skill: Skill): string {
