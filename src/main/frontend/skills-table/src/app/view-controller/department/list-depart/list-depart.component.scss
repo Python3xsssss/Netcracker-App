@@ -1,0 +1,30 @@
+.list-depart-container {
+  position: relative;
+}
+
+#add-dep {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#update-dep, #delete-dep {
+  margin: 0 5px 0 5px;
+}
+
+figcaption {
+  font-weight: bold;
+}
+
+#list-deps {
+  margin-top: 20px;
+}
+
+#add-team, #add-member {
+  margin: 10px 5px 10px 5px;
+}
+
+h5 {
+  margin-bottom: 1vh;
+  margin-top: 1vh;
+}

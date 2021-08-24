@@ -1,9 +1,22 @@
 package com.netcracker.skillstable.model.dto;
 
-import com.netcracker.skillstable.model.dto.attr.Position;
-import com.netcracker.skillstable.model.dto.attr.Role;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.netcracker.skillstable.model.dto.enumeration.Position;
+import com.netcracker.skillstable.model.dto.enumeration.Role;
+import jdk.jfr.Name;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -12,69 +25,113 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+@JsonIgnoreProperties({"allAuthorities"})
+public class User implements UserDetails {
     // General
     private Integer id;
-    @Getter private static final Integer entTypeId = 1;
+    @Getter
+    private static final Integer entTypeId = 1;
+
+    @NotEmpty(message = "Username should not be empty")
+    @Size(min = 2, max = 15, message = "Username should be between 2 and 15 characters")
     private String username;
 
+    @Size(min = 5, max = 20, message = "Password should be between 5 and 20 characters")
     private String password;
+    @Getter
+    private static final Integer passwordId = 10;
 
     private Set<Role> roles = new HashSet<>();
-    @Getter private static final Integer roleId = 14;
+    @Getter
+    private static final Integer roleId = 14;
+
+    @JsonIgnore
+    private Set<? extends GrantedAuthority> authorities = new HashSet<>();
+    @Getter
+    private static final Integer authId = 7;
 
     // Personal info
-    private String firstName, lastName;
-    @Getter private static final Integer firstNameId = 1, lastNameId = 2;
+    @NotEmpty(message = "First name should not be empty")
+    @Size(min = 2, max = 30, message = "First name should be between 2 and 30 characters")
+    private String firstName;
+    @Getter
+    private static final Integer firstNameId = 1;
 
-    private Integer age;
-    @Getter private static final Integer ageId = 24;
+    @NotEmpty(message = "Last name should not be empty")
+    @Size(min = 2, max = 30, message = "Last name should be between 2 and 30 characters")
+    private String lastName;
+    @Getter
+    private static final Integer lastNameId = 2;
 
+    @Email(message = "Email should be valid")
     private String email;
-    @Getter private static final Integer emailId = 16;
+    @Getter
+    private static final Integer emailId = 16;
 
+    @Size(max = 200, message = "About should not be longer than 200 symbols")
     private String about;
-    @Getter private static final Integer aboutId = 25;
+    @Getter
+    private static final Integer aboutId = 25;
 
     // Work info
     private Department department;
-    @Getter private static final Integer departmentRefId = 18;
+    @Getter
+    private static final Integer departmentRefId = 18;
 
     private Team team;
-    @Getter private static final Integer teamRefId = 4;
+    @Getter
+    private static final Integer teamRefId = 4;
 
+    @NotNull(message = "User should have a position")
     private Position position;
-    @Getter private static final Integer positionId = 26;
+    @Getter
+    private static final Integer positionId = 26;
 
     private Set<SkillLevel> skillLevels = new HashSet<>();
-    @Getter private static final Integer skillLevelRefId = 6;
+    @Getter
+    private static final Integer skillLevelRefId = 6;
+
+    //Other
+    private boolean isActive;
+    @Getter
+    private static final Integer isActiveId = 8;
+
+    private boolean isNonLocked;
+    @Getter
+    private static final Integer isNonLockedId = 9;
 
 
+    // Constructor for User w/o OrgItem references
     public User(
             Integer id,
             String username,
             String password,
             Set<Role> roles,
+            Set<? extends GrantedAuthority> authorities,
             String firstName,
             String lastName,
-            Integer age,
             String email,
             String about,
             Position position,
-            Set<SkillLevel> skillLevels
+            Set<SkillLevel> skillLevels,
+            boolean isActive,
+            boolean isNonLocked
     ) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.authorities = authorities;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
         this.email = email;
         this.about = about;
         this.position = position;
         this.skillLevels = skillLevels;
+        this.isActive = isActive;
+        this.isNonLocked = isNonLocked;
     }
+
 
     public User toUserNoRefs() {
         return new User(
@@ -82,19 +139,19 @@ public class User {
                 this.username,
                 this.password,
                 this.roles,
+                this.authorities,
                 this.firstName,
                 this.lastName,
-                this.age,
                 this.email,
                 this.about,
                 this.position,
-                this.skillLevels
+                this.skillLevels,
+                this.isActive,
+                this.isNonLocked
         );
     }
 
     public void addSkillLevel(SkillLevel skillLevel) {
-        System.out.println("\n\n\n00000000\n\n" + skillLevel);
-        System.out.println("\n\n\n00000000\n\n" + skillLevels);
         skillLevels.add(skillLevel);
     }
 
@@ -106,6 +163,10 @@ public class User {
         skillLevels.removeIf(level -> skill.getId().equals(level.getSkill().getId()));
     }
 
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -115,7 +176,6 @@ public class User {
                 ",\nroles=" + roles +
                 ",\nfirstName='" + firstName + '\'' +
                 ",\nlastName='" + lastName + '\'' +
-                ",\nage=" + age +
                 ",\nemail='" + email + '\'' +
                 ",\nabout='" + about + '\'' +
                 ",\ndepartment=" + ((department != null) ? department.name : "None") +
@@ -136,5 +196,30 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; //isNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; //isActive;
     }
 }

@@ -1,0 +1,23 @@
+<div class="col-md-6 offset-md-3 list-skill-container">
+  <h2>Skills</h2>
+  <button class="btn btn-success" (click)="addSkill()"><i class="fas fa-plus"></i> New Skill</button>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>About</th>
+      <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let skill of skills">
+      <td>{{skill?.name}}</td>
+      <td>{{skill?.about}}</td>
+      <td>
+        <button class="btn btn-danger" (click)="deleteSkill(skill)"><i class="fas fa-trash-alt"></i></button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+

@@ -1,0 +1,30 @@
+<div class="col-md-6 offset-md-3 show-team-container">
+  <h2>Team "{{team?.name}}"</h2>
+  <h4>About:</h4>
+  <span>{{team?.about}}</span>
+  <h5>
+    Members:
+    <button class="btn-sm btn-success" id="add-member" (click)="addMember()"><i class="fas fa-user-plus"></i></button>
+  </h5>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Username</th>
+      <th>Name</th>
+      <th>Position</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let member of team?.members">
+      <td>
+        <a routerLink="/user/{{member?.id}}">{{member?.username}}</a>
+      </td>
+      <td>{{member?.firstName}} {{member?.lastName}}</td>
+      <td>{{member?.position}}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <button class="btn btn-primary" id="show-report" (click)="showReport()"> Show report </button>
+</div>
+

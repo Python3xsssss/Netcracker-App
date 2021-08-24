@@ -1,0 +1,38 @@
+.user-page {
+  position: relative;
+}
+
+.form-group{
+  margin-bottom: 10px;
+}
+
+button {
+  margin-right: 10px;
+}
+
+h3 {
+  margin-top: 30px;
+}
+
+.roles {
+  position: relative;
+}
+
+#edit-profile, #add-role {
+  position: absolute;
+  right: 1vh;
+  top: 1vw;
+}
+
+#add-role, #add-skill {
+  margin-bottom: 10px;
+}
+
+.list-group {
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+#add-skill-form {
+  margin-bottom: 20px;
+}

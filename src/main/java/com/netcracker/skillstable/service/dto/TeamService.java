@@ -1,11 +1,11 @@
 package com.netcracker.skillstable.service.dto;
 
-import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.EntityType;
-import com.netcracker.skillstable.model.dto.Skill;
+import com.netcracker.skillstable.exception.ResourceAlreadyExistsException;
+import com.netcracker.skillstable.exception.ResourceNotFoundException;
+import com.netcracker.skillstable.model.eav.EAVObject;
 import com.netcracker.skillstable.model.dto.Team;
-import com.netcracker.skillstable.service.EAVService;
-import com.netcracker.skillstable.service.MetamodelService;
+import com.netcracker.skillstable.service.eav.EAVService;
+import com.netcracker.skillstable.service.eav.MetamodelService;
 import com.netcracker.skillstable.service.converter.TeamConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +27,14 @@ public class TeamService {
 
 
     public Team createTeam(Team team) {
-        return teamConverter.eavObjToDto(eavService.createEAVObj(
-                teamConverter.dtoToEavObj(team)
-        ));
+        EAVObject teamEavObj;
+        try {
+            teamEavObj = eavService.createEAVObj(teamConverter.dtoToEavObj(team));
+        } catch (ResourceAlreadyExistsException exception) {
+            throw new ResourceAlreadyExistsException("Team '" + team.getName() + "' already exists!");
+        }
+
+        return teamConverter.eavObjToDto(teamEavObj);
     }
 
     public List<Team> getAllTeams() {
@@ -41,13 +46,25 @@ public class TeamService {
     }
 
     public Team getTeamById(Integer teamId) {
-        return teamConverter.eavObjToDto(eavService.getEAVObjById(teamId));
+        EAVObject teamEavObj;
+        try {
+            teamEavObj = eavService.getEAVObjById(teamId);
+        } catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException("Team not found!");
+        }
+
+        return teamConverter.eavObjToDto(teamEavObj);
     }
 
     public Team updateTeam(Team team) {
-        EAVObject dtoEavObj = teamConverter.dtoToEavObj(team);
+        EAVObject teamEavObj;
+        try {
+            teamEavObj = eavService.updateEAVObj(teamConverter.dtoToEavObj(team), team.getId());
+        } catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException("Team '" + team.getName() + "' not found!");
+        }
 
-        return teamConverter.eavObjToDto(eavService.updateEAVObj(dtoEavObj, team.getId()));
+        return teamConverter.eavObjToDto(teamEavObj);
     }
 
     public void deleteTeam(Integer teamId) {

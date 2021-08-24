@@ -1,14 +1,14 @@
 package com.netcracker.skillstable.service.dto;
 
-import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.Parameter;
-import com.netcracker.skillstable.model.ParameterValue;
+import com.netcracker.skillstable.exception.ResourceAlreadyExistsException;
+import com.netcracker.skillstable.exception.ResourceNotFoundException;
+import com.netcracker.skillstable.model.eav.EAVObject;
+import com.netcracker.skillstable.model.eav.Parameter;
 import com.netcracker.skillstable.model.dto.Skill;
 import com.netcracker.skillstable.model.dto.SkillLevel;
-import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.model.dto.User;
-import com.netcracker.skillstable.service.EAVService;
-import com.netcracker.skillstable.service.MetamodelService;
+import com.netcracker.skillstable.service.eav.EAVService;
+import com.netcracker.skillstable.service.eav.MetamodelService;
 import com.netcracker.skillstable.service.converter.SkillConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,9 +32,14 @@ public class SkillService {
 
 
     public Skill createSkill(Skill skill) {
-        return skillConverter.eavObjToDto(eavService.createEAVObj(
-                skillConverter.dtoToEavObj(skill)
-        ));
+        EAVObject skillEavObj;
+        try {
+            skillEavObj = eavService.createEAVObj(skillConverter.dtoToEavObj(skill));
+        } catch (ResourceAlreadyExistsException exception) {
+            throw new ResourceAlreadyExistsException("Skill '" + skill.getName() + "' already exists!");
+        }
+
+        return skillConverter.eavObjToDto(skillEavObj);
     }
 
     public List<Skill> getAllSkills() {
@@ -46,31 +51,36 @@ public class SkillService {
     }
 
     public Skill getSkillById(Integer skillId) {
-        return skillConverter.eavObjToDto(eavService.getEAVObjById(skillId));
+        EAVObject skillEavObj;
+        try {
+            skillEavObj = eavService.getEAVObjById(skillId);
+        } catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException("Skill not found!");
+        }
+
+        return skillConverter.eavObjToDto(skillEavObj);
     }
 
     public Skill updateSkill(Skill skill, Integer skillId) {
-        EAVObject dtoEavObj = skillConverter.dtoToEavObj(skill);
+        EAVObject skillEavObj;
+        try {
+            skillEavObj = eavService.updateEAVObj(skillConverter.dtoToEavObj(skill), skillId);
+        } catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException("Skill '" + skill.getName() + "' not found!");
+        }
 
-        return skillConverter.eavObjToDto(eavService.updateEAVObj(dtoEavObj, skillId));
+        return skillConverter.eavObjToDto(skillEavObj);
     }
 
     public void deleteSkill(Integer skillId) {
-        Skill skill = this.getSkillById(skillId);
-
-        for (User user : userService.getAllUsers()) {
-            user.deleteSkillLevel(skill);
-            userService.updateUser(user);
-        }
-
         List<EAVObject> skillLevelEavList = eavService.getAllByEntTypeId(SkillLevel.getEntTypeId());
         for (EAVObject skillLevelEav : skillLevelEavList) {
-            if (skillId.equals(
-                            skillLevelEav
-                                    .getParameterByAttrId(SkillLevel.getSkillRefId())
-                                    .orElseGet(Parameter::new)
-                                    .getAttrValueInt()
-            )) {
+            Integer skillIdToCheck = skillLevelEav
+                    .getParameterByAttrId(SkillLevel.getSkillRefId())
+                    .orElseGet(Parameter::new)
+                    .getReferenced()
+                    .getId();
+            if (skillId.equals(skillIdToCheck)) {
                 eavService.deleteEAVObj(skillLevelEav.getId());
             }
         }

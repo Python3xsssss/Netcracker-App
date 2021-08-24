@@ -1,17 +1,23 @@
 package com.netcracker.skillstable.service.converter;
 
-import com.netcracker.skillstable.model.*;
+import com.netcracker.skillstable.model.eav.Attribute;
+import com.netcracker.skillstable.model.eav.EAVObject;
+import com.netcracker.skillstable.model.eav.EntityType;
+import com.netcracker.skillstable.model.eav.Parameter;
 import com.netcracker.skillstable.model.dto.Department;
 import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.model.dto.User;
-import com.netcracker.skillstable.service.EAVService;
-import com.netcracker.skillstable.service.MetamodelService;
+import com.netcracker.skillstable.service.eav.EAVService;
+import com.netcracker.skillstable.service.eav.MetamodelService;
 import com.netcracker.skillstable.service.dto.TeamService;
 import com.netcracker.skillstable.service.dto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,8 +30,6 @@ public class DepartmentConverter {
     private UserService userService;
     @Autowired
     private UserConverter userConverter;
-    @Autowired
-    private TeamConverter teamConverter;
     @Autowired
     private MetamodelService metamodelService;
 
