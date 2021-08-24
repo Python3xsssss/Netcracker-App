@@ -4,11 +4,14 @@ import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.dto.TeamService;
 import com.netcracker.skillstable.service.dto.UserService;
+import com.netcracker.skillstable.utils.ValidationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -32,7 +35,11 @@ public class TeamController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('team:create')")
-    public ResponseEntity<Team> saveTeam(@RequestBody Team team) {
+    public ResponseEntity<Team> saveTeam(@RequestBody @Valid Team team, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            ValidationHelper.generateValidationException(bindingResult);
+        }
+
         Team createdTeam = teamService.createTeam(team);
         updateLeader(createdTeam);
 
@@ -53,7 +60,11 @@ public class TeamController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('team:update')")
-    public ResponseEntity<Team> updateTeam(@RequestBody Team team) {
+    public ResponseEntity<Team> updateTeam(@RequestBody Team team, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            ValidationHelper.generateValidationException(bindingResult);
+        }
+
         Team updatedTeam = teamService.updateTeam(team);
         updateLeader(updatedTeam);
 

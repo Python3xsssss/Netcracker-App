@@ -15,6 +15,7 @@ import {Team} from "../../../model/team.model";
 export class AddTeamComponent implements OnInit {
   addForm!: FormGroup;
   departments: Department[] = [];
+  submitted = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -39,10 +40,19 @@ export class AddTeamComponent implements OnInit {
 
   }
 
+  get f() {
+    return this.addForm.controls;
+  }
+
   onSuperiorSelect(departId: any) {
   }
 
   onSubmit() {
+    this.submitted = true;
+    if (this.addForm.invalid) {
+      return;
+    }
+
     let value = this.addForm.value;
     for (let depart of this.departments) {
       if (depart.id === Number(value.superior)) {

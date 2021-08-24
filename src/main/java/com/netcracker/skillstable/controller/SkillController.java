@@ -2,11 +2,14 @@ package com.netcracker.skillstable.controller;
 
 import com.netcracker.skillstable.model.dto.Skill;
 import com.netcracker.skillstable.service.dto.SkillService;
+import com.netcracker.skillstable.utils.ValidationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -18,7 +21,13 @@ public class SkillController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('skill:create')")
-    public ResponseEntity<Skill> saveSkill(@RequestBody Skill skill) {
+    public ResponseEntity<Skill> saveSkill(
+            @RequestBody @Valid Skill skill,
+            BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors()) {
+            ValidationHelper.generateValidationException(bindingResult);
+        }
         return ResponseEntity.ok(skillService.createSkill(skill));
     }
 
@@ -36,7 +45,13 @@ public class SkillController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('skill:update')")
-    public ResponseEntity<Skill> updateSkill(@RequestBody Skill skill) {
+    public ResponseEntity<Skill> updateSkill(
+            @RequestBody Skill skill,
+            BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors()) {
+            ValidationHelper.generateValidationException(bindingResult);
+        }
         return ResponseEntity.ok(skillService.createSkill(skill));
     }
 

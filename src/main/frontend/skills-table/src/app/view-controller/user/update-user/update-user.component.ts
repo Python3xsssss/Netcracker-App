@@ -27,6 +27,7 @@ export class UpdateUserComponent implements OnInit {
   depSelectedId!: number | null;
   teamSelectedId!: number | null;
   onUserUpdated: EventEmitter<boolean>;
+  submitted = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -80,6 +81,10 @@ export class UpdateUserComponent implements OnInit {
       });
   }
 
+  get f() {
+    return this.addForm.controls;
+  }
+
   onDepartSelect(departId: any) {
     this.teamsInDepart = [];
     for (let team of this.teams) {
@@ -90,6 +95,11 @@ export class UpdateUserComponent implements OnInit {
   }
 
   onSubmit() {
+    this.submitted = true;
+    if (this.addForm.invalid) {
+      return;
+    }
+
     let value = this.addForm.value;
     if (value.department === "null") {
       value.department = null;

@@ -10,6 +10,7 @@ import {SkillService} from "../../../service/skill.service";
 })
 export class AddSkillComponent implements OnInit {
   addForm!: FormGroup;
+  submitted = false;
 
   constructor(private formBuilder: FormBuilder, private router: Router, private skillService: SkillService) {
   }
@@ -23,7 +24,16 @@ export class AddSkillComponent implements OnInit {
 
   }
 
+  get f() {
+    return this.addForm.controls;
+  }
+
   onSubmit() {
+    this.submitted = true;
+    if (this.addForm.invalid) {
+      return;
+    }
+
     this.skillService.createSkill(this.addForm.value)
       .subscribe(() => {
         this.router.navigate(['skills']);

@@ -14,6 +14,7 @@ import {Department} from "../../../model/department.model";
 export class AddDepartComponent implements OnInit {
   addForm!: FormGroup;
   users: User[] = [];
+  submitted = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -37,7 +38,16 @@ export class AddDepartComponent implements OnInit {
       });
   }
 
+  get f() {
+    return this.addForm.controls;
+  }
+
   onSubmit() {
+    this.submitted = true;
+    if (this.addForm.invalid) {
+      return;
+    }
+
     let value = this.addForm.value;
 
     for (let user of this.users) {

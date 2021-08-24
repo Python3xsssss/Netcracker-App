@@ -21,6 +21,7 @@ export class AddUserComponent implements OnInit {
   teams: Team[] = [];
   teamsInDepart: Team[] = [];
   positions = Object.keys(Position).filter(key => isNaN(Number(key)));
+  submitted = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -37,10 +38,10 @@ export class AddUserComponent implements OnInit {
       password: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', Validators.required],
-      about: ['', Validators.required],
-      department: [null, Validators.required],
-      team: [null, Validators.required],
+      email: [''],
+      about: [''],
+      department: [null],
+      team: [null],
       position: ['NEWCOMER', Validators.required]
     });
 
@@ -55,6 +56,10 @@ export class AddUserComponent implements OnInit {
       });
   }
 
+  get f() {
+    return this.addForm.controls;
+  }
+
   onDepartSelect(departId: number | null) {
     this.teamsInDepart = [];
     for (let team of this.teams) {
@@ -65,6 +70,11 @@ export class AddUserComponent implements OnInit {
   }
 
   onSubmit() {
+    this.submitted = true;
+    if (this.addForm.invalid) {
+      return;
+    }
+
     let value = this.addForm.value;
     if (value.department === "null") {
       value.department = null;

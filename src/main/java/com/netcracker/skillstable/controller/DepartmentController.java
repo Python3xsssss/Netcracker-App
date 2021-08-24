@@ -4,11 +4,14 @@ import com.netcracker.skillstable.model.dto.Department;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.dto.DepartmentService;
 import com.netcracker.skillstable.service.dto.UserService;
+import com.netcracker.skillstable.utils.ValidationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -32,7 +35,14 @@ public class DepartmentController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('depart:create')")
-    public ResponseEntity<Department> saveDepart(@RequestBody Department department) {
+    public ResponseEntity<Department> saveDepart(
+            @RequestBody @Valid Department department,
+            BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors()) {
+            ValidationHelper.generateValidationException(bindingResult);
+        }
+
         Department createdDepartment = departmentService.createDepartment(department);
         updateLeader(createdDepartment);
 
@@ -54,9 +64,14 @@ public class DepartmentController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('depart:update')")
     public ResponseEntity<Department> updateDepart(
+            @PathVariable(value = "id") Integer departId,
             @RequestBody Department department,
-            @PathVariable(value = "id") Integer departId
+            BindingResult bindingResult
     ) {
+        if (bindingResult.hasErrors()) {
+            ValidationHelper.generateValidationException(bindingResult);
+        }
+
         Department updatedDepartment = departmentService.updateDepartment(department);
         updateLeader(updatedDepartment);
 

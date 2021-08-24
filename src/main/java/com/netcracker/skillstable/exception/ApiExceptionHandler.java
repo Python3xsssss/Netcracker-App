@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ValidationException;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 
@@ -43,6 +44,13 @@ public class ApiExceptionHandler {
     @ExceptionHandler(PasswordException.class)
     public ResponseEntity<ApiResponse> handlePasswordException(PasswordException exception) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
+        ApiResponse apiResponse = new ApiResponse(exception.getMessage(), status, ZonedDateTime.now());
+        return new ResponseEntity<>(apiResponse, status);
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ApiResponse> handleValidationException(ValidationException exception) {
+        HttpStatus status = HttpStatus.CONFLICT;
         ApiResponse apiResponse = new ApiResponse(exception.getMessage(), status, ZonedDateTime.now());
         return new ResponseEntity<>(apiResponse, status);
     }

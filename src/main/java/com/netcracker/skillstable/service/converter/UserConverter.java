@@ -98,10 +98,10 @@ public class UserConverter {
                     passwordEncoder.encode(user.getPassword())
             ))));
         } else if (user.getId() == null) {
-            throw new NullPointerException("User should have a non-empty password!");
+            throw new RuntimeException("User should have a non-empty password!");
         } else {
             String password = eavService.getEAVObjById(user.getId()).getParameterByAttrId(User.getPasswordId())
-                    .orElseThrow(() -> new ResourceNotFoundException("User " + user.getUsername() + " has an empty password!"))
+                    .orElseThrow(() -> new RuntimeException("User " + user.getUsername() + " has an empty password!"))
                     .getAttrValueTxt();
             eavObj.addParameters(new ArrayList<>(Collections.singletonList(new Parameter(
                     eavObj,

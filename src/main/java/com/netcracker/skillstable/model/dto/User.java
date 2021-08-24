@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.netcracker.skillstable.model.dto.enumeration.Position;
 import com.netcracker.skillstable.model.dto.enumeration.Role;
+import jdk.jfr.Name;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -11,6 +12,10 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -26,8 +31,12 @@ public class User implements UserDetails {
     private Integer id;
     @Getter
     private static final Integer entTypeId = 1;
+
+    @NotEmpty(message = "Username should not be empty")
+    @Size(min = 2, max = 15, message = "Username should be between 2 and 15 characters")
     private String username;
 
+    @Size(min = 5, max = 20, message = "Password should be between 5 and 20 characters")
     private String password;
     @Getter
     private static final Integer passwordId = 10;
@@ -42,14 +51,24 @@ public class User implements UserDetails {
     private static final Integer authId = 7;
 
     // Personal info
-    private String firstName, lastName;
+    @NotEmpty(message = "First name should not be empty")
+    @Size(min = 2, max = 30, message = "First name should be between 2 and 30 characters")
+    private String firstName;
     @Getter
-    private static final Integer firstNameId = 1, lastNameId = 2;
+    private static final Integer firstNameId = 1;
 
+    @NotEmpty(message = "Last name should not be empty")
+    @Size(min = 2, max = 30, message = "Last name should be between 2 and 30 characters")
+    private String lastName;
+    @Getter
+    private static final Integer lastNameId = 2;
+
+    @Email(message = "Email should be valid")
     private String email;
     @Getter
     private static final Integer emailId = 16;
 
+    @Size(max = 200, message = "About should not be longer than 200 symbols")
     private String about;
     @Getter
     private static final Integer aboutId = 25;
@@ -63,6 +82,7 @@ public class User implements UserDetails {
     @Getter
     private static final Integer teamRefId = 4;
 
+    @NotNull(message = "User should have a position")
     private Position position;
     @Getter
     private static final Integer positionId = 26;

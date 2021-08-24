@@ -3,14 +3,20 @@
   <form *ngIf="addForm" [formGroup]="addForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="firstName">First Name</label>
-      <input type="text" formControlName="firstName" placeholder="First Name" name="firstName"
-             class="form-control" id="firstName">
+      <input formControlName="firstName" placeholder="First Name" name="firstName" class="form-control"
+             id="firstName" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }">
+      <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+        <div *ngIf="f.firstName.errors.required">First name is required</div>
+      </div>
     </div>
 
     <div class="form-group">
       <label for="lastName">Last Name</label>
-      <input type="text" formControlName="lastName" placeholder="Last Name" name="lastName"
-             class="form-control" id="lastName">
+      <input formControlName="lastName" placeholder="Last Name" name="lastName" class="form-control"
+             id="lastName" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }">
+      <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+        <div *ngIf="f.lastName.errors.required">Last name is required</div>
+      </div>
     </div>
 
     <div class="form-group">
