@@ -18,17 +18,17 @@ export class ListSkillComponent implements OnInit {
 
   ngOnInit() {
     this.skillService.getSkills()
-      .subscribe(data => {
-        this.skills = data.result;
-      }, error => console.log(error));
+      .subscribe((skills) => {
+        this.skills = skills;
+      });
   }
 
   deleteSkill(skill: Skill): void {
     if (skill.id !== null) {
       this.skillService.deleteSkill(skill.id)
-        .subscribe(data => {
+        .subscribe(() => {
           this.skills = this.skills.filter(s => s !== skill);
-        }, error => console.log(error))
+        })
     }
   };
 

@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
 import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
@@ -41,7 +41,9 @@ import {ShowReportComponent} from './view-controller/team/show-report/show-repor
 import {AuthService} from "./service/auth.service";
 import {AuthInterceptor} from "./helper/auth.interceptor";
 
-import { PlotlyViaCDNModule } from 'angular-plotly.js';
+import {PlotlyViaCDNModule} from 'angular-plotly.js';
+import {GlobalErrorHandler} from "./helper/global-error-handler";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 PlotlyViaCDNModule.setPlotlyVersion(`latest`); // can be `latest` or any version number (i.e.: '1.40.0')
 PlotlyViaCDNModule.setPlotlyBundle('basic'); // optional: can be null (for full) or 'basic', 'cartesian', 'geo', 'gl3d', 'gl2d', 'mapbox' or 'finance'
@@ -64,39 +66,38 @@ PlotlyViaCDNModule.setPlotlyBundle('basic'); // optional: can be null (for full)
     UpdateUserComponent,
     LoginComponent,
     UpdateDepartComponent,
-    ShowReportComponent
+    ShowReportComponent,
   ],
-    imports: [
-        CommonModule,
-        BrowserModule,
-        AppRoutingModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        MdbAccordionModule,
-        MdbCarouselModule,
-        MdbCheckboxModule,
-        MdbCollapseModule,
-        MdbDropdownModule,
-        MdbFormsModule,
-        MdbModalModule,
-        MdbPopoverModule,
-        MdbRadioModule,
-        MdbRangeModule,
-        MdbRippleModule,
-        MdbScrollspyModule,
-        MdbTabsModule,
-        MdbTooltipModule,
-        MdbValidationModule,
-        BrowserAnimationsModule,
-        PlotlyViaCDNModule,
-        FormsModule
-    ],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    MdbAccordionModule,
+    MdbCarouselModule,
+    MdbCheckboxModule,
+    MdbCollapseModule,
+    MdbDropdownModule,
+    MdbFormsModule,
+    MdbModalModule,
+    MdbPopoverModule,
+    MdbRadioModule,
+    MdbRangeModule,
+    MdbRippleModule,
+    MdbScrollspyModule,
+    MdbTabsModule,
+    MdbTooltipModule,
+    MdbValidationModule,
+    BrowserAnimationsModule,
+    PlotlyViaCDNModule,
+    FormsModule,
+    MatSnackBarModule
+  ],
   providers: [AuthService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    }],
+    {provide: ErrorHandler, useClass: GlobalErrorHandler},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

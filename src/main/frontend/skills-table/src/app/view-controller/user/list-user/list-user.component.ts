@@ -25,17 +25,17 @@ export class ListUserComponent implements OnInit {
 
   ngOnInit() {
     this.userService.getUsers()
-      .subscribe(data => {
-        this.users = data.result;
-      }, error => console.log(error));
+      .subscribe((users) => {
+        this.users = users;
+      });
   }
 
   deleteUser(user: User): void {
     if (user.id !== null) {
       this.userService.deleteUser(user.id)
-        .subscribe(data => {
+        .subscribe(() => {
           this.users = this.users.filter(u => u !== user);
-        }, error => console.log(error))
+        })
     }
   };
 

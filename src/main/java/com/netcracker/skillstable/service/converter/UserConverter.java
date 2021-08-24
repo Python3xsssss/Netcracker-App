@@ -1,14 +1,16 @@
 package com.netcracker.skillstable.service.converter;
 
 import com.netcracker.skillstable.exception.ResourceNotFoundException;
-import com.netcracker.skillstable.model.*;
+import com.netcracker.skillstable.model.eav.Attribute;
+import com.netcracker.skillstable.model.eav.EAVObject;
+import com.netcracker.skillstable.model.eav.EntityType;
+import com.netcracker.skillstable.model.eav.Parameter;
 import com.netcracker.skillstable.model.dto.*;
-import com.netcracker.skillstable.model.dto.attr.Authority;
-import com.netcracker.skillstable.model.dto.attr.Position;
-import com.netcracker.skillstable.model.dto.attr.Role;
-import com.netcracker.skillstable.service.EAVService;
-import com.netcracker.skillstable.service.MetamodelService;
-import lombok.extern.java.Log;
+import com.netcracker.skillstable.model.dto.enumeration.Authority;
+import com.netcracker.skillstable.model.dto.enumeration.Position;
+import com.netcracker.skillstable.model.dto.enumeration.Role;
+import com.netcracker.skillstable.service.eav.EAVService;
+import com.netcracker.skillstable.service.eav.MetamodelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,15 +39,15 @@ public class UserConverter {
     private static final Position[] positionValues = Position.values();
 
 
-    public EAVObject skillLevelToEavObj(SkillLevel skillLevel) {
+    public EAVObject skillLevelToEavObj(SkillLevel skillLevel, String username) {
         final EntityType skillLevelEntityType = metamodelService.getEntityTypeByEntTypeId(SkillLevel.getEntTypeId());
         EAVObject eavObj = new EAVObject(
                 skillLevelEntityType,
-                "Level of " + skillLevel.getSkill().getName()
+                username + "_" + skillLevel.getSkill().getName() + "_level"
         );
         eavObj.setId(skillLevel.getId());
 
-        eavObj.addParameters(new ArrayList<Parameter>(Arrays.asList(
+        eavObj.addParameters(new ArrayList<>(Arrays.asList(
                 new Parameter(
                         eavObj,
                         metamodelService.updateEntTypeAttrMapping(skillLevelEntityType.getId(), SkillLevel.getLevelId()),
@@ -185,7 +187,7 @@ public class UserConverter {
             skillLevelsAsParams.add(new Parameter(
                     eavObj,
                     skillLevelAttr,
-                    this.skillLevelToEavObj(skillLevel)
+                    this.skillLevelToEavObj(skillLevel, user.getUsername())
             ));
         }
         eavObj.addParameters(skillLevelsAsParams);

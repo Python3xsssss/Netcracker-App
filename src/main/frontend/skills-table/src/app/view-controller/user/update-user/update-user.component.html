@@ -1,4 +1,4 @@
-<div class="edit-user-container">
+<div class="update-user-container">
   <h2 class="text-center">Edit profile</h2>
   <form *ngIf="addForm" [formGroup]="addForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
@@ -30,7 +30,7 @@
       <select formControlName="department" class="form-select" id="depart-select"
               (ngModelChange)="onDepartSelect($event)">
         <option [value]=null>None</option>
-        <option *ngFor="let depart of departs" [value]=depart?.id>{{depart?.name}}</option>
+        <option *ngFor="let depart of departments" [value]=depart?.id>{{depart?.name}}</option>
       </select>
     </div>
 

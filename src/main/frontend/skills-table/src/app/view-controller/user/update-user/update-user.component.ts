@@ -20,7 +20,7 @@ export class UpdateUserComponent implements OnInit {
   id!: number;
   user!: User;
   addForm!: FormGroup;
-  departs: Department[] = [];
+  departments: Department[] = [];
   teams: Team[] = [];
   teamsInDepart: Team[] = [];
   positions = Object.keys(Position).filter(key => isNaN(Number(key)));
@@ -42,41 +42,42 @@ export class UpdateUserComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
 
-    this.userService.getUserById(this.id).subscribe(data => {
-      this.user = data.result;
-      if (this.user.department !== null) {
-        this.depSelectedId = this.user.department.id;
-      } else {
-        this.depSelectedId = null;
-      }
-      if (this.user.team !== null) {
-        this.teamSelectedId = this.user.team.id;
-      } else {
-        this.teamSelectedId = null;
-      }
+    this.userService.getUserById(this.id)
+      .subscribe((user) => {
+        this.user = user;
+        if (this.user.department !== null) {
+          this.depSelectedId = this.user.department.id;
+        } else {
+          this.depSelectedId = null;
+        }
+        if (this.user.team !== null) {
+          this.teamSelectedId = this.user.team.id;
+        } else {
+          this.teamSelectedId = null;
+        }
 
 
-      this.departService.getDepartments()
-        .subscribe(data => {
-          this.departs = data.result;
-        }, error => console.log(error));
+        this.departService.getDepartments()
+          .subscribe((departments) => {
+            this.departments = departments;
+          });
 
-      this.teamService.getTeams()
-        .subscribe(data => {
-          this.teams = data.result;
-          this.onDepartSelect(this.depSelectedId);
-        }, error => console.log(error));
+        this.teamService.getTeams()
+          .subscribe((teams) => {
+            this.teams = teams;
+            this.onDepartSelect(this.depSelectedId);
+          });
 
-      this.addForm = this.formBuilder.group({
-        firstName: [this.user.firstName, Validators.required],
-        lastName: [this.user.lastName, Validators.required],
-        email: [this.user.email, Validators.required],
-        about: [this.user.about, Validators.required],
-        department: [this.depSelectedId, Validators.required],
-        team: [this.teamSelectedId, Validators.required],
-        position: [this.user.position, Validators.required],
+        this.addForm = this.formBuilder.group({
+          firstName: [this.user.firstName, Validators.required],
+          lastName: [this.user.lastName, Validators.required],
+          email: [this.user.email, Validators.required],
+          about: [this.user.about, Validators.required],
+          department: [this.depSelectedId, Validators.required],
+          team: [this.teamSelectedId, Validators.required],
+          position: [this.user.position, Validators.required],
+        });
       });
-    }, error => console.log(error));
   }
 
   onDepartSelect(departId: any) {
@@ -98,7 +99,7 @@ export class UpdateUserComponent implements OnInit {
       value.team = null;
     }
 
-    for (let depart of this.departs) {
+    for (let depart of this.departments) {
       if (depart.id === Number(value.department)) {
         value.department = depart;
       }
@@ -111,11 +112,10 @@ export class UpdateUserComponent implements OnInit {
     }
 
     Object.assign(this.user, value);
-    console.log(this.user);
     this.userService.updateUser(this.user)
-      .subscribe(data => {
+      .subscribe(() => {
         this.onUserUpdated.emit(true);
-      }, error => console.log(error));
+      });
   }
 
   onCancel() {

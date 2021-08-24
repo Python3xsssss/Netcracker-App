@@ -32,8 +32,8 @@ export class AddDepartComponent implements OnInit {
     });
 
     this.userService.getUsers()
-      .subscribe(data => {
-        this.users = data.result;
+      .subscribe((users) => {
+        this.users = users;
       });
   }
 
@@ -50,9 +50,9 @@ export class AddDepartComponent implements OnInit {
 
     let department: Department = value;
     this.departmentService.createDepartment(department)
-      .subscribe(data => {
+      .subscribe(() => {
         this.router.navigate(['home']);
-      }, error => console.log(error));
+      });
   }
 
 }

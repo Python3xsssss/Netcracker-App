@@ -1,4 +1,3 @@
-import {Role} from "./role.model";
 import {Department} from "./department.model";
 import {Team} from "./team.model";
 import {Position} from "./position.model";

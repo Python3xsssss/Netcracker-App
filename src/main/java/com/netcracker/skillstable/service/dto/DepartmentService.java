@@ -1,12 +1,12 @@
 package com.netcracker.skillstable.service.dto;
 
-import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.EntityType;
+import com.netcracker.skillstable.exception.ResourceAlreadyExistsException;
+import com.netcracker.skillstable.exception.ResourceNotFoundException;
+import com.netcracker.skillstable.model.eav.EAVObject;
 import com.netcracker.skillstable.model.dto.Department;
 import com.netcracker.skillstable.model.dto.Team;
-import com.netcracker.skillstable.model.dto.User;
-import com.netcracker.skillstable.service.EAVService;
-import com.netcracker.skillstable.service.MetamodelService;
+import com.netcracker.skillstable.service.eav.EAVService;
+import com.netcracker.skillstable.service.eav.MetamodelService;
 import com.netcracker.skillstable.service.converter.DepartmentConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,9 +28,14 @@ public class DepartmentService {
 
 
     public Department createDepartment(Department department) {
-        return departmentConverter.eavObjToDto(eavService.createEAVObj(
-                departmentConverter.dtoToEavObj(department)
-        ));
+        EAVObject departEavObj;
+        try {
+            departEavObj = eavService.createEAVObj(departmentConverter.dtoToEavObj(department));
+        } catch (ResourceAlreadyExistsException exception) {
+            throw new ResourceAlreadyExistsException("Department '" + department.getName() + "' already exists!");
+        }
+
+        return departmentConverter.eavObjToDto(departEavObj);
     }
 
     public List<Department> getAllDepartments() {
@@ -42,16 +47,28 @@ public class DepartmentService {
     }
 
     public Department getDepartmentById(Integer departmentId) {
-        return departmentConverter.eavObjToDto(eavService.getEAVObjById(departmentId));
+        EAVObject departEavObj;
+        try {
+            departEavObj = eavService.getEAVObjById(departmentId);
+        } catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException("Department not found!");
+        }
+
+        return departmentConverter.eavObjToDto(departEavObj);
     }
 
     public Department updateDepartment(Department department) {
-        EAVObject updatedDepart = eavService.updateEAVObj(
-                departmentConverter.dtoToEavObj(department),
-                department.getId()
-        );
+        EAVObject departEavObj;
+        try {
+            departEavObj = eavService.updateEAVObj(
+                    departmentConverter.dtoToEavObj(department),
+                    department.getId()
+            );
+        } catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException("Department '" + department.getName() + "' not found!");
+        }
 
-        return departmentConverter.eavObjToDto(updatedDepart);
+        return departmentConverter.eavObjToDto(departEavObj);
     }
 
     public void deleteDepartment(Integer departmentId) {

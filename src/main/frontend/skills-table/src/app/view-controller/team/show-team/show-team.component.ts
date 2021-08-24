@@ -20,16 +20,10 @@ export class ShowTeamComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
     this.teamService.getTeamById(this.id)
-      .subscribe(data => {
-        this.team = data.result;
-      }, error => console.log(error));
+      .subscribe((team) => {
+        this.team = team;
+      });
   }
-
-  deleteTeam(team: Team): void {
-    if (team.id !== null) {
-      this.teamService.deleteTeam(team.id);
-    }
-  };
 
   addMember(): void {
     this.router.navigate(['add-user']);

@@ -1,21 +1,18 @@
 package com.netcracker.skillstable;
 
 import com.netcracker.skillstable.model.dto.User;
-import com.netcracker.skillstable.model.dto.attr.Position;
-import com.netcracker.skillstable.model.dto.attr.Role;
+import com.netcracker.skillstable.model.dto.enumeration.Position;
+import com.netcracker.skillstable.model.dto.enumeration.Role;
 import com.netcracker.skillstable.service.dto.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @SpringBootApplication
 public class Application {

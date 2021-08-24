@@ -18,17 +18,17 @@ export class ListTeamComponent implements OnInit {
 
   ngOnInit() {
     this.teamService.getTeams()
-      .subscribe(data => {
-        this.teams = data.result;
-      }, error => console.log(error));
+      .subscribe((teams) => {
+        this.teams = teams;
+      });
   }
 
   deleteTeam(team: Team): void {
     if (team.id !== null) {
       this.teamService.deleteTeam(team.id)
-        .subscribe(data => {
+        .subscribe(() => {
           this.teams = this.teams.filter(t => t !== team);
-        }, error => console.log(error))
+        })
     }
   };
 

@@ -16,12 +16,11 @@ export class ListDepartComponent implements OnInit {
   }
 
   departments: Department[] = [];
-  errResponse: ErrorResponse = new ErrorResponse("");
 
   ngOnInit() {
     this.departService.getDepartments()
-      .subscribe(data => {
-        this.departments = data.result;
+      .subscribe((departments) => {
+        this.departments = departments;
         this.departments = this.departments.sort((dep1, dep2) => {
           if (dep1.name < dep2.name) {
             return -1;
@@ -45,11 +44,8 @@ export class ListDepartComponent implements OnInit {
   deleteDepart(department: Department): void {
     if (department.id !== null) {
       this.departService.deleteDepartment(department.id)
-        .subscribe(data => {
+        .subscribe(() => {
           this.departments = this.departments.filter(d => d !== department);
-        }, error => {
-          this.errResponse = error;
-          console.log(this.errResponse.message);
         })
     }
   };

@@ -41,8 +41,8 @@ export class ShowReportComponent implements OnInit {
     this.id = this.route.snapshot.params['id'];
 
     this.teamService.getTeamById(this.id)
-      .subscribe(data => {
-          this.team = data.result;
+      .subscribe((team) => {
+          this.team = team;
           this.members = this.team.members;
           for (let member of this.members) {
             for (let skillLevel of member.skillLevels) {

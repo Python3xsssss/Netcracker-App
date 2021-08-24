@@ -2,17 +2,19 @@ package com.netcracker.skillstable.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.netcracker.skillstable.model.dto.attr.Authority;
-import com.netcracker.skillstable.model.dto.attr.Position;
-import com.netcracker.skillstable.model.dto.attr.Role;
+import com.netcracker.skillstable.model.dto.enumeration.Position;
+import com.netcracker.skillstable.model.dto.enumeration.Role;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import lombok.*;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 
 @Data

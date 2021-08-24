@@ -1,24 +1,27 @@
 package com.netcracker.skillstable.service.dto;
 
+import com.netcracker.skillstable.exception.PasswordException;
+import com.netcracker.skillstable.exception.ResourceAlreadyExistsException;
 import com.netcracker.skillstable.exception.ResourceNotFoundException;
-import com.netcracker.skillstable.model.EAVObject;
-import com.netcracker.skillstable.model.EntityType;
-import com.netcracker.skillstable.model.Parameter;
+import com.netcracker.skillstable.model.eav.EAVObject;
+import com.netcracker.skillstable.model.eav.EntityType;
+import com.netcracker.skillstable.model.eav.Parameter;
 import com.netcracker.skillstable.model.dto.SkillLevel;
 import com.netcracker.skillstable.model.dto.User;
-import com.netcracker.skillstable.model.dto.attr.Position;
-import com.netcracker.skillstable.model.dto.attr.Role;
-import com.netcracker.skillstable.service.EAVService;
-import com.netcracker.skillstable.service.MetamodelService;
+import com.netcracker.skillstable.model.dto.enumeration.Role;
+import com.netcracker.skillstable.service.eav.EAVService;
+import com.netcracker.skillstable.service.eav.MetamodelService;
 import com.netcracker.skillstable.service.converter.UserConverter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -35,9 +38,14 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public User createUser(User user) {
-        return userConverter.eavObjToDto(eavService.createEAVObj(
-                userConverter.dtoToEavObj(user)
-        ));
+        EAVObject userEavObj;
+        try {
+            userEavObj = eavService.createEAVObj(userConverter.dtoToEavObj(user));
+        } catch (ResourceAlreadyExistsException exception) {
+            throw new ResourceAlreadyExistsException("User '" + user.getUsername() + "' already exists!");
+        }
+
+        return userConverter.eavObjToDto(userEavObj);
     }
 
     public List<User> getAllUsers() {
@@ -49,43 +57,64 @@ public class UserService {
     }
 
     public User getUserById(Integer userId) {
-        EAVObject userEavObj = eavService.getEAVObjById(userId);
+        EAVObject userEavObj;
+        try {
+            userEavObj = eavService.getEAVObjById(userId);
+        } catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException("User not found!");
+        }
 
         return userConverter.eavObjToDto(userEavObj);
     }
 
     public User getUserByUsername(String username) {
-        EAVObject userEavObj = eavService.getEAVObjByNameAndType(
-                username,
-                metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
-        );
+        EAVObject userEavObj;
+        try {
+            userEavObj = eavService.getEAVObjByNameAndType(
+                    username,
+                    metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
+            );
+        } catch (ResourceNotFoundException exception) {
+            throw new UsernameNotFoundException("User '" + username + "' not found!");
+        }
 
         return userConverter.eavObjToDto(userEavObj);
     }
 
     public User getUserByUsernameAndPassword(String username, String password) {
-        EAVObject userEavObj = eavService.getEAVObjByNameAndType(
-                username,
-                metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
-        );
+        EAVObject userEavObj;
+        try {
+            userEavObj = eavService.getEAVObjByNameAndType(
+                    username,
+                    metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId())
+            );
+        } catch (ResourceNotFoundException exception) {
+            throw new UsernameNotFoundException("User '" + username + "' not found!");
+        }
 
         User user = userConverter.eavObjToDto(userEavObj);
 
         String userEncPassword = userEavObj.getParameterByAttrId(User.getPasswordId())
                 .map(Parameter::getAttrValueTxt)
-                .orElseThrow(() -> new ResourceNotFoundException("User " + user.getUsername() + " has no password!"));
+                .orElseThrow(() -> new RuntimeException("User " + user.getUsername() + " has no password!"));
+
         if (passwordEncoder.matches(password, userEncPassword)) {
             return user;
         } else {
-            throw new ResourceNotFoundException("Invalid password");
+            throw new PasswordException();
         }
     }
 
     public User updateUser(User user) {
-        EAVObject updatedUser = eavService.updateEAVObj(
-                userConverter.dtoToEavObj(user),
-                user.getId()
-        );
+        EAVObject updatedUser;
+        try {
+            updatedUser = eavService.updateEAVObj(
+                    userConverter.dtoToEavObj(user),
+                    user.getId()
+            );
+        } catch (ResourceNotFoundException exception) {
+            throw new UsernameNotFoundException("User '" + user.getUsername() + "' not found!");
+        }
 
         return userConverter.eavObjToDto(updatedUser);
     }
@@ -101,13 +130,31 @@ public class UserService {
     }
 
     public SkillLevel createOrUpdateSkillLevel(Integer userId, SkillLevel skillLevel) {
-        User user = this.getUserById(userId);
+        User user;
+        try {
+            user = this.getUserById(userId);
+        } catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException("User not found!");
+        }
 
-        SkillLevel createdSkillLevel = userConverter.eavObjToSkillLevel(
-                eavService.createOrUpdateEAVObj(
-                        userConverter.skillLevelToEavObj(skillLevel)
-                )
-        );
+        EAVObject skillLevelEavObj;
+        try {
+            skillLevelEavObj = eavService.createOrUpdateEAVObj(
+                    userConverter.skillLevelToEavObj(skillLevel, user.getUsername())
+            );
+        } catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException(
+                    "User '" + user.getUsername() +
+                            "' doesn't have skill '" + skillLevel.getSkill().getName() + "'!"
+            );
+        } catch (ResourceAlreadyExistsException exception) {
+            throw new ResourceAlreadyExistsException(
+                    "User '" + user.getUsername() +
+                            "' already has skill '" + skillLevel.getSkill().getName() + "'!"
+            );
+        }
+
+        SkillLevel createdSkillLevel = userConverter.eavObjToSkillLevel(skillLevelEavObj);
 
         if (skillLevel.getId() == null) {
             user.addSkillLevel(createdSkillLevel);
@@ -130,7 +177,14 @@ public class UserService {
                 Role.valueOf(roleName).ordinal()
         ))));
 
-        return userConverter.eavObjToDto(eavService.updateEAVObj(eavObj, user.getId()));
+        EAVObject userEavObj;
+        try {
+            userEavObj = eavService.updateEAVObj(eavObj, user.getId());
+        } catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException("User '" + user.getUsername() + "' not found!");
+        }
+
+        return userConverter.eavObjToDto(userEavObj);
     }
 
     public void deleteRole(Integer userId, String roleName) {
@@ -144,7 +198,11 @@ public class UserService {
             }
         }
 
-        eavService.updateEAVObj(eavObj, userId);
+        try {
+            eavService.updateEAVObj(eavObj, userId);
+        } catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException("User not found!");
+        }
     }
 
     public void setCreator(User creator) {
@@ -161,6 +219,10 @@ public class UserService {
                 Role.CREATOR.ordinal()
         ));
 
-        eavService.createEAVObj(eavObject);
+        try {
+            eavService.createEAVObj(eavObject);
+        } catch (ResourceAlreadyExistsException exception) {
+            throw new ResourceAlreadyExistsException("Creator already exists!");
+        }
     }
 }

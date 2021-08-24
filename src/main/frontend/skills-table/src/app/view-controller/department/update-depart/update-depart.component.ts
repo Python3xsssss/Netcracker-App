@@ -30,8 +30,8 @@ export class UpdateDepartComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
 
-    this.departmentService.getDepartmentById(this.id).subscribe(data => {
-      this.department = data.result;
+    this.departmentService.getDepartmentById(this.id).subscribe((department) => {
+      this.department = department;
       if (this.department.leader !== null && this.department.leader.id !== null) {
         this.leaderSelectedId = this.department.leader.id;
 
@@ -43,11 +43,11 @@ export class UpdateDepartComponent implements OnInit {
         });
 
         this.userService.getUsers()
-          .subscribe(data => {
-            this.users = data.result;
+          .subscribe((users) => {
+            this.users = users;
           });
       }
-    }, error => console.log(error));
+    });
   }
 
   onSubmit() {
@@ -62,8 +62,8 @@ export class UpdateDepartComponent implements OnInit {
 
     Object.assign(this.department, value);
     this.departmentService.updateDepartment(this.department)
-      .subscribe(data => {
+      .subscribe(() => {
         this.router.navigate(['home']);
-      }, error => console.log(error));
+      });
   }
 }

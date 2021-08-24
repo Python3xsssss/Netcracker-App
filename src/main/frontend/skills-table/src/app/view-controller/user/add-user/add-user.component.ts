@@ -17,7 +17,7 @@ import {Position} from "../../../model/position.model";
 })
 export class AddUserComponent implements OnInit {
   addForm!: FormGroup;
-  departs: Department[] = [];
+  departments: Department[] = [];
   teams: Team[] = [];
   teamsInDepart: Team[] = [];
   positions = Object.keys(Position).filter(key => isNaN(Number(key)));
@@ -45,13 +45,13 @@ export class AddUserComponent implements OnInit {
     });
 
     this.departService.getDepartments()
-      .subscribe(data => {
-        this.departs = data.result;
+      .subscribe((departments) => {
+        this.departments = departments;
       });
 
     this.teamService.getTeams()
-      .subscribe(data => {
-        this.teams = data.result;
+      .subscribe((teams) => {
+        this.teams = teams;
       });
   }
 
@@ -74,7 +74,7 @@ export class AddUserComponent implements OnInit {
       value.team = null;
     }
 
-    for (let depart of this.departs) {
+    for (let depart of this.departments) {
       if (depart.id === Number(value.department)) {
         value.department = depart;
       }
@@ -92,11 +92,10 @@ export class AddUserComponent implements OnInit {
     user.roles = [];
     user.roles.push('USER');
 
-    console.log(user);
     this.userService.createUser(user)
-      .subscribe(data => {
+      .subscribe(() => {
         this.router.navigate(['users']);
-      }, error => console.log(error));
+      });
   }
 
 }

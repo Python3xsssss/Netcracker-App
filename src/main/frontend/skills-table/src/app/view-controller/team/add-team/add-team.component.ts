@@ -14,7 +14,7 @@ import {Team} from "../../../model/team.model";
 })
 export class AddTeamComponent implements OnInit {
   addForm!: FormGroup;
-  departs: Department[] = [];
+  departments: Department[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,9 +33,9 @@ export class AddTeamComponent implements OnInit {
     });
 
     this.departService.getDepartments()
-      .subscribe(data => {
-        this.departs = data.result;
-      }, error => console.log(error));
+      .subscribe((departments) => {
+        this.departments = departments;
+      });
 
   }
 
@@ -44,7 +44,7 @@ export class AddTeamComponent implements OnInit {
 
   onSubmit() {
     let value = this.addForm.value;
-    for (let depart of this.departs) {
+    for (let depart of this.departments) {
       if (depart.id === Number(value.superior)) {
         value.superior = depart;
       }
@@ -52,9 +52,9 @@ export class AddTeamComponent implements OnInit {
 
     let team: Team = value;
     this.teamService.createTeam(team)
-      .subscribe(data => {
+      .subscribe(() => {
         this.router.navigate(['teams']);
-      }, error => console.log(error));
+      });
   }
 
 }

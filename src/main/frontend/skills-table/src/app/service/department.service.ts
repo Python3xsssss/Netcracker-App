@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from "rxjs";
-import {ApiResponse} from "../model/api.response";
 import {Department} from "../model/department.model";
 
 @Injectable({
@@ -14,23 +13,23 @@ export class DepartmentService {
 
   baseUrl: string = 'http://localhost:8080/api/departments/';
 
-  getDepartments(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.baseUrl);
+  getDepartments(): Observable<Department[]> {
+    return this.http.get<Department[]>(this.baseUrl);
   }
 
-  getDepartmentById(id: number): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.baseUrl + id);
+  getDepartmentById(id: number): Observable<Department> {
+    return this.http.get<Department>(this.baseUrl + id);
   }
 
-  createDepartment(department: Department): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.baseUrl, department);
+  createDepartment(department: Department): Observable<Department> {
+    return this.http.post<Department>(this.baseUrl, department);
   }
 
-  updateDepartment(department: Department): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(this.baseUrl + department.id, department);
+  updateDepartment(department: Department): Observable<Department> {
+    return this.http.put<Department>(this.baseUrl + department.id, department);
   }
 
-  deleteDepartment(id: number): Observable<ApiResponse> {
-    return this.http.delete<ApiResponse>(this.baseUrl + id);
+  deleteDepartment(id: number): Observable<void> {
+    return this.http.delete<void>(this.baseUrl + id);
   }
 }

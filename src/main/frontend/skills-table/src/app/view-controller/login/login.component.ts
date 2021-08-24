@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {Role} from "../../model/role.model";
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../service/auth.service';
 import {TokenStorageService} from '../../service/token-storage.service';
 import {AuthRequest} from "../../model/auth.request";
-import {AlertService} from "../../service/alert.service";
+import {NotificationService} from "../../service/notification.service";
 
 @Component({
   selector: 'app-login',
@@ -16,7 +15,6 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoggedIn = false;
   isLoginFailed = false;
-  errorMessage = '';
   loading = false;
   submitted = false;
   returnUrl!: string;
@@ -26,7 +24,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private alertService: AlertService,
+    private notificationService: NotificationService,
     private tokenStorage: TokenStorageService
   ) {
     if (this.tokenStorage.getToken()) {
@@ -43,7 +41,9 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
-  get f() { return this.loginForm.controls; }
+  get f() {
+    return this.loginForm.controls;
+  }
 
   onSubmit() {
     this.submitted = true;
@@ -56,23 +56,23 @@ export class LoginComponent implements OnInit {
 
     this.loading = true;
     let request: AuthRequest = this.loginForm.value;
-    this.authService.login(request).subscribe(
-      data => {
-        this.tokenStorage.saveToken(data.result.jwtToken);
-        this.tokenStorage.saveUser(data.result.user);
+    this.authService.login(request)
+      .subscribe((jwtResponse) => {
+          this.tokenStorage.saveToken(jwtResponse.jwtToken);
+          this.tokenStorage.saveUser(jwtResponse.user);
 
-        this.isLoginFailed = false;
-        this.isLoggedIn = true;
-        this.router.navigate([this.returnUrl]).then(() => {
-          window.location.reload();
-        });
-      },
-      error => {
-        this.alertService.error(error);
-        this.isLoginFailed = true;
-        this.loading = false;
-      }
-    );
+          this.isLoginFailed = false;
+          this.isLoggedIn = true;
+          this.router.navigate([this.returnUrl]).then(() => {
+            window.location.reload();
+          });
+        },
+        error => {
+          this.isLoginFailed = true;
+          this.loading = false;
+          this.notificationService.showError(error.error.message);
+        }
+      );
   }
 }
 
