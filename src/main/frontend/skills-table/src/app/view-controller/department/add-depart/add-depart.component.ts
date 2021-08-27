@@ -28,7 +28,7 @@ export class AddDepartComponent implements OnInit {
     this.addForm = this.formBuilder.group({
       id: [],
       name: ['', Validators.required],
-      about: ['', Validators.required],
+      about: [''],
       leader: [null, Validators.required]
     });
 
@@ -45,6 +45,7 @@ export class AddDepartComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (this.addForm.invalid) {
+      console.log("Form is invalid!");
       return;
     }
 
@@ -57,12 +58,11 @@ export class AddDepartComponent implements OnInit {
       }
     }
 
-
     let department: Department = value;
     this.departmentService.createDepartment(department)
       .subscribe(() => {
         this.router.navigate(['home']);
-      });
+      }, error => console.log(error));
   }
 
 }

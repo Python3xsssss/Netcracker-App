@@ -3,7 +3,7 @@
   <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="name">Name of team</label>
-      <input type="text" formControlName="name" placeholder="Department" name="name" class="form-control"
+      <input type="text" formControlName="name" placeholder="New Team" name="name" class="form-control"
              id="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
       <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
         <div *ngIf="f.name.errors.required">Name is required</div>
@@ -12,14 +12,30 @@
 
     <div class="form-group">
       <label for="about">About</label>
-      <input type="text" formControlName="about" placeholder="About" name="about" class="form-control" id="about">
+      <textarea formControlName="about" type="text" placeholder="About"
+                name="about" class="form-control" id="about" rows="4"></textarea>
     </div>
 
     <div class="form-group">
       <label for="superior-select">Choose department the team belongs to</label>
-      <select formControlName="superior" class="form-select" id="superior-select" (ngModelChange)="onSuperiorSelect($event)">
+      <select formControlName="superior" class="form-select" id="superior-select"
+              (ngModelChange)="onSuperiorSelect($event)" [ngClass]="{ 'is-invalid': submitted && f.superior.errors }">
         <option *ngFor="let depart of departments" [value]=depart?.id>{{depart?.name}}</option>
       </select>
+      <div *ngIf="submitted && f.superior.errors" class="invalid-feedback">
+        <div *ngIf="f.superior.errors.required">Department is required</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="leader-select">Choose leader</label>
+      <select formControlName="leader" class="form-select"
+              id="leader-select" [ngClass]="{ 'is-invalid': submitted && f.leader.errors }">
+        <option *ngFor="let user of users" [value]=user?.id>{{user?.username}} - {{user?.firstName}} {{user?.lastName}}</option>
+      </select>
+      <div *ngIf="submitted && f.leader.errors" class="invalid-feedback">
+        <div *ngIf="f.leader.errors.required">Leader is required</div>
+      </div>
     </div>
 
     <button class="btn btn-success">Add team</button>

@@ -6,6 +6,7 @@ import {DepartmentService} from "../../../service/department.service";
 import {Department} from "../../../model/department.model";
 import {User} from "../../../model/user.model";
 import {Team} from "../../../model/team.model";
+import {UserService} from "../../../service/user.service";
 
 @Component({
   selector: 'app-add-team',
@@ -16,12 +17,14 @@ export class AddTeamComponent implements OnInit {
   addForm!: FormGroup;
   departments: Department[] = [];
   submitted = false;
+  users: User[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private teamService: TeamService,
-    private departService: DepartmentService
+    private departService: DepartmentService,
+    private userService: UserService
   ) {
   }
 
@@ -29,8 +32,9 @@ export class AddTeamComponent implements OnInit {
     this.addForm = this.formBuilder.group({
       id: [],
       name: ['', Validators.required],
-      about: ['', Validators.required],
-      superior: [null, Validators.required]
+      about: [''],
+      superior: [null, Validators.required],
+      leader: [null, Validators.required]
     });
 
     this.departService.getDepartments()
@@ -38,6 +42,10 @@ export class AddTeamComponent implements OnInit {
         this.departments = departments;
       });
 
+    this.userService.getUsers()
+      .subscribe((users) => {
+        this.users = users;
+      });
   }
 
   get f() {
@@ -50,6 +58,7 @@ export class AddTeamComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (this.addForm.invalid) {
+      console.log("Form is invalid!");
       return;
     }
 
@@ -57,6 +66,13 @@ export class AddTeamComponent implements OnInit {
     for (let depart of this.departments) {
       if (depart.id === Number(value.superior)) {
         value.superior = depart;
+      }
+    }
+
+    for (let user of this.users) {
+      if (user.id === Number(value.leader)) {
+        value.leader = user;
+        break;
       }
     }
 

@@ -38,7 +38,8 @@ const ROUTES: Routes = [
   {path: 'users', component: ListUserComponent},
   {path: 'teams', component: ListTeamComponent},
   {path: 'skills', component: ListSkillComponent},
-  {path: '', redirectTo: 'home', pathMatch: 'full'}
+  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: '**', redirectTo: 'home'}
 ];
 
 @NgModule({

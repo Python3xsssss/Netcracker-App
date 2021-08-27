@@ -13,6 +13,7 @@ import com.netcracker.skillstable.service.eav.EAVService;
 import com.netcracker.skillstable.service.eav.MetamodelService;
 import com.netcracker.skillstable.service.converter.UserConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -164,12 +165,22 @@ public class UserService {
         return createdSkillLevel;
     }
 
-    public void deleteSkillLevel(Integer userId, Integer skillLevelId) {
+    public void deleteSkillLevel(Integer skillLevelId) {
         eavService.deleteEAVObj(skillLevelId);
     }
 
-    public User addRole(User user, String roleName) {
-        EAVObject eavObj = userConverter.dtoToEavObj(user);
+    public User addRole(Integer userId, String roleName) {
+        if (roleName.equals(Role.CREATOR.name())) {
+            throw new AccessDeniedException("Role 'CREATOR' cannot be added!");
+        }
+
+        EAVObject eavObj;
+        try {
+            eavObj = eavService.getEAVObjById(userId);
+        } catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException("User not found!");
+        }
+
         final EntityType userEntityType = metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId());
         eavObj.addParameters(new ArrayList<>(Collections.singletonList(new Parameter(
                 eavObj,
@@ -177,32 +188,38 @@ public class UserService {
                 Role.valueOf(roleName).ordinal()
         ))));
 
-        EAVObject userEavObj;
-        try {
-            userEavObj = eavService.updateEAVObj(eavObj, user.getId());
-        } catch (ResourceNotFoundException exception) {
-            throw new ResourceNotFoundException("User '" + user.getUsername() + "' not found!");
-        }
-
-        return userConverter.eavObjToDto(userEavObj);
+        return userConverter.eavObjToDto(eavService.updateEAVObj(eavObj, userId));
     }
 
     public void deleteRole(Integer userId, String roleName) {
+        if (roleName.equals(Role.CREATOR.name())) {
+            throw new AccessDeniedException("Role 'CREATOR' cannot be deleted!");
+        }
         Role role = Role.valueOf(roleName);
-        EAVObject eavObj = eavService.getEAVObjById(userId);
+        EAVObject eavObj;
+        try {
+            eavObj = eavService.getEAVObjById(userId);
+        } catch (ResourceNotFoundException exception) {
+            throw new ResourceNotFoundException("User not found!");
+        }
         List<Parameter> roleParams = eavObj.getMultipleParametersByAttrId(User.getRoleId());
         for (Parameter roleParam : roleParams) {
             if (User.getRoleId().equals(roleParam.getAttribute().getId()) && role.ordinal() == roleParam.getAttrValueInt()) {
                 eavObj.deleteParameter(roleParam);
+                roleParams.remove(roleParam);
+                if (roleParams.isEmpty()) {
+                    eavObj.addParameter(new Parameter(
+                            eavObj,
+                            metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getRoleId()),
+                            Role.USER.ordinal()
+                    ));
+                }
                 break;
             }
         }
 
-        try {
-            eavService.updateEAVObj(eavObj, userId);
-        } catch (ResourceNotFoundException exception) {
-            throw new ResourceNotFoundException("User not found!");
-        }
+        eavService.updateEAVObj(eavObj, userId);
+
     }
 
     public void setCreator(User creator) {

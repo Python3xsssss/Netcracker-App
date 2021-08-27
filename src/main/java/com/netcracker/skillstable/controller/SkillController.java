@@ -1,5 +1,6 @@
 package com.netcracker.skillstable.controller;
 
+import com.netcracker.skillstable.exception.ResourceNotFoundException;
 import com.netcracker.skillstable.model.dto.Skill;
 import com.netcracker.skillstable.service.dto.SkillService;
 import com.netcracker.skillstable.utils.ValidationHelper;
@@ -21,7 +22,7 @@ public class SkillController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('skill:create')")
-    public ResponseEntity<Skill> saveSkill(
+    public ResponseEntity<Skill> createSkill(
             @RequestBody @Valid Skill skill,
             BindingResult bindingResult
     ) {
@@ -46,9 +47,13 @@ public class SkillController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('skill:update')")
     public ResponseEntity<Skill> updateSkill(
+            @PathVariable(value = "id") Integer skillId,
             @RequestBody Skill skill,
             BindingResult bindingResult
     ) {
+        if (!skillId.equals(skill.getId())) {
+            throw new ResourceNotFoundException("Wrong skill id!");
+        }
         if (bindingResult.hasErrors()) {
             ValidationHelper.generateValidationException(bindingResult);
         }

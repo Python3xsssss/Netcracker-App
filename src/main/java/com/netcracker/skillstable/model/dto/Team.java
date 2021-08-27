@@ -1,11 +1,9 @@
 package com.netcracker.skillstable.model.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -33,14 +31,25 @@ public class Team extends OrgItem {
     }
 
     @Override
+    public String toString() {
+        return "Team{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", about='" + about + '\'' +
+                ", leader=" + (leader != null ? leader.getUsername() : null) +
+                ", superior=" + (superior != null ? superior.getName() : null) +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Department)) return false;
+        if (!(o instanceof Team)) return false;
         return super.equals(o);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(super.hashCode());
     }
 }

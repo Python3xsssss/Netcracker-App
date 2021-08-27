@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.netcracker.skillstable.model.dto.enumeration.Authority.*;
 
@@ -18,18 +19,16 @@ public enum Role {
             SKILL_READ,
             SKILL_CREATE
     )),
-    TEAMLEAD(Sets.newHashSet(
-            USER_READ,
-            USER_CREATE,
-            USER_UPDATE,
-            DEPART_READ,
-            TEAM_READ,
-            TEAM_UPDATE,
-            SKILL_READ,
-            SKILL_CREATE,
-            SKILL_UPDATE,
-            SKILL_DELETE
-    )),
+    TEAMLEAD(
+            Stream.concat(
+                    USER.authorities.stream(),
+                    Sets.newHashSet(
+                            SKILL_UPDATE,
+                            SKILL_DELETE
+                    ).stream()
+            ).collect(Collectors.toUnmodifiableSet())
+    ),
+    DEPARTLEAD(TEAMLEAD.authorities),
     ADMIN(Sets.newHashSet(
             Authority.values()
     )),

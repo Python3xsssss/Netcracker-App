@@ -15,9 +15,8 @@ public class SkillConverter {
 
 
     public EAVObject dtoToEavObj(Skill skill) {
-        final EntityType skillEntityType = metamodelService.getEntityTypeByEntTypeId(Skill.getEntTypeId());
         EAVObject eavObj = new EAVObject(
-                skillEntityType,
+                metamodelService.getEntityTypeByEntTypeId(Skill.getEntTypeId()),
                 skill.getName()
         );
         eavObj.setId(skill.getId());
@@ -25,7 +24,7 @@ public class SkillConverter {
         eavObj.addParameter(
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(skillEntityType.getId(), Skill.getAboutId()),
+                        metamodelService.updateEntTypeAttrMapping(Skill.getEntTypeId(), Skill.getAboutId()),
                         skill.getAbout()
                 )
         );

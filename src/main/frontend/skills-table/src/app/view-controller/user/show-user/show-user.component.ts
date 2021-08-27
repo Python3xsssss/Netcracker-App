@@ -25,7 +25,6 @@ export class ShowUserComponent implements OnInit {
   showEditForm: boolean = false;
   showRoleForm: boolean = false;
   showSkillLevelForm: boolean = false;
-  showNewSkillForm: boolean = false;
 
 
   constructor(
@@ -52,8 +51,6 @@ export class ShowUserComponent implements OnInit {
       id: [],
       skill: [null, Validators.required],
       level: [0, Validators.required],
-      name: ["", Validators.required],
-      about: ["", Validators.required]
     });
 
     this.skillService.getSkills()
@@ -78,27 +75,13 @@ export class ShowUserComponent implements OnInit {
   addSkillLevel() {
     let value = this.addSkillLevelForm.value;
 
-    if (!this.showNewSkillForm) {
-      for (let skill of this.skills) {
-        if (skill.id === Number(value.skill)) {
-          value.skill = skill;
-          break;
-        }
+    for (let skill of this.skills) {
+      if (skill.id === Number(value.skill)) {
+        value.skill = skill;
+        break;
       }
-      let skillLevel: SkillLevel = value;
-      this.pushSkillLevel(skillLevel);
-    } else {
-      let newSkill: Skill = value;
-      this.skillService.createSkill(newSkill)
-        .subscribe((skill) => {
-          let skillLevel: SkillLevel = value;
-          skillLevel.skill = skill;
-          this.pushSkillLevel(skillLevel);
-        })
     }
-  }
-
-  pushSkillLevel(skillLevel: SkillLevel) {
+    let skillLevel: SkillLevel = value;
     if (this.user.id !== null) {
       this.userService.createSkillLevel(skillLevel, this.user.id)
         .subscribe(() => {
@@ -107,7 +90,6 @@ export class ShowUserComponent implements OnInit {
               this.user = user;
             });
           this.showSkillLevelForm = false;
-          this.showNewSkillForm = false;
         });
     }
   }

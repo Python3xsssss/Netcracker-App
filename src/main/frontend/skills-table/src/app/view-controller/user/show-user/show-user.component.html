@@ -9,7 +9,7 @@
     </div>
     <div class="card-body roles">
       <button class="btn btn-primary" id="add-role" *ngIf="!showRoleForm" (click)="onShowRoleForm(user)">
-        Add role
+        <i class="fas fa-plus"></i> Add role
       </button>
       <h5>Roles:</h5>
       <form [formGroup]="roleForm" (ngSubmit)="addRole()" *ngIf="showRoleForm">
@@ -19,10 +19,10 @@
             <option *ngFor="let role of roles" [value]=role>{{role}}</option>
           </select>
         </div>
-        <button class="btn-sm btn-primary" ng-click="addRole()">Save</button>
+        <button class="btn-sm btn-success" (click)="addRole()">Save</button>
         <button class="btn-sm btn-light" (click)="showRoleForm=!showRoleForm">Cancel</button>
       </form>
-      <ul class="list-group col-md-4">
+      <ul class="list-group col-md-6">
         <li class="list-group-item" *ngFor="let role of user?.roles">
           <button class="btn-sm btn-danger" (click)="deleteRole(user.id, role)"><i class="fas fa-times"></i></button>
           {{role}}
@@ -30,86 +30,75 @@
       </ul>
     </div>
     <div class="card-footer info">
-        <h5>Information: </h5>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            E-mail: {{user?.email}}
-          </li>
-          <li class="list-group-item">
-            About me: {{user?.about}}
-          </li>
-          <li class="list-group-item">
-            Department:
-            <a routerLink="/home" fragment="{{user?.department?.id}}" *ngIf="user?.department?.id !== null">
-              {{user?.department?.name}}
-            </a>
-            <a *ngIf="user?.department?.id === null">No department</a>
-          </li>
-          <li class="list-group-item">
-            Team:
-            <a routerLink="/team/{{user?.team?.id}}" *ngIf="user?.team?.id !== null">
-              {{user?.team?.name}}
-            </a>
-            <a *ngIf="user?.team?.id === null">No team</a>
-          </li>
-          <li class="list-group-item">
-            Position: {{user?.position}}
-          </li>
-        </ul>
+      <h5>Information: </h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          E-mail: {{user?.email}}
+        </li>
+        <li class="list-group-item">
+          About me: {{user?.about}}
+        </li>
+        <li class="list-group-item">
+          Department:
+          <a routerLink="/home" fragment="{{user?.department?.id}}" *ngIf="user?.department?.id !== null">
+            {{user?.department?.name}}
+          </a>
+          <a *ngIf="user?.department?.id === null">No department</a>
+        </li>
+        <li class="list-group-item">
+          Team:
+          <a routerLink="/team/{{user?.team?.id}}" *ngIf="user?.team?.id !== null">
+            {{user?.team?.name}}
+          </a>
+          <a *ngIf="user?.team?.id === null">No team</a>
+        </li>
+        <li class="list-group-item">
+          Position: {{user?.position}}
+        </li>
+      </ul>
     </div>
   </div>
 
   <app-update-user (onUserUpdated)="hideEditForm($event)" *ngIf="showEditForm"></app-update-user>
 
   <h3>Skills</h3>
-  <button class="btn btn-primary" id="add-skill" (click)="onShowSkillLevelForm()" *ngIf="!showSkillLevelForm">
+  <button class="btn btn-success" id="add-skill" (click)="onShowSkillLevelForm()" *ngIf="!showSkillLevelForm">
     <i class="fas fa-plus"></i>
   </button>
-  <form [formGroup]="addSkillLevelForm" (ngSubmit)="addSkillLevel()" *ngIf="showSkillLevelForm" id="add-skill-form">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="form-group" *ngIf="!showNewSkillForm">
-          <label for="skill-select">Choose skill</label>
-          <select formControlName="skill" class="form-select" id="skill-select">
-            <option *ngFor="let skill of skills" [value]=skill?.id>{{skill?.name}}</option>
-          </select>
+  <div class="col-md-8">
+    <form [formGroup]="addSkillLevelForm" (ngSubmit)="addSkillLevel()" *ngIf="showSkillLevelForm" id="add-skill-form">
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="skill-select">Choose skill</label>
+            <select formControlName="skill" class="form-select" id="skill-select">
+              <option *ngFor="let skill of skills" [value]=skill?.id>{{skill?.name}}</option>
+            </select>
+          </div>
         </div>
-        <div class="form-group" *ngIf="showSkillLevelForm && showNewSkillForm">
-          <label for="skill-name">New skill name</label>
-          <input formControlName="name" placeholder="Skill" class="form-control form-control-lg" id="skill-name">
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          <label for="level">Level</label>
-          <select formControlName="level" name="level" class="form-select" id="level">
-            <option *ngFor="let number of [0, 1, 2, 3, 4, 5]">{{number}}</option>
-          </select>
+        <div class="col">
+          <div class="form-group">
+            <label for="level">Level</label>
+            <select formControlName="level" name="level" class="form-select" id="level">
+              <option *ngFor="let number of [0, 1, 2, 3, 4, 5]">{{number}}</option>
+            </select>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="row" *ngIf="showSkillLevelForm && showNewSkillForm">
-      <div class="form-group">
-        <label for="about-skill">About</label>
-        <textarea formControlName="about" type="text" placeholder="About skill..."
-                  name="about" class="form-control" id="about-skill" rows="4"></textarea>
+      <div class="row">
+        <p>The skill you are looking for does not exist? <a routerLink="/add-skill">Create new skill!</a></p>
       </div>
-    </div>
-    <br>
-    <div class="row">
-      <div class="col-md-4" *ngIf="!showNewSkillForm">
-        <button class="btn btn-block btn-success" (click)="showNewSkillForm=true">
-          <i class="bi bi-plus-lg"></i>Create new skill
-        </button>
+      <div class="row">
+        <div class="col">
+          <button class="btn btn-success" ng-click="addSkillLevel()">Save</button>
+          <button class="btn btn-light" id="btn-cancel-skill"
+                  (click)="showSkillLevelForm=false;">
+            Cancel
+          </button>
+        </div>
       </div>
-      <div class="col-md-4 text-right">
-        <button class="btn btn-primary" ng-click="addSkillLevel()">Save</button>
-        <button class="btn btn-light" id="btn-cancel-skill" (click)="showSkillLevelForm=false; showNewSkillForm=false;">
-          Cancel
-        </button>
-      </div>
-    </div>
-  </form>
+    </form>
+  </div>
   <table class="table table-bordered table-light">
     <thead>
     <tr>
@@ -129,7 +118,5 @@
     </tr>
     </tbody>
   </table>
-
-
 </div>
 

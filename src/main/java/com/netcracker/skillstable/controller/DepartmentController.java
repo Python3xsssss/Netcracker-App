@@ -1,7 +1,9 @@
 package com.netcracker.skillstable.controller;
 
+import com.netcracker.skillstable.exception.ResourceNotFoundException;
 import com.netcracker.skillstable.model.dto.Department;
 import com.netcracker.skillstable.model.dto.User;
+import com.netcracker.skillstable.model.dto.enumeration.Role;
 import com.netcracker.skillstable.service.dto.DepartmentService;
 import com.netcracker.skillstable.service.dto.UserService;
 import com.netcracker.skillstable.utils.ValidationHelper;
@@ -23,19 +25,17 @@ public class DepartmentController {
     @Autowired
     private UserService userService;
 
-    private void updateLeader(Department department) {
-        if (department.getLeader() != null && department.getLeader().getId() != null) {
-            User leader = userService.getUserById(department.getLeader().getId());
-            if (!department.equals(leader.getDepartment())) {
-                leader.setDepartment(department);
-                userService.updateUser(leader);
-            }
-        }
+    private void updateLeaderProfile(Integer leaderId, Department department) {
+        User newLeader = userService.getUserById(leaderId);
+        newLeader.setDepartment(department);
+        newLeader.setTeam(null);
+        userService.updateUser(newLeader);
+        userService.addRole(leaderId, Role.DEPARTLEAD.name());
     }
 
     @PostMapping
     @PreAuthorize("hasAuthority('depart:create')")
-    public ResponseEntity<Department> saveDepart(
+    public ResponseEntity<Department> createDepart(
             @RequestBody @Valid Department department,
             BindingResult bindingResult
     ) {
@@ -44,7 +44,10 @@ public class DepartmentController {
         }
 
         Department createdDepartment = departmentService.createDepartment(department);
-        updateLeader(createdDepartment);
+        User leader = createdDepartment.getLeader();
+        if (leader != null && leader.getId() != null) {
+            updateLeaderProfile(leader.getId(), createdDepartment);
+        }
 
         return ResponseEntity.ok(createdDepartment);
     }
@@ -62,18 +65,25 @@ public class DepartmentController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('depart:update')")
+    @PreAuthorize("hasAuthority('depart:update')" +
+            "or @authorizeHelper.checkDepartIdentity(authentication.principal, #department)")
     public ResponseEntity<Department> updateDepart(
             @PathVariable(value = "id") Integer departId,
             @RequestBody Department department,
             BindingResult bindingResult
     ) {
+        if (!departId.equals(department.getId())) {
+            throw new ResourceNotFoundException("Wrong department id!");
+        }
         if (bindingResult.hasErrors()) {
             ValidationHelper.generateValidationException(bindingResult);
         }
 
         Department updatedDepartment = departmentService.updateDepartment(department);
-        updateLeader(updatedDepartment);
+        User leader = updatedDepartment.getLeader();
+        if (leader != null && leader.getId() != null) {
+            updateLeaderProfile(leader.getId(), updatedDepartment);
+        }
 
         return ResponseEntity.ok(updatedDepartment);
     }

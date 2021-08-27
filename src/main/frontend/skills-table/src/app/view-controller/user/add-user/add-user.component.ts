@@ -72,6 +72,7 @@ export class AddUserComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (this.addForm.invalid) {
+      console.log("Form is invalid!");
       return;
     }
 

@@ -1,7 +1,6 @@
 <div class="container" id="box-default">
   <div class="card" id="sign-in">
     <article class="card-header text-center">
-
       <h1 class="display-5"><i class="fas fa-table"></i> Skills Table</h1>
     </article>
     <article class="card-body">
@@ -24,8 +23,9 @@
           </div>
         </div>
         <div class="form-group">
-          <button [disabled]="loading" class="btn btn-primary">Sign In</button>
+          <button [disabled]="loading" class="btn btn-primary btn-block">Sign In</button>
         </div>
+        <button [disabled]="loading" class="btn btn-light btn-block" [routerLink]="'/home'">Back to homepage</button>
       </form>
     </article>
   </div> <!-- card.// -->

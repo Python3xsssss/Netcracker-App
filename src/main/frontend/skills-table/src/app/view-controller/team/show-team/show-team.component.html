@@ -2,10 +2,15 @@
   <h2>Team "{{team?.name}}"</h2>
   <h4>About:</h4>
   <span>{{team?.about}}</span>
-  <h5>
+  <h5>Leader:</h5>
+  <a routerLink="/user/{{team?.leader?.id}}" *ngIf="team?.leader?.id !== null">
+    {{team?.leader?.username}} - {{team?.leader?.firstName}} {{team?.leader?.lastName}}
+  </a>
+  <a *ngIf="team?.leader?.id === null">No leader</a>
+  <h6>
     Members:
     <button class="btn-sm btn-success" id="add-member" (click)="addMember()"><i class="fas fa-user-plus"></i></button>
-  </h5>
+  </h6>
   <table class="table table-striped">
     <thead>
     <tr>
