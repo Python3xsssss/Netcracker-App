@@ -44,6 +44,10 @@ public class MetamodelService {
         );
     }
 
+    public Attribute getAttributeByAttrName(String attrName) {
+        return attributeRepo.findByName(attrName);
+    }
+
     public List<Attribute> getAttributesByEntTypeId(Integer entTypeId) {
         List<EntTypeAttr> entTypeAttrList = entTypeAttrRepo.findByEntityTypeId(entTypeId);
 
@@ -65,10 +69,6 @@ public class MetamodelService {
         return Optional.of(optionalTypeAttr.get().getAttribute());
     }
 
-    public Attribute getAttributeByAttrName(String attrName) {
-        return attributeRepo.findByName(attrName);
-    }
-
     public void setEntTypeAttrMapping(Integer entTypeId, Integer attrId) {
         EntityType entType = entityTypeRepo.getById(entTypeId);
         Attribute attr = attributeRepo.getById(attrId);
@@ -78,7 +78,10 @@ public class MetamodelService {
     public Attribute updateEntTypeAttrMapping(Integer entTypeId, Integer attrId) {
         Integer parentId = this.getEntityTypeByEntTypeId(entTypeId).getEntParentId();
         if (parentId != null) {
-            return this.updateEntTypeAttrMapping(parentId, attrId);
+            Optional<Attribute> optionalAttribute = this.getEntTypeAttrMapping(parentId, attrId);
+            if (optionalAttribute.isPresent()) {
+                return optionalAttribute.get();
+            }
         }
 
         if (this.getEntTypeAttrMapping(entTypeId, attrId).isEmpty()) {

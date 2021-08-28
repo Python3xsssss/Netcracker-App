@@ -71,10 +71,10 @@ export class UpdateUserComponent implements OnInit {
         this.addForm = this.formBuilder.group({
           firstName: [this.user.firstName, Validators.required],
           lastName: [this.user.lastName, Validators.required],
-          email: [this.user.email, Validators.required],
-          about: [this.user.about, Validators.required],
-          department: [this.depSelectedId, Validators.required],
-          team: [this.teamSelectedId, Validators.required],
+          email: [this.user.email],
+          about: [this.user.about],
+          department: [this.depSelectedId],
+          team: [this.teamSelectedId],
           position: [this.user.position, Validators.required],
         });
       });

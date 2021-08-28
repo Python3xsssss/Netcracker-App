@@ -1,5 +1,6 @@
 package com.netcracker.skillstable.service.converter;
 
+import com.netcracker.skillstable.model.dto.OrgItem;
 import com.netcracker.skillstable.model.eav.Attribute;
 import com.netcracker.skillstable.model.eav.EAVObject;
 import com.netcracker.skillstable.model.eav.EntityType;
@@ -44,7 +45,7 @@ public class DepartmentConverter {
         eavObj.addParameter(
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(Department.getEntTypeId(), Department.getAboutId()),
+                        metamodelService.updateEntTypeAttrMapping(OrgItem.getEntTypeId(), OrgItem.getAboutId()),
                         department.getAbout()
                 )
         );
@@ -53,7 +54,7 @@ public class DepartmentConverter {
             eavObj.addParameter(
                     new Parameter(
                             eavObj,
-                            metamodelService.updateEntTypeAttrMapping(Department.getEntTypeId(), Department.getLeaderRefId()),
+                            metamodelService.updateEntTypeAttrMapping(OrgItem.getEntTypeId(), OrgItem.getLeaderRefId()),
                             eavService.getEAVObjById(department.getLeader().getId())
                     )
             );
