@@ -4,7 +4,6 @@ import {User} from "../../../model/user.model";
 import {UserService} from "../../../service/user.service";
 import {Department} from "../../../model/department.model";
 import {Team} from "../../../model/team.model";
-import {Role} from "../../../model/role.model";
 import {DepartmentService} from "../../../service/department.service";
 import {TeamService} from "../../../service/team.service";
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -17,7 +16,7 @@ import {Position} from "../../../model/position.model";
   outputs: ['onUserUpdated']
 })
 export class UpdateUserComponent implements OnInit {
-  id!: number;
+  userId!: number;
   user!: User;
   addForm!: FormGroup;
   departments: Department[] = [];
@@ -41,9 +40,9 @@ export class UpdateUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
+    this.userId = this.route.snapshot.params['id'];
 
-    this.userService.getUserById(this.id)
+    this.userService.getUserById(this.userId)
       .subscribe((user) => {
         this.user = user;
         if (this.user.department !== null) {

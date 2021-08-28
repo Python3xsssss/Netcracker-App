@@ -3,8 +3,8 @@ import {ExtraOptions, RouterModule, Routes} from '@angular/router';
 
 import {HomeComponent} from "./view-controller/home/home.component";
 import {AddUserComponent} from "./view-controller/user/add-user/add-user.component";
-import {AddTeamComponent} from "./view-controller/team/add-team/add-team.component";
-import {AddSkillComponent} from "./view-controller/skill/add-skill/add-skill.component";
+import {FormTeamComponent} from "./view-controller/team/form-team/form-team.component";
+import {FormSkillComponent} from "./view-controller/skill/form-skill/form-skill.component";
 import {ShowTeamComponent} from "./view-controller/team/show-team/show-team.component";
 import {ListUserComponent} from "./view-controller/user/list-user/list-user.component";
 import {ListTeamComponent} from "./view-controller/team/list-team/list-team.component";
@@ -26,16 +26,22 @@ const ROUTES: Routes = [
   {path: 'auth/sign-in', component: LoginComponent},
 
   {path: 'user/:id', component: ShowUserComponent},
+  {path: 'users', component: ListUserComponent},
   {path: 'add-user', component: AddUserComponent},
+
   {path: 'add-depart', component: FormDepartComponent},
   {path: 'update-depart/:id', component: FormDepartComponent},
-  {path: 'add-team', component: AddTeamComponent},
-  {path: 'add-skill', component: AddSkillComponent},
+
   {path: 'team/:id', component: ShowTeamComponent},
   {path: 'team/:id/show-report', component: ShowReportComponent},
-  {path: 'users', component: ListUserComponent},
   {path: 'teams', component: ListTeamComponent},
+  {path: 'add-team', component: FormTeamComponent},
+  {path: 'update-team/:id', component: FormTeamComponent},
+
   {path: 'skills', component: ListSkillComponent},
+  {path: 'add-skill', component: FormSkillComponent},
+  {path: 'update-skill/:id', component: FormSkillComponent},
+
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: '**', redirectTo: 'home'}
 ];

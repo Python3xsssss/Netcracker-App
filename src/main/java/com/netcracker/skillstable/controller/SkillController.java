@@ -39,7 +39,7 @@ public class SkillController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('skill:get')")
+    @PreAuthorize("hasAuthority('skill:read')")
     public ResponseEntity<Skill> getSkill(@PathVariable(value = "id") Integer skillId) {
         return ResponseEntity.ok(skillService.getSkillById(skillId));
     }
@@ -57,7 +57,7 @@ public class SkillController {
         if (bindingResult.hasErrors()) {
             ValidationHelper.generateValidationException(bindingResult);
         }
-        return ResponseEntity.ok(skillService.createSkill(skill));
+        return ResponseEntity.ok(skillService.updateSkill(skill));
     }
 
     @DeleteMapping("/{id}")

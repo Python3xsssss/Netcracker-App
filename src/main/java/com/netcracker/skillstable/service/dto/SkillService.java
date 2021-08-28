@@ -61,10 +61,10 @@ public class SkillService {
         return skillConverter.eavObjToDto(skillEavObj);
     }
 
-    public Skill updateSkill(Skill skill, Integer skillId) {
+    public Skill updateSkill(Skill skill) {
         EAVObject skillEavObj;
         try {
-            skillEavObj = eavService.updateEAVObj(skillConverter.dtoToEavObj(skill), skillId);
+            skillEavObj = eavService.updateEAVObj(skillConverter.dtoToEavObj(skill), skill.getId());
         } catch (ResourceNotFoundException exception) {
             throw new ResourceNotFoundException("Skill '" + skill.getName() + "' not found!");
         }

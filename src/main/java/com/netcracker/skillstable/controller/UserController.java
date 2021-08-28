@@ -91,6 +91,9 @@ public class UserController {
             @RequestBody SkillLevel skillLevel,
             BindingResult bindingResult
     ) {
+        if (!skillLevelId.equals(skillLevel.getId())) {
+            throw new ResourceNotFoundException("Wrong skill level id!");
+        }
         if (bindingResult.hasErrors()) {
             ValidationHelper.generateValidationException(bindingResult);
         }

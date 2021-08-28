@@ -93,6 +93,7 @@ public class DepartmentConverter {
                 .collect(Collectors.toSet());
         department.setTeams(teams);
 
+        final User finalLeader = leader;
         Set<User> membersNoTeam = userService
                 .getAllUsers()
                 .stream()
@@ -100,7 +101,8 @@ public class DepartmentConverter {
                         user -> (user.getTeam() == null ||
                                 user.getTeam().getId() == null) &&
                                 user.getDepartment() != null &&
-                                departEavObj.getId().equals(user.getDepartment().getId())
+                                departEavObj.getId().equals(user.getDepartment().getId()) &&
+                                !user.equals(finalLeader)
                 )
                 .map(User::toUserNoRefs)
                 .collect(Collectors.toSet());

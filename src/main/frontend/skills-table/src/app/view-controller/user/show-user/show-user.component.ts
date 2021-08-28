@@ -25,6 +25,7 @@ export class ShowUserComponent implements OnInit {
   showEditForm: boolean = false;
   showRoleForm: boolean = false;
   showSkillLevelForm: boolean = false;
+  editSkillLevel: boolean = false;
 
 
   constructor(

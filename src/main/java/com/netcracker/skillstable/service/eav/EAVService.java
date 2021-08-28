@@ -69,8 +69,9 @@ public class EAVService {
         databaseEavObj.setEntName(dtoEavObj.getEntName());
         List<Parameter> newParameters = databaseEavObj.updateParameters(dtoEavObj.getParameters());
         parameterRepo.saveAll(newParameters);
-
-        return eavRepo.save(databaseEavObj);
+        EAVObject savedEavObj = eavRepo.save(databaseEavObj);
+        savedEavObj.addParameters(newParameters);
+        return savedEavObj;
     }
 
     public void deleteEAVObj(Integer eavObjId) {

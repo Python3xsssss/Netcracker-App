@@ -11,7 +11,6 @@ export class GlobalErrorHandler implements ErrorHandler {
   }
 
   handleError(error: Error | HttpErrorResponse) {
-    console.log("I'm here!");
     const errorService = this.injector.get(ErrorService);
     const logger = this.injector.get(LoggingService);
     const notifier = this.injector.get(NotificationService);

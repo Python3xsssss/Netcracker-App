@@ -1,6 +1,7 @@
-<div class="col-md-6 offset-md-3 add-team-container">
-  <h2 class="text-center">Adding new team</h2>
-  <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+<div class="col-md-6 offset-md-3 form-team-container">
+  <h2 class="text-center" *ngIf="teamId === undefined">Adding new team</h2>
+  <h2 class="text-center" *ngIf="teamId !== undefined">Editing department "{{team?.name}}"</h2>
+  <form [formGroup]="teamForm" *ngIf="teamForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="name">Name of team</label>
       <input type="text" formControlName="name" placeholder="New Team" name="name" class="form-control"
@@ -18,8 +19,8 @@
 
     <div class="form-group">
       <label for="superior-select">Choose department the team belongs to</label>
-      <select formControlName="superior" class="form-select" id="superior-select"
-              (ngModelChange)="onSuperiorSelect($event)" [ngClass]="{ 'is-invalid': submitted && f.superior.errors }">
+      <select formControlName="superior" class="form-select"
+              id="superior-select" [ngClass]="{ 'is-invalid': submitted && f.superior.errors }">
         <option *ngFor="let depart of departments" [value]=depart?.id>{{depart?.name}}</option>
       </select>
       <div *ngIf="submitted && f.superior.errors" class="invalid-feedback">
@@ -38,6 +39,7 @@
       </div>
     </div>
 
-    <button class="btn btn-success">Add team</button>
+    <button class="btn btn-success" type="submit">Save</button>
+    <button class="btn btn-light" type="reset" (click)="onCancel()">Cancel</button>
   </form>
 </div>

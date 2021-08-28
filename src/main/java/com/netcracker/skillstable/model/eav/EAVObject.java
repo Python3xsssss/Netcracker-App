@@ -101,9 +101,6 @@ public class EAVObject {
                     } else {
                         contains = true;
                         param.setParameterValues(inputParam);
-//                        param.setAttrValueInt(inputParam.getAttrValueInt());
-//                        param.setAttrValueTxt(inputParam.getAttrValueTxt());
-//                        param.setReferenced(inputParam.getReferenced());
                         iter.set(param);
                         break;
                     }
@@ -127,9 +124,9 @@ public class EAVObject {
     public String toString() {
         return "EAVObject{" +
                 "id=" + id +
-                ", entType=" + entType +
-                ", entName='" + entName + '\'' +
-                ", parameters=" + parameters +
+                ", \nentType=" + entType.getName() +
+                ", \nentName='" + entName + '\'' +
+                ", \nparameters=" + parameters +
                 '}';
     }
 

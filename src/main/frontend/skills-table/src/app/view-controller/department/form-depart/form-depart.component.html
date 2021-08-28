@@ -1,6 +1,7 @@
 <div class="col-md-6 offset-md-3 form-depart-container">
-  <h2 class="text-center">Adding new department</h2>
-  <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+  <h2 class="text-center" *ngIf="departId === undefined">Adding new department</h2>
+  <h2 class="text-center" *ngIf="departId !== undefined">Editing department "{{department?.name}}"</h2>
+  <form *ngIf="departForm" [formGroup]="departForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="name">Name of department</label>
       <input type="text" formControlName="name" placeholder="New Department" name="name" class="form-control"
@@ -27,7 +28,8 @@
       </div>
     </div>
 
-    <button class="btn btn-success">Add department</button>
+    <button class="btn btn-success" type="submit">Save</button>
+    <button class="btn btn-light" type="reset" (click)="onCancel()">Cancel</button>
   </form>
 </div>
 
