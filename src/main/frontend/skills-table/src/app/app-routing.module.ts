@@ -3,7 +3,6 @@ import {ExtraOptions, RouterModule, Routes} from '@angular/router';
 
 import {HomeComponent} from "./view-controller/home/home.component";
 import {AddUserComponent} from "./view-controller/user/add-user/add-user.component";
-import {AddDepartComponent} from "./view-controller/department/add-depart/add-depart.component";
 import {AddTeamComponent} from "./view-controller/team/add-team/add-team.component";
 import {AddSkillComponent} from "./view-controller/skill/add-skill/add-skill.component";
 import {ShowTeamComponent} from "./view-controller/team/show-team/show-team.component";
@@ -11,10 +10,9 @@ import {ListUserComponent} from "./view-controller/user/list-user/list-user.comp
 import {ListTeamComponent} from "./view-controller/team/list-team/list-team.component";
 import {ListSkillComponent} from "./view-controller/skill/list-skill/list-skill.component";
 import {ShowUserComponent} from "./view-controller/user/show-user/show-user.component";
-import {UpdateUserComponent} from "./view-controller/user/update-user/update-user.component";
 import {LoginComponent} from "./view-controller/login/login.component";
-import {UpdateDepartComponent} from "./view-controller/department/update-depart/update-depart.component";
 import {ShowReportComponent} from "./view-controller/team/show-report/show-report.component";
+import {FormDepartComponent} from "./view-controller/department/form-depart/form-depart.component";
 
 
 const routerOptions: ExtraOptions = {
@@ -29,8 +27,8 @@ const ROUTES: Routes = [
 
   {path: 'user/:id', component: ShowUserComponent},
   {path: 'add-user', component: AddUserComponent},
-  {path: 'add-depart', component: AddDepartComponent},
-  {path: 'update-depart/:id', component: UpdateDepartComponent},
+  {path: 'add-depart', component: FormDepartComponent},
+  {path: 'update-depart/:id', component: FormDepartComponent},
   {path: 'add-team', component: AddTeamComponent},
   {path: 'add-skill', component: AddSkillComponent},
   {path: 'team/:id', component: ShowTeamComponent},

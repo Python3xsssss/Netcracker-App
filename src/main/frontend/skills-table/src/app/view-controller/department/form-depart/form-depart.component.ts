@@ -7,11 +7,11 @@ import {UserService} from "../../../service/user.service";
 import {Department} from "../../../model/department.model";
 
 @Component({
-  selector: 'app-add-depart',
-  templateUrl: './add-depart.component.html',
-  styleUrls: ['./add-depart.component.scss']
+  selector: 'app-form-depart',
+  templateUrl: './form-depart.component.html',
+  styleUrls: ['./form-depart.component.scss']
 })
-export class AddDepartComponent implements OnInit {
+export class FormDepartComponent implements OnInit {
   addForm!: FormGroup;
   users: User[] = [];
   submitted = false;
@@ -62,7 +62,7 @@ export class AddDepartComponent implements OnInit {
     this.departmentService.createDepartment(department)
       .subscribe(() => {
         this.router.navigate(['home']);
-      }, error => console.log(error));
+      });
   }
 
 }
