@@ -26,7 +26,7 @@ import {AppComponent} from './app.component';
 import {HomeComponent} from './view-controller/home/home.component';
 import {AddUserComponent} from './view-controller/user/add-user/add-user.component';
 import {ListUserComponent} from './view-controller/user/list-user/list-user.component';
-import {AddDepartComponent} from './view-controller/department/add-depart/add-depart.component';
+import {FormDepartComponent} from './view-controller/department/form-depart/form-depart.component';
 import {ListDepartComponent} from './view-controller/department/list-depart/list-depart.component';
 import {AddTeamComponent} from "./view-controller/team/add-team/add-team.component";
 import {ListTeamComponent} from "./view-controller/team/list-team/list-team.component";
@@ -54,7 +54,7 @@ PlotlyViaCDNModule.setPlotlyBundle('basic'); // optional: can be null (for full)
     AppComponent,
     HomeComponent,
     AddUserComponent,
-    AddDepartComponent,
+    FormDepartComponent,
     AddTeamComponent,
     AddSkillComponent,
     ListUserComponent,

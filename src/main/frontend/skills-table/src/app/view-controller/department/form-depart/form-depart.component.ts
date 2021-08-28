@@ -7,11 +7,11 @@ import {UserService} from "../../../service/user.service";
 import {Department} from "../../../model/department.model";
 
 @Component({
-  selector: 'app-add-depart',
-  templateUrl: './add-depart.component.html',
-  styleUrls: ['./add-depart.component.scss']
+  selector: 'app-form-depart',
+  templateUrl: './form-depart.component.html',
+  styleUrls: ['./form-depart.component.scss']
 })
-export class AddDepartComponent implements OnInit {
+export class FormDepartComponent implements OnInit {
   addForm!: FormGroup;
   users: User[] = [];
   submitted = false;
@@ -28,7 +28,7 @@ export class AddDepartComponent implements OnInit {
     this.addForm = this.formBuilder.group({
       id: [],
       name: ['', Validators.required],
-      about: ['', Validators.required],
+      about: [''],
       leader: [null, Validators.required]
     });
 
@@ -45,6 +45,7 @@ export class AddDepartComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (this.addForm.invalid) {
+      console.log("Form is invalid!");
       return;
     }
 
@@ -56,7 +57,6 @@ export class AddDepartComponent implements OnInit {
         break;
       }
     }
-
 
     let department: Department = value;
     this.departmentService.createDepartment(department)

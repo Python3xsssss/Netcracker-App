@@ -40,9 +40,8 @@ public class UserConverter {
 
 
     public EAVObject skillLevelToEavObj(SkillLevel skillLevel, String username) {
-        final EntityType skillLevelEntityType = metamodelService.getEntityTypeByEntTypeId(SkillLevel.getEntTypeId());
         EAVObject eavObj = new EAVObject(
-                skillLevelEntityType,
+                metamodelService.getEntityTypeByEntTypeId(SkillLevel.getEntTypeId()),
                 username + "_" + skillLevel.getSkill().getName() + "_level"
         );
         eavObj.setId(skillLevel.getId());
@@ -50,12 +49,12 @@ public class UserConverter {
         eavObj.addParameters(new ArrayList<>(Arrays.asList(
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(skillLevelEntityType.getId(), SkillLevel.getLevelId()),
+                        metamodelService.updateEntTypeAttrMapping(SkillLevel.getEntTypeId(), SkillLevel.getLevelId()),
                         skillLevel.getLevel()
                 ),
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(skillLevelEntityType.getId(), SkillLevel.getSkillRefId()),
+                        metamodelService.updateEntTypeAttrMapping(SkillLevel.getEntTypeId(), SkillLevel.getSkillRefId()),
                         eavService.getEAVObjById(skillLevel.getSkill().getId())
                 )
         )));
@@ -84,9 +83,8 @@ public class UserConverter {
     }
 
     public EAVObject dtoToEavObj(User user) {
-        final EntityType userEntityType = metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId());
         EAVObject eavObj = new EAVObject(
-                userEntityType,
+                metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId()),
                 user.getUsername()
         );
         eavObj.setId(user.getId());
@@ -94,7 +92,7 @@ public class UserConverter {
         if (user.getPassword() != null && user.getPassword().length() != 0) {
             eavObj.addParameters(new ArrayList<>(Collections.singletonList(new Parameter(
                     eavObj,
-                    metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getPasswordId()),
+                    metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getPasswordId()),
                     passwordEncoder.encode(user.getPassword())
             ))));
         } else if (user.getId() == null) {
@@ -105,7 +103,7 @@ public class UserConverter {
                     .getAttrValueTxt();
             eavObj.addParameters(new ArrayList<>(Collections.singletonList(new Parameter(
                     eavObj,
-                    metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getPasswordId()),
+                    metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getPasswordId()),
                     password
             ))));
         }
@@ -113,37 +111,37 @@ public class UserConverter {
         eavObj.addParameters(new ArrayList<>(Arrays.asList(
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getFirstNameId()),
+                        metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getFirstNameId()),
                         user.getFirstName()
                 ),
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getLastNameId()),
+                        metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getLastNameId()),
                         user.getLastName()
                 ),
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getEmailId()),
+                        metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getEmailId()),
                         user.getEmail()
                 ),
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getAboutId()),
+                        metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getAboutId()),
                         user.getAbout()
                 ),
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getPositionId()),
+                        metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getPositionId()),
                         (user.getPosition() != null) ? user.getPosition().ordinal() : Position.NEWCOMER.ordinal()
                 ),
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getIsNonLockedId()),
+                        metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getIsNonLockedId()),
                         user.isNonLocked()
                 ),
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getIsActiveId()),
+                        metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getIsActiveId()),
                         user.isActive()
                 )
         )));
@@ -152,7 +150,7 @@ public class UserConverter {
             eavObj.addParameter(
                     new Parameter(
                             eavObj,
-                            metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getDepartmentRefId()),
+                            metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getDepartmentRefId()),
                             eavService.getEAVObjById(user.getDepartment().getId())
                     )
             );
@@ -161,25 +159,28 @@ public class UserConverter {
             eavObj.addParameter(
                     new Parameter(
                             eavObj,
-                            metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getTeamRefId()),
+                            metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getTeamRefId()),
                             eavService.getEAVObjById(user.getTeam().getId())
                     )
             );
         }
 
-        if (user.getId() == null) {
-            eavObj.addParameters(new ArrayList<>(Collections.singletonList(new Parameter(
-                    eavObj,
-                    metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getRoleId()),
-                    Role.USER.ordinal()
-            ))));
-        } else {
-            List<Parameter> roleParams = eavService.getEAVObjById(user.getId()).getMultipleParametersByAttrId(User.getRoleId());
-            eavObj.addParameters(roleParams);
+        List<Parameter> roleParams = new ArrayList<>();
+        if (user.getId() != null) {
+            roleParams = eavService.getEAVObjById(user.getId()).getMultipleParametersByAttrId(User.getRoleId());
         }
 
+        if (roleParams.isEmpty()) {
+            roleParams.add(new Parameter(
+                    eavObj,
+                    metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getRoleId()),
+                    Role.USER.ordinal()
+            ));
+        }
+        eavObj.addParameters(roleParams);
+
         Attribute skillLevelAttr = metamodelService.updateEntTypeAttrMapping(
-                userEntityType.getId(),
+                User.getEntTypeId(),
                 User.getSkillLevelRefId()
         );
         List<Parameter> skillLevelsAsParams = new ArrayList<>();
@@ -218,8 +219,12 @@ public class UserConverter {
     public User eavObjToDtoNoRefs(EAVObject userEavObj) {
         Set<Role> roles = new HashSet<>();
         List<Parameter> rolesAsParams = userEavObj.getMultipleParametersByAttrId(User.getRoleId());
-        for (Parameter roleParam : rolesAsParams) {
-            roles.add(roleValues[Math.toIntExact(roleParam.getAttrValueInt())]);
+        if (rolesAsParams.isEmpty()) {
+            roles.add(Role.USER);
+        } else {
+            for (Parameter roleParam : rolesAsParams) {
+                roles.add(roleValues[Math.toIntExact(roleParam.getAttrValueInt())]);
+            }
         }
 
         Set<GrantedAuthority> authorities = new HashSet<>();

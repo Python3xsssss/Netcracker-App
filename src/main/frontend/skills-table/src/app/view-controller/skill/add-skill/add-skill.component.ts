@@ -19,7 +19,7 @@ export class AddSkillComponent implements OnInit {
     this.addForm = this.formBuilder.group({
       id: [],
       name: ['', Validators.required],
-      about: ['', Validators.required],
+      about: [''],
     });
 
   }
@@ -31,6 +31,7 @@ export class AddSkillComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (this.addForm.invalid) {
+      console.log("Form is invalid!");
       return;
     }
 

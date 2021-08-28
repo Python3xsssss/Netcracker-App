@@ -35,9 +35,8 @@ public class DepartmentConverter {
 
 
     public EAVObject dtoToEavObj(Department department) {
-        final EntityType depEntityType = metamodelService.getEntityTypeByEntTypeId(Department.getEntTypeId());
         EAVObject eavObj = new EAVObject(
-                depEntityType,
+                metamodelService.getEntityTypeByEntTypeId(Department.getEntTypeId()),
                 department.getName()
         );
         eavObj.setId(department.getId());
@@ -45,7 +44,7 @@ public class DepartmentConverter {
         eavObj.addParameter(
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(depEntityType.getId(), Department.getAboutId()),
+                        metamodelService.updateEntTypeAttrMapping(Department.getEntTypeId(), Department.getAboutId()),
                         department.getAbout()
                 )
         );
@@ -54,13 +53,13 @@ public class DepartmentConverter {
             eavObj.addParameter(
                     new Parameter(
                             eavObj,
-                            metamodelService.updateEntTypeAttrMapping(depEntityType.getId(), Department.getLeaderRefId()),
+                            metamodelService.updateEntTypeAttrMapping(Department.getEntTypeId(), Department.getLeaderRefId()),
                             eavService.getEAVObjById(department.getLeader().getId())
                     )
             );
         }
 
-        Attribute teamAttr = metamodelService.updateEntTypeAttrMapping(depEntityType.getId(), Department.getTeamRefId());
+        Attribute teamAttr = metamodelService.updateEntTypeAttrMapping(Department.getEntTypeId(), Department.getTeamRefId());
         List<Parameter> teamsAsParams = new ArrayList<>();
         for (Team team : department.getTeams()) {
             teamsAsParams.add(

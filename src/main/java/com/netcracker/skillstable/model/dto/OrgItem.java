@@ -1,12 +1,14 @@
 package com.netcracker.skillstable.model.dto;
 
 
+import com.netcracker.skillstable.utils.Leader;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
@@ -25,6 +27,8 @@ public class OrgItem {
     protected String about;
     @Getter private static final Integer aboutId = 25;
 
+    @NotNull(message = "Leader is required")
+    @Leader
     protected User leader;
     @Getter private static final Integer leaderRefId = 17;
 
@@ -38,11 +42,10 @@ public class OrgItem {
         this.about = about;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof OrgItem)) return false;
         OrgItem orgItem = (OrgItem) o;
         return id.equals(orgItem.id);
     }

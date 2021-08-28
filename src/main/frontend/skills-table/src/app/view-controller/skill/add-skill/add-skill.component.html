@@ -3,7 +3,7 @@
   <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="name">Name of skill</label>
-      <input type="text" formControlName="name" placeholder="Department" name="name" class="form-control"
+      <input type="text" formControlName="name" placeholder="New Skill" name="name" class="form-control"
              id="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"/>
       <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
         <div *ngIf="f.name.errors.required">Name is required</div>
@@ -12,7 +12,8 @@
 
     <div class="form-group">
       <label for="about">About</label>
-      <input type="text" formControlName="about" placeholder="About" name="about" class="form-control" id="about">
+      <textarea formControlName="about" type="text" placeholder="About"
+                name="about" class="form-control" id="about" rows="4"></textarea>
     </div>
 
     <button class="btn btn-success">Add skill</button>

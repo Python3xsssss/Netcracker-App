@@ -38,8 +38,8 @@ export class UpdateDepartComponent implements OnInit {
         this.addForm = this.formBuilder.group({
           id: [this.department.id],
           name: [this.department.name, Validators.required],
-          about: [this.department.about, Validators.required],
-          leader: [this.department.leader.id, Validators.required]
+          about: [this.department.about],
+          leader: [this.department.leader.id]
         });
 
         this.userService.getUsers()

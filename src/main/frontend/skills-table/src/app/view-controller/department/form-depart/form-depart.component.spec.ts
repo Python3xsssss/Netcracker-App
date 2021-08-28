@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddDepartComponent } from './add-depart.component';
+import { FormDepartComponent } from './form-depart.component';
 
 describe('AddDepartComponent', () => {
-  let component: AddDepartComponent;
-  let fixture: ComponentFixture<AddDepartComponent>;
+  let component: FormDepartComponent;
+  let fixture: ComponentFixture<FormDepartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddDepartComponent ]
+      declarations: [ FormDepartComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddDepartComponent);
+    fixture = TestBed.createComponent(FormDepartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

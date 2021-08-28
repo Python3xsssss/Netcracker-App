@@ -21,7 +21,7 @@ public enum Authority {
     SKILL_UPDATE("skill:update"),
     SKILL_DELETE("skill:delete"),
     ROLE_READ("role:read"),
-    ROLE_ADD("role:update"),
+    ROLE_UPDATE("role:update"),
     ROLE_DELETE("role:delete");
 
     private final String permission;

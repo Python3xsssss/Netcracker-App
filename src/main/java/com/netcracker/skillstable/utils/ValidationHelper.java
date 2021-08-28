@@ -1,6 +1,7 @@
 package com.netcracker.skillstable.utils;
 
 import com.google.common.collect.Ordering;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
@@ -8,6 +9,7 @@ import javax.validation.ValidationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class ValidationHelper {
     public static void generateValidationException(BindingResult bindingResult) {
         List<String> messages = bindingResult.getAllErrors()
