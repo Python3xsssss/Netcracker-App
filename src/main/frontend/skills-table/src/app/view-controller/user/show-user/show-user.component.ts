@@ -53,6 +53,7 @@ export class ShowUserComponent implements OnInit {
       .subscribe((skills) => {
         this.skills = skills;
         if (skillLevel !== undefined) {
+          this.editSkillLevel = true;
           this.skillLevelForm = this.formBuilder.group({
             id: [skillLevel.id],
             skill: [skillLevel.skill.id, Validators.required],
@@ -176,5 +177,6 @@ export class ShowUserComponent implements OnInit {
   hideSkillLevelForm() {
     this.skillLevelForm = undefined;
     this.showSkillLevelForm = false;
+    this.editSkillLevel = false;
   }
 }

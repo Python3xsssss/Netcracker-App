@@ -68,10 +68,12 @@
   <div class="col-md-8">
     <form *ngIf="showSkillLevelForm && skillLevelForm" [formGroup]="skillLevelForm"
           (ngSubmit)="addOrEditSkillLevel()"  id="add-skill-form">
+      <h5 *ngIf="!editSkillLevel">New skill</h5>
+      <h5 *ngIf="editSkillLevel">Edit skill</h5>
       <div class="row">
         <div class="col">
           <div class="form-group">
-            <label for="skill-select">Choose skill</label>
+            <label for="skill-select">Skill</label>
             <select formControlName="skill" class="form-select"
                     id="skill-select" [ngClass]="{ 'is-invalid': submitted && func && func.skill.errors }">
               <option *ngFor="let skill of skills" [value]="skill?.id">{{skill?.name}}</option>

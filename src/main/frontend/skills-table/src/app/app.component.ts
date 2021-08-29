@@ -11,9 +11,11 @@ import {User} from "./model/user.model";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  show: boolean = false;
+  showAddList: boolean = false;
+  showUserList: boolean = false;
   title = 'Skills Table';
-  showAdminBoard = false;
+  showAdminPanels = false;
+  showDepartLeadBoard = false;
   user?: User | null;
 
 
@@ -25,7 +27,7 @@ export class AppComponent {
     if (this.checkIfLoggedIn()) {
       this.user = this.tokenStorageService.getUser();
       if (this.user !== null) {
-        this.showAdminBoard = this.user.roles.includes("ADMIN");
+        this.showAdminPanels = this.user.roles.includes('ADMIN') || this.user.roles.includes('CREATOR');
       }
     }
   }
@@ -36,10 +38,11 @@ export class AppComponent {
 
   signOut(): void {
     this.tokenStorageService.signOut();
-    this.router.navigate(['home']).then(() => {
-      window.location.reload();
-    });
+    // this.router.navigate(['home']).then(() => {
+    //   window.location.reload();
+    // });
 
+    window.location.href = window.location.protocol + '//' + window.location.host + '/home';
   }
 
 }
