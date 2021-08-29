@@ -132,6 +132,15 @@ export class ShowUserComponent implements OnInit {
   }
 
   hideEditForm($event: boolean) {
-    this.showEditForm = false;
+    if ($event) {
+      this.userService.getUserById(this.id)
+        .subscribe((user) => {
+          this.user = user;
+          this.showEditForm = false;
+        });
+    } else {
+      this.showEditForm = false;
+    }
+
   }
 }

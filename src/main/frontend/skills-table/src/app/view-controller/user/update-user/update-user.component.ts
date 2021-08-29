@@ -123,7 +123,8 @@ export class UpdateUserComponent implements OnInit {
 
     Object.assign(this.user, value);
     this.userService.updateUser(this.user)
-      .subscribe(() => {
+      .subscribe((user) => {
+        this.user = user;
         this.onUserUpdated.emit(true);
       });
   }
