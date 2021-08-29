@@ -24,9 +24,9 @@ public class UserController {
     @PostMapping
     @PreAuthorize("hasAuthority('user:create') " +
             "or hasRole('TEAMLEAD') " +
-            "and @authorizeHelper.checkTeamIdentity(authentication.principal, #user.team) " +
+            "and @authorizeHelper.checkTeamLeader(authentication.principal, #user.team.id) " +
             "or hasRole('DEPARTLEAD') " +
-            "and @authorizeHelper.checkDepartIdentity(authentication.principal, #user.department)")
+            "and @authorizeHelper.checkDepartLeader(authentication.principal, #user.department.id)")
     public ResponseEntity<User> createUser(
             @RequestBody @Valid User user,
             BindingResult bindingResult
@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'CREATOR')")
+    @PreAuthorize("hasAuthority('user:read')")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
@@ -66,9 +66,9 @@ public class UserController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('user:update') or #userId == authentication.principal.id " +
             "or hasRole('TEAMLEAD') " +
-            "and @authorizeHelper.checkTeamIdentity(authentication.principal, #user.team) " +
+            "and @authorizeHelper.checkTeamLeader(authentication.principal, #user.team.id) " +
             "or hasRole('DEPARTLEAD') " +
-            "and @authorizeHelper.checkDepartIdentity(authentication.principal, #user.department)")
+            "and @authorizeHelper.checkDepartLeader(authentication.principal, #user.department.id)")
     public ResponseEntity<User> updateUser(
             @PathVariable(value = "id") Integer userId,
             @RequestBody @Valid User user,

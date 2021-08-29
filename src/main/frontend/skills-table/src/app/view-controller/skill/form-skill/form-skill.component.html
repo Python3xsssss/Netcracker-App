@@ -1,6 +1,6 @@
 <div class="col-md-6 offset-md-3 add-skill-container">
-  <h2 class="text-center" *ngIf="skillId === undefined">Adding new skill</h2>
-  <h2 class="text-center" *ngIf="skillId !== undefined">Editing skill "{{skill?.name}}"</h2>
+  <h2 class="text-center" *ngIf="skillId === undefined">Create new skill</h2>
+  <h2 class="text-center" *ngIf="skillId !== undefined">Edit skill: {{skill?.name}}</h2>
   <form [formGroup]="skillForm" *ngIf="skillForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="name">Name of skill</label>

@@ -1,6 +1,6 @@
 <div class="col-md-6 offset-md-3 form-depart-container">
-  <h2 class="text-center" *ngIf="departId === undefined">Adding new department</h2>
-  <h2 class="text-center" *ngIf="departId !== undefined">Editing department "{{department?.name}}"</h2>
+  <h2 class="text-center" *ngIf="departId === undefined">Create new department</h2>
+  <h2 class="text-center" *ngIf="departId !== undefined">Edit department: {{department?.name}}</h2>
   <form *ngIf="departForm" [formGroup]="departForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="name">Name of department</label>

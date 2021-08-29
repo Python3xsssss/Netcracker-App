@@ -66,7 +66,8 @@ public class DepartmentController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('depart:update')" +
-            "or @authorizeHelper.checkDepartIdentity(authentication.principal, #department)")
+            "or hasRole('DEPARTLEAD') " +
+            "and @authorizeHelper.checkDepartLeader(authentication.principal, #department.id)")
     public ResponseEntity<Department> updateDepart(
             @PathVariable(value = "id") Integer departId,
             @RequestBody Department department,

@@ -6,7 +6,6 @@ import {Department} from "../../../model/department.model";
 import {Team} from "../../../model/team.model";
 import {DepartmentService} from "../../../service/department.service";
 import {TeamService} from "../../../service/team.service";
-import {Role} from "../../../model/role.model";
 import {User} from "../../../model/user.model";
 import {Position} from "../../../model/position.model";
 
@@ -36,6 +35,7 @@ export class AddUserComponent implements OnInit {
     this.addForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
+      confirm_password: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: [''],
@@ -43,6 +43,8 @@ export class AddUserComponent implements OnInit {
       department: [null],
       team: [null],
       position: ['NEWCOMER', Validators.required]
+    }, {
+      validator: this.ConfirmedValidator('password', 'confirm_password')
     });
 
     this.departService.getDepartments()
@@ -58,6 +60,21 @@ export class AddUserComponent implements OnInit {
 
   get f() {
     return this.addForm.controls;
+  }
+
+  ConfirmedValidator(controlName: string, matchingControlName: string) {
+    return (formGroup: FormGroup) => {
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
+      if (matchingControl.errors && !matchingControl.errors.confirmedValidator) {
+        return;
+      }
+      if (control.value !== matchingControl.value) {
+        matchingControl.setErrors({confirmedValidator: true});
+      } else {
+        matchingControl.setErrors(null);
+      }
+    }
   }
 
   onDepartSelect(departId: number | null) {

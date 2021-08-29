@@ -35,7 +35,10 @@ public class TeamController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('team:create')")
+    @PreAuthorize("hasAuthority('team:create') " +
+            "or hasRole('DEPARTLEAD') " +
+            "and @authorizeHelper.checkDepartLeader(authentication.principal, #team.superior.id) " +
+            "and @authorizeHelper.checkDepartIdentity(#team.leader, #team.superior.id)")
     public ResponseEntity<Team> createTeam(@RequestBody @Valid Team team, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             ValidationHelper.generateValidationException(bindingResult);
@@ -51,7 +54,7 @@ public class TeamController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('CREATOR', 'ADMIN', 'TEAMLEAD', 'DEPARTLEAD')")
+    @PreAuthorize("hasAuthority('team:read')")
     public ResponseEntity<List<Team>> getAllTeams() {
         return ResponseEntity.ok(teamService.getAllTeams());
     }
@@ -64,7 +67,9 @@ public class TeamController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('team:update') " +
-            "or @authorizeHelper.checkTeamIdentity(authentication.principal, #team)")
+            "or hasRole('TEAMLEAD') and @authorizeHelper.checkTeamLeader(authentication.principal, #team.id) " +
+            "or hasRole('DEPARTLEAD') " +
+            "and @authorizeHelper.checkDepartLeader(authentication.principal, #team.superior.id)")
     public ResponseEntity<Team> updateTeam(
             @PathVariable(value = "id") Integer teamId,
             @RequestBody Team team,

@@ -1,6 +1,6 @@
 <div class="col-md-6 offset-md-3 form-team-container">
-  <h2 class="text-center" *ngIf="teamId === undefined">Adding new team</h2>
-  <h2 class="text-center" *ngIf="teamId !== undefined">Editing department "{{team?.name}}"</h2>
+  <h2 class="text-center" *ngIf="teamId === undefined">Create new team</h2>
+  <h2 class="text-center" *ngIf="teamId !== undefined">Edit team: {{team?.name}}</h2>
   <form [formGroup]="teamForm" *ngIf="teamForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="name">Name of team</label>

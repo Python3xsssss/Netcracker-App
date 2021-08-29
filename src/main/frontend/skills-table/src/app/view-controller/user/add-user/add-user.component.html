@@ -1,5 +1,5 @@
 <div class="col-md-6 offset-md-3 add-user-container">
-  <h2 class="text-center">Adding new user</h2>
+  <h2 class="text-center">Create new user</h2>
   <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="username">Username</label>
@@ -20,22 +20,35 @@
     </div>
 
     <div class="form-group">
-      <label for="firstName">First Name</label>
-      <input formControlName="firstName" placeholder="First Name" name="firstName" class="form-control"
-             id="firstName" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }">
-      <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-        <div *ngIf="f.firstName.errors.required">First name is required</div>
+      <label for="confirm_password">Confirm Password</label>
+      <input type="password" formControlName="confirm_password" placeholder="Password" class="form-control"
+             id="confirm_password" [ngClass]="{ 'is-invalid': submitted && f.confirm_password.errors }">
+      <div *ngIf="submitted && f.confirm_password.errors && f.confirm_password.invalid" class="invalid-feedback">
+        <div *ngIf="f.confirm_password.errors.required">Confirm password.</div>
+        <div *ngIf="f.confirm_password.errors.confirmedValidator">Passwords don't match.</div>
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="lastName">Last Name</label>
-      <input formControlName="lastName" placeholder="Last Name" name="lastName" class="form-control"
-             id="lastName" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }">
-      <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-        <div *ngIf="f.lastName.errors.required">Last name is required</div>
+    <div class="row">
+      <div class="form-group col">
+        <label for="firstName">First Name</label>
+        <input formControlName="firstName" placeholder="First Name" name="firstName" class="form-control"
+               id="firstName" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }">
+        <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+          <div *ngIf="f.firstName.errors.required">First name is required</div>
+        </div>
+      </div>
+
+      <div class="form-group col">
+        <label for="lastName">Last Name</label>
+        <input formControlName="lastName" placeholder="Last Name" name="lastName" class="form-control"
+               id="lastName" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }">
+        <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+          <div *ngIf="f.lastName.errors.required">Last name is required</div>
+        </div>
       </div>
     </div>
+
 
     <div class="form-group">
       <label for="email">E-mail</label>
@@ -48,28 +61,31 @@
                 name="about" class="form-control" id="about" rows="4"></textarea>
     </div>
 
-    <div class="form-group">
-      <label for="depart-select">Choose department</label>
-      <select formControlName="department" class="form-select" id="depart-select" (ngModelChange)="onDepartSelect($event)">
-        <option [value]=null>None</option>
-        <option *ngFor="let depart of departments" [value]=depart?.id>{{depart?.name}}</option>
-      </select>
+    <div class="row">
+      <div class="form-group col">
+        <label for="depart-select">Choose department</label>
+        <select formControlName="department" class="form-select" id="depart-select" (ngModelChange)="onDepartSelect($event)">
+          <option [value]=null>None</option>
+          <option *ngFor="let depart of departments" [value]=depart?.id>{{depart?.name}}</option>
+        </select>
+      </div>
+
+      <div class="form-group col">
+        <label for="team-select">Choose team</label>
+        <select formControlName="team" class="form-select" id="team-select">
+          <option [value]=null>None</option>
+          <option *ngFor="let team of teamsInDepart" [value]=team?.id>{{team?.name}}</option>
+        </select>
+      </div>
+
+      <div class="form-group col">
+        <label for="position-select">Choose position</label>
+        <select formControlName="position" class="form-select" id="position-select">
+          <option *ngFor="let position of positions" [value]=[position]>{{position}}</option>
+        </select>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label for="team-select">Choose team</label>
-      <select formControlName="team" class="form-select" id="team-select">
-        <option [value]=null>None</option>
-        <option *ngFor="let team of teamsInDepart" [value]=team?.id>{{team?.name}}</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="position-select">Choose position</label>
-      <select formControlName="position" class="form-select" id="position-select">
-        <option *ngFor="let position of positions" [value]=[position]>{{position}}</option>
-      </select>
-    </div>
 
     <button class="btn btn-success" ng-click="onSubmit()">Add user</button>
   </form>
