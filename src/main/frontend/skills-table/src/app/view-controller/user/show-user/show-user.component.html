@@ -66,22 +66,31 @@
     <i class="fas fa-plus"></i>
   </button>
   <div class="col-md-8">
-    <form [formGroup]="addSkillLevelForm" (ngSubmit)="addSkillLevel()" *ngIf="showSkillLevelForm" id="add-skill-form">
+    <form *ngIf="showSkillLevelForm && skillLevelForm" [formGroup]="skillLevelForm"
+          (ngSubmit)="addOrEditSkillLevel()"  id="add-skill-form">
       <div class="row">
         <div class="col">
           <div class="form-group">
             <label for="skill-select">Choose skill</label>
-            <select formControlName="skill" class="form-select" id="skill-select">
-              <option *ngFor="let skill of skills" [value]=skill?.id>{{skill?.name}}</option>
+            <select formControlName="skill" class="form-select"
+                    id="skill-select" [ngClass]="{ 'is-invalid': submitted && func && func.skill.errors }">
+              <option *ngFor="let skill of skills" [value]="skill?.id">{{skill?.name}}</option>
             </select>
+            <div *ngIf="submitted && func && func.skill.errors" class="invalid-feedback">
+              <div *ngIf="func && func.skill.errors.required">Skill is required</div>
+            </div>
           </div>
         </div>
         <div class="col">
           <div class="form-group">
             <label for="level">Level</label>
-            <select formControlName="level" name="level" class="form-select" id="level">
-              <option *ngFor="let number of [0, 1, 2, 3, 4, 5]">{{number}}</option>
+            <select formControlName="level" name="level" class="form-select"
+                    id="level" [ngClass]="{ 'is-invalid': submitted && func && func.level.errors }">
+              <option *ngFor="let number of [0, 1, 2, 3, 4, 5]" [value]="number">{{number}}</option>
             </select>
+            <div *ngIf="submitted && func && func.level.errors" class="invalid-feedback">
+              <div *ngIf="func && func.level.errors.required">Level is required</div>
+            </div>
           </div>
         </div>
       </div>
@@ -91,7 +100,7 @@
       <div class="row">
         <div class="col">
           <button class="btn btn-success" type="submit">Save</button>
-          <button class="btn btn-light" id="btn-cancel-skill" type="reset" (click)="showSkillLevelForm=false;">
+          <button class="btn btn-light" id="btn-cancel-skill" type="reset" (click)="hideSkillLevelForm()">
             Cancel
           </button>
         </div>
@@ -111,6 +120,9 @@
       <td>{{skillLevel?.skill?.name}}</td>
       <td>{{skillLevel?.level}}</td>
       <td>
+        <button class="btn btn-success" id="edit-skill-level" (click)="onShowSkillLevelForm(skillLevel)">
+          <i class="fas fa-edit"></i>
+        </button>
         <button class="btn btn-danger" id="delete-skill-level" (click)="deleteSkillLevel(skillLevel.id)">
           <i class="fas fa-trash-alt"></i>
         </button>

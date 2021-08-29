@@ -1,6 +1,6 @@
 <div class="update-user-container">
   <h2 class="text-center">Edit profile</h2>
-  <form *ngIf="addForm" [formGroup]="addForm" (ngSubmit)="onSubmit()">
+  <form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <div class="row">
       <div class="form-group col">
         <label for="firstName">First Name</label>

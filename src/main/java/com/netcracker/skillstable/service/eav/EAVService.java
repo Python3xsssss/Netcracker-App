@@ -61,11 +61,19 @@ public class EAVService {
         );
     }
 
-    public EAVObject updateEAVObj(EAVObject dtoEavObj, Integer eavObjId) throws ResourceNotFoundException {
+    public EAVObject updateEAVObj(EAVObject dtoEavObj, Integer eavObjId)
+            throws ResourceNotFoundException, ResourceAlreadyExistsException {
         EAVObject databaseEavObj = eavRepo.findById(eavObjId).orElseThrow(
                 () -> new ResourceNotFoundException("EAVObject with id=" + eavObjId + " not found!")
         );
 
+        if (!dtoEavObj.getEntName().equals(databaseEavObj.getEntName())
+                && eavRepo.findByEntNameAndEntType(dtoEavObj.getEntName(), dtoEavObj.getEntType()).isPresent()) {
+            throw new ResourceAlreadyExistsException("EAVObject with name: " + dtoEavObj.getEntName() +
+                    " and type: " + dtoEavObj.getEntType().getName() +
+                    " already exists!"
+            );
+        }
         databaseEavObj.setEntName(dtoEavObj.getEntName());
         List<Parameter> newParameters = databaseEavObj.updateParameters(dtoEavObj.getParameters());
         parameterRepo.saveAll(newParameters);

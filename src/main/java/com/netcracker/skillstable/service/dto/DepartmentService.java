@@ -66,6 +66,8 @@ public class DepartmentService {
             );
         } catch (ResourceNotFoundException exception) {
             throw new ResourceNotFoundException("Department '" + department.getName() + "' not found!");
+        } catch (ResourceAlreadyExistsException exception) {
+            throw new ResourceAlreadyExistsException("Department '" + department.getName() + "' already exists!");
         }
 
         return departmentConverter.eavObjToDto(departEavObj);

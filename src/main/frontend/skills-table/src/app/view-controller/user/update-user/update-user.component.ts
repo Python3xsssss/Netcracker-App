@@ -18,7 +18,7 @@ import {Position} from "../../../model/position.model";
 export class UpdateUserComponent implements OnInit {
   userId!: number;
   user!: User;
-  addForm!: FormGroup;
+  userForm!: FormGroup;
   departments: Department[] = [];
   teams: Team[] = [];
   teamsInDepart: Team[] = [];
@@ -68,7 +68,7 @@ export class UpdateUserComponent implements OnInit {
             this.onDepartSelect(this.depSelectedId);
           });
 
-        this.addForm = this.formBuilder.group({
+        this.userForm = this.formBuilder.group({
           firstName: [this.user.firstName, Validators.required],
           lastName: [this.user.lastName, Validators.required],
           email: [this.user.email],
@@ -81,7 +81,7 @@ export class UpdateUserComponent implements OnInit {
   }
 
   get f() {
-    return this.addForm.controls;
+    return this.userForm.controls;
   }
 
   onDepartSelect(departId: any) {
@@ -95,12 +95,12 @@ export class UpdateUserComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    if (this.addForm.invalid) {
+    if (this.userForm.invalid) {
       console.log("Form is invalid!");
       return;
     }
 
-    let value = this.addForm.value;
+    let value = this.userForm.value;
     if (value.department === "null") {
       value.department = null;
       value.team = null;

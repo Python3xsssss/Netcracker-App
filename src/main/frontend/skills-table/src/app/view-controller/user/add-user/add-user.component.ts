@@ -15,7 +15,7 @@ import {Position} from "../../../model/position.model";
   styleUrls: ['./add-user.component.scss']
 })
 export class AddUserComponent implements OnInit {
-  addForm!: FormGroup;
+  userForm!: FormGroup;
   departments: Department[] = [];
   teams: Team[] = [];
   teamsInDepart: Team[] = [];
@@ -32,7 +32,7 @@ export class AddUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.addForm = this.formBuilder.group({
+    this.userForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
       confirm_password: ['', Validators.required],
@@ -59,7 +59,7 @@ export class AddUserComponent implements OnInit {
   }
 
   get f() {
-    return this.addForm.controls;
+    return this.userForm.controls;
   }
 
   ConfirmedValidator(controlName: string, matchingControlName: string) {
@@ -88,12 +88,12 @@ export class AddUserComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    if (this.addForm.invalid) {
+    if (this.userForm.invalid) {
       console.log("Form is invalid!");
       return;
     }
 
-    let value = this.addForm.value;
+    let value = this.userForm.value;
     if (value.department === "null") {
       value.department = null;
       value.team = null;

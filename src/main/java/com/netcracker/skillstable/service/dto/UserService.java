@@ -115,6 +115,8 @@ public class UserService {
             );
         } catch (ResourceNotFoundException exception) {
             throw new UsernameNotFoundException("User '" + user.getUsername() + "' not found!");
+        } catch (ResourceAlreadyExistsException exception) {
+            throw new ResourceAlreadyExistsException("User '" + user.getUsername() + "' already exists!");
         }
 
         return userConverter.eavObjToDto(updatedUser);

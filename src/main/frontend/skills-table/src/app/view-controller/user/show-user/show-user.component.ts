@@ -20,12 +20,13 @@ export class ShowUserComponent implements OnInit {
   user!: User;
   skills: Skill[] = [];
   roles: string[] = [];
-  addSkillLevelForm!: FormGroup;
+  skillLevelForm: FormGroup | undefined;
   roleForm!: FormGroup;
   showEditForm: boolean = false;
   showRoleForm: boolean = false;
   showSkillLevelForm: boolean = false;
   editSkillLevel: boolean = false;
+  submitted: boolean = false;
 
 
   constructor(
@@ -46,24 +47,73 @@ export class ShowUserComponent implements OnInit {
       });
   }
 
-  onShowSkillLevelForm(): void {
+  onShowSkillLevelForm(skillLevel: SkillLevel | undefined = undefined): void {
     this.showSkillLevelForm = true;
-    this.addSkillLevelForm = this.formBuilder.group({
-      id: [],
-      skill: [null, Validators.required],
-      level: [0, Validators.required],
-    });
-
     this.skillService.getSkills()
       .subscribe((skills) => {
         this.skills = skills;
+        if (skillLevel !== undefined) {
+          this.skillLevelForm = this.formBuilder.group({
+            id: [skillLevel.id],
+            skill: [skillLevel.skill.id, Validators.required],
+            level: [skillLevel.level, Validators.required],
+          });
+        } else {
+          this.skillLevelForm = this.formBuilder.group({
+            id: [],
+            skill: [null, Validators.required], //(this.skills.length) ? this.skills[0].id :
+            level: [0, Validators.required],
+          });
+        }
       });
+  }
+
+  addOrEditSkillLevel() {
+    if (!this.skillLevelForm) {
+      return;
+    }
+    this.submitted = true;
+    if (this.skillLevelForm.invalid) {
+      console.log("Form is invalid!");
+      return;
+    }
+
+    let value = this.skillLevelForm.value;
+    for (let skill of this.skills) {
+      if (skill.id === Number(value.skill)) {
+        value.skill = skill;
+        break;
+      }
+    }
+    let skillLevel: SkillLevel = value;
+    if (this.user.id !== null) {
+      if (skillLevel.id !== null) {
+        this.userService.updateSkillLevel(skillLevel, this.user.id, skillLevel.id)
+          .subscribe(() => {
+            this.userService.getUserById(this.id)
+              .subscribe((user) => {
+                this.user = user;
+              });
+
+          });
+      } else {
+        this.userService.createSkillLevel(skillLevel, this.user.id)
+          .subscribe(() => {
+            this.userService.getUserById(this.id)
+              .subscribe((user) => {
+                this.user = user;
+              });
+            this.showSkillLevelForm = false;
+          });
+      }
+      this.hideSkillLevelForm();
+    }
   }
 
   deleteSkillLevel(idToDelete: number | null): void {
     if (this.user.id !== null && idToDelete !== null) {
       this.userService.deleteSkillLevel(this.user.id, idToDelete)
-        .subscribe(data => {
+        .subscribe(() => {
           this.user.skillLevels = this.user.skillLevels.filter(sl => sl.id !== idToDelete);
           this.userService.getUserById(this.id)
             .subscribe((user) => {
@@ -73,26 +123,8 @@ export class ShowUserComponent implements OnInit {
     }
   }
 
-  addSkillLevel() {
-    let value = this.addSkillLevelForm.value;
-
-    for (let skill of this.skills) {
-      if (skill.id === Number(value.skill)) {
-        value.skill = skill;
-        break;
-      }
-    }
-    let skillLevel: SkillLevel = value;
-    if (this.user.id !== null) {
-      this.userService.createSkillLevel(skillLevel, this.user.id)
-        .subscribe(() => {
-          this.userService.getUserById(this.id)
-            .subscribe((user) => {
-              this.user = user;
-            });
-          this.showSkillLevelForm = false;
-        });
-    }
+  get func() {
+    return this.skillLevelForm?.controls;
   }
 
   deleteRole(userId: number | null, role: string) {
@@ -136,11 +168,13 @@ export class ShowUserComponent implements OnInit {
       this.userService.getUserById(this.id)
         .subscribe((user) => {
           this.user = user;
-          this.showEditForm = false;
         });
-    } else {
-      this.showEditForm = false;
     }
+    this.showEditForm = false;
+  }
 
+  hideSkillLevelForm() {
+    this.skillLevelForm = undefined;
+    this.showSkillLevelForm = false;
   }
 }

@@ -62,6 +62,8 @@ public class TeamService {
             teamEavObj = eavService.updateEAVObj(teamConverter.dtoToEavObj(team), team.getId());
         } catch (ResourceNotFoundException exception) {
             throw new ResourceNotFoundException("Team '" + team.getName() + "' not found!");
+        } catch (ResourceAlreadyExistsException exception) {
+            throw new ResourceAlreadyExistsException("Team '" + team.getName() + "' already exists!");
         }
 
         return teamConverter.eavObjToDto(teamEavObj);

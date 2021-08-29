@@ -67,6 +67,8 @@ public class SkillService {
             skillEavObj = eavService.updateEAVObj(skillConverter.dtoToEavObj(skill), skill.getId());
         } catch (ResourceNotFoundException exception) {
             throw new ResourceNotFoundException("Skill '" + skill.getName() + "' not found!");
+        } catch (ResourceAlreadyExistsException exception) {
+            throw new ResourceAlreadyExistsException("Skill '" + skill.getName() + "' already exists!");
         }
 
         return skillConverter.eavObjToDto(skillEavObj);
