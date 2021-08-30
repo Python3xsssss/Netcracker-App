@@ -7,9 +7,9 @@
 
       <ul class="navbar-nav" *ngIf="showAdminPanels">
         <li class="nav-item dropdown ml-auto">
-          <a class="nav-link dropdown-toggle" id="addDropdown" role="button" data-toggle="dropdown"
+          <a class="nav-link dropdown-toggle" id="add-dropdown" role="button" data-toggle="dropdown"
              (click)="showAddList=!showAddList">Add</a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="addDropdown"
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="add-dropdown"
                *ngIf="showAddList" (click)="showAddList=!showAddList">
             <a class="dropdown-item" routerLink="add-user">User</a>
             <a class="dropdown-item" routerLink="add-depart">Department</a>
@@ -36,14 +36,13 @@
 
     <ul class="nav navbar-nav user-menu">
       <li class="nav-item dropdown">
-        <button class="btn btn-outline-light dropdown-toggle" id="userDropdown" type="button" data-mdb-toggle="dropdown"
+        <button class="btn btn-outline-light dropdown-toggle" id="user-dropdown" type="button" data-mdb-toggle="dropdown"
                 aria-expanded="false" (click)="showUserList=!showUserList">
           {{user?.username}}
         </button>
-        <div class="dropdown-menu" aria-labelledby="userDropdown"
+        <div class="dropdown-menu" id="user-dropdown-menu" aria-labelledby="user-dropdown"
              *ngIf="showUserList" (click)="showUserList=!showUserList">
           <button class="dropdown-item" routerLink="user/{{user?.id}}">Your profile</button>
-          <div class="dropdown-divider"></div>
           <button class="dropdown-item" (click)="signOut()">Sign out</button>
         </div>
       </li>

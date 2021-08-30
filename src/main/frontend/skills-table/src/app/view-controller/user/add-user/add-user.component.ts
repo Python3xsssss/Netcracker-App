@@ -121,8 +121,8 @@ export class AddUserComponent implements OnInit {
     user.roles.push('USER');
 
     this.userService.createUser(user)
-      .subscribe(() => {
-        this.router.navigate(['users']);
+      .subscribe((user) => {
+        this.router.navigate(['user', user.id]);
       });
   }
 
