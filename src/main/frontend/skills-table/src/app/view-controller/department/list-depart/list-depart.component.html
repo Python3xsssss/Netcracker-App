@@ -1,7 +1,7 @@
 <div class="col-md-6 offset-md-3 list-depart-container">
   <h2>Departments</h2>
   <button class="btn btn-success" id="add-dep" (click)="addDepart()"><i class="fas fa-plus"></i> New Department</button>
-  <div class="card border bg-light" id="list-deps" *ngFor="let department of departments">
+  <div class="depart-card card border bg-super-light" id="list-deps" *ngFor="let department of departments">
     <div class="card-header">
       <h3 [attr.id]="department?.id">
         {{department?.name}}

@@ -1,7 +1,7 @@
 <div class="col-md-6 offset-md-3 list-skill-container">
   <h2>Skills</h2>
-  <button class="btn btn-success" (click)="addSkill()"><i class="fas fa-plus"></i> New Skill</button>
-  <table class="table table-striped">
+  <button class="btn btn-success" id="new-skill" (click)="addSkill()"><i class="fas fa-plus"></i> New Skill</button>
+  <table class="table table-striped border">
     <thead>
     <tr>
       <th>Name</th>
@@ -14,6 +14,7 @@
       <td>{{skill?.name}}</td>
       <td>{{skill?.about}}</td>
       <td>
+        <button class="btn btn-success" routerLink="/update-skill/{{skill?.id}}"><i class="fas fa-edit"></i></button>
         <button class="btn btn-danger" (click)="deleteSkill(skill)"><i class="fas fa-trash-alt"></i></button>
       </td>
     </tr>

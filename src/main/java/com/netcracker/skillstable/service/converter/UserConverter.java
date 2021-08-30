@@ -1,14 +1,13 @@
 package com.netcracker.skillstable.service.converter;
 
 import com.netcracker.skillstable.exception.ResourceNotFoundException;
-import com.netcracker.skillstable.model.eav.Attribute;
-import com.netcracker.skillstable.model.eav.EAVObject;
-import com.netcracker.skillstable.model.eav.EntityType;
-import com.netcracker.skillstable.model.eav.Parameter;
 import com.netcracker.skillstable.model.dto.*;
 import com.netcracker.skillstable.model.dto.enumeration.Authority;
 import com.netcracker.skillstable.model.dto.enumeration.Position;
 import com.netcracker.skillstable.model.dto.enumeration.Role;
+import com.netcracker.skillstable.model.eav.Attribute;
+import com.netcracker.skillstable.model.eav.EAVObject;
+import com.netcracker.skillstable.model.eav.Parameter;
 import com.netcracker.skillstable.service.eav.EAVService;
 import com.netcracker.skillstable.service.eav.MetamodelService;
 import org.springframework.beans.factory.annotation.Autowired;

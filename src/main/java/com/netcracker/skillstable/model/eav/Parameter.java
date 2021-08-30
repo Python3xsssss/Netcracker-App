@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity(name = "Parameter")
-@Table(name = "parameters")
+@Table(name = "values")
 @Getter
 @Setter
 public class Parameter {
@@ -91,12 +91,12 @@ public class Parameter {
     public String toString() {
         return "Parameter{" +
                 "id=" + id +
-                ", eavObject=" + eavObject +
-                ", attribute=" + attribute +
-                ", attrValueTxt='" + attrValueTxt + '\'' +
-                ", attrValueInt=" + attrValueInt +
-                ", attrValueBool=" + attrValueBool +
-                ", referenced=" + referenced.getEntName() +
+                ", eavObject=" + eavObject.getEntName() +
+                ", attribute=" + attribute.getName() +
+                (attrValueTxt != null ? ", attrValueTxt='" + attrValueTxt + '\'' : "") +
+                (attrValueInt != null ? ", attrValueInt=" + attrValueInt : "") +
+                (attrValueBool != null ? ", attrValueBool=" + attrValueBool : "") +
+                (referenced != null ? ", referenced=" + referenced.getEntName() : "") +
                 '}';
     }
 

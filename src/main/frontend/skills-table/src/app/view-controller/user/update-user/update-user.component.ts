@@ -4,7 +4,6 @@ import {User} from "../../../model/user.model";
 import {UserService} from "../../../service/user.service";
 import {Department} from "../../../model/department.model";
 import {Team} from "../../../model/team.model";
-import {Role} from "../../../model/role.model";
 import {DepartmentService} from "../../../service/department.service";
 import {TeamService} from "../../../service/team.service";
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -17,9 +16,9 @@ import {Position} from "../../../model/position.model";
   outputs: ['onUserUpdated']
 })
 export class UpdateUserComponent implements OnInit {
-  id!: number;
+  userId!: number;
   user!: User;
-  addForm!: FormGroup;
+  userForm!: FormGroup;
   departments: Department[] = [];
   teams: Team[] = [];
   teamsInDepart: Team[] = [];
@@ -41,9 +40,9 @@ export class UpdateUserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
+    this.userId = this.route.snapshot.params['id'];
 
-    this.userService.getUserById(this.id)
+    this.userService.getUserById(this.userId)
       .subscribe((user) => {
         this.user = user;
         if (this.user.department !== null) {
@@ -69,20 +68,20 @@ export class UpdateUserComponent implements OnInit {
             this.onDepartSelect(this.depSelectedId);
           });
 
-        this.addForm = this.formBuilder.group({
+        this.userForm = this.formBuilder.group({
           firstName: [this.user.firstName, Validators.required],
           lastName: [this.user.lastName, Validators.required],
-          email: [this.user.email, Validators.required],
-          about: [this.user.about, Validators.required],
-          department: [this.depSelectedId, Validators.required],
-          team: [this.teamSelectedId, Validators.required],
+          email: [this.user.email],
+          about: [this.user.about],
+          department: [this.depSelectedId],
+          team: [this.teamSelectedId],
           position: [this.user.position, Validators.required],
         });
       });
   }
 
   get f() {
-    return this.addForm.controls;
+    return this.userForm.controls;
   }
 
   onDepartSelect(departId: any) {
@@ -96,12 +95,12 @@ export class UpdateUserComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    if (this.addForm.invalid) {
+    if (this.userForm.invalid) {
       console.log("Form is invalid!");
       return;
     }
 
-    let value = this.addForm.value;
+    let value = this.userForm.value;
     if (value.department === "null") {
       value.department = null;
       value.team = null;
@@ -124,7 +123,8 @@ export class UpdateUserComponent implements OnInit {
 
     Object.assign(this.user, value);
     this.userService.updateUser(this.user)
-      .subscribe(() => {
+      .subscribe((user) => {
+        this.user = user;
         this.onUserUpdated.emit(true);
       });
   }

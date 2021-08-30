@@ -38,10 +38,15 @@ public class MetamodelService {
         return eavService.getEAVObjById(entId).getEntType();
     }
 
-    public AttrType getAttrTypeByAttrTypeId(Integer attrTypeId) throws ResourceNotFoundException {
+    public AttrType getAttrTypeByAttrTypeId(Integer attrTypeId)
+            throws ResourceNotFoundException {
         return attrTypeRepo.findById(attrTypeId).orElseThrow(
                 () -> new ResourceNotFoundException("The attribute type with id=" + attrTypeId + " not found!")
         );
+    }
+
+    public Attribute getAttributeByAttrName(String attrName) {
+        return attributeRepo.findByName(attrName);
     }
 
     public List<Attribute> getAttributesByEntTypeId(Integer entTypeId) {
@@ -65,10 +70,6 @@ public class MetamodelService {
         return Optional.of(optionalTypeAttr.get().getAttribute());
     }
 
-    public Attribute getAttributeByAttrName(String attrName) {
-        return attributeRepo.findByName(attrName);
-    }
-
     public void setEntTypeAttrMapping(Integer entTypeId, Integer attrId) {
         EntityType entType = entityTypeRepo.getById(entTypeId);
         Attribute attr = attributeRepo.getById(attrId);
@@ -78,7 +79,10 @@ public class MetamodelService {
     public Attribute updateEntTypeAttrMapping(Integer entTypeId, Integer attrId) {
         Integer parentId = this.getEntityTypeByEntTypeId(entTypeId).getEntParentId();
         if (parentId != null) {
-            return this.updateEntTypeAttrMapping(parentId, attrId);
+            Optional<Attribute> optionalAttribute = this.getEntTypeAttrMapping(parentId, attrId);
+            if (optionalAttribute.isPresent()) {
+                return optionalAttribute.get();
+            }
         }
 
         if (this.getEntTypeAttrMapping(entTypeId, attrId).isEmpty()) {

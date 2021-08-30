@@ -1,35 +1,51 @@
 <div class="col-md-6 offset-md-3 show-team-container">
-  <h2>Team "{{team?.name}}"</h2>
-  <h4>About:</h4>
-  <span>{{team?.about}}</span>
-  <h5>Leader:</h5>
-  <a routerLink="/user/{{team?.leader?.id}}" *ngIf="team?.leader?.id !== null">
-    {{team?.leader?.username}} - {{team?.leader?.firstName}} {{team?.leader?.lastName}}
-  </a>
-  <a *ngIf="team?.leader?.id === null">No leader</a>
-  <h6>
-    Members:
-    <button class="btn-sm btn-success" id="add-member" (click)="addMember()"><i class="fas fa-user-plus"></i></button>
-  </h6>
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th>Username</th>
-      <th>Name</th>
-      <th>Position</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let member of team?.members">
-      <td>
-        <a routerLink="/user/{{member?.id}}">{{member?.username}}</a>
-      </td>
-      <td>{{member?.firstName}} {{member?.lastName}}</td>
-      <td>{{member?.position}}</td>
-    </tr>
-    </tbody>
-  </table>
+  <div class="team-card card border bg-super-light">
+    <div class="card-header">
+      <button class="btn btn-success" id="edit-team" routerLink="/update-team/{{team?.id}}"><i class="fas fa-edit"></i>
+        Edit team
+      </button>
+      <h2>{{team?.name}}</h2>
+      <h3>Team</h3>
+    </div>
+    <div class="card-body">
+      <h4>About:</h4>
+      <span>{{team?.about}}</span>
+      <h5>
+        Leader:
+        <a routerLink="/user/{{team?.leader?.id}}" *ngIf="team?.leader?.id !== null">
+          {{team?.leader?.username}} - {{team?.leader?.firstName}} {{team?.leader?.lastName}}
+        </a>
+      </h5>
 
-  <button class="btn btn-primary" id="show-report" (click)="showReport()"> Show report </button>
+      <a *ngIf="team?.leader?.id === null">No leader</a>
+    </div>
+    <div class="card-footer">
+      <h6>
+        Members:
+        <button class="btn-sm btn-success" id="add-member" (click)="addMember()"><i class="fas fa-user-plus"></i>
+        </button>
+      </h6>
+      <table class="table table-striped bg-body border">
+        <thead>
+        <tr>
+          <th>Username</th>
+          <th>Name</th>
+          <th>Position</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let member of team?.members">
+          <td>
+            <a routerLink="/user/{{member?.id}}">{{member?.username}}</a>
+          </td>
+          <td>{{member?.firstName}} {{member?.lastName}}</td>
+          <td>{{member?.position}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <button class="btn btn-primary" id="show-report" (click)="showReport()"> Show report</button>
+    </div>
+  </div>
 </div>
 

@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class LeaderValidator implements
-        ConstraintValidator<Leader, User> {
+public class LeaderValidator implements ConstraintValidator<Leader, User> {
     @Autowired
     private DepartmentService departmentService;
     @Autowired

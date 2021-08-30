@@ -1,6 +1,7 @@
 <div class="col-md-6 offset-md-3 add-skill-container">
-  <h2 class="text-center">Adding new skill</h2>
-  <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+  <h2 class="text-center" *ngIf="skillId === undefined">Create new skill</h2>
+  <h2 class="text-center" *ngIf="skillId !== undefined">Edit skill: {{skill?.name}}</h2>
+  <form [formGroup]="skillForm" *ngIf="skillForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="name">Name of skill</label>
       <input type="text" formControlName="name" placeholder="New Skill" name="name" class="form-control"
@@ -16,6 +17,7 @@
                 name="about" class="form-control" id="about" rows="4"></textarea>
     </div>
 
-    <button class="btn btn-success">Add skill</button>
+    <button class="btn btn-success" type="submit">Save</button>
+    <button class="btn btn-light" type="reset" (click)="onCancel()">Cancel</button>
   </form>
 </div>

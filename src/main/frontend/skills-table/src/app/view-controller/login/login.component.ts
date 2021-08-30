@@ -61,9 +61,10 @@ export class LoginComponent implements OnInit {
 
           this.isLoginFailed = false;
           this.isLoggedIn = true;
-          this.router.navigate([this.returnUrl]).then(() => {
-            window.location.reload();
-          });
+          // this.router.navigate([this.returnUrl]).then(() => {
+          //   window.location.reload();
+          // });
+          window.location.href = window.location.protocol + '//' + window.location.host + this.returnUrl;
         },
         error => {
           this.isLoginFailed = true;

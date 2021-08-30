@@ -1,16 +1,16 @@
 package com.netcracker.skillstable.service.converter;
 
-import com.netcracker.skillstable.model.eav.Attribute;
-import com.netcracker.skillstable.model.eav.EAVObject;
-import com.netcracker.skillstable.model.eav.EntityType;
-import com.netcracker.skillstable.model.eav.Parameter;
 import com.netcracker.skillstable.model.dto.Department;
+import com.netcracker.skillstable.model.dto.OrgItem;
 import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.model.dto.User;
-import com.netcracker.skillstable.service.eav.EAVService;
-import com.netcracker.skillstable.service.eav.MetamodelService;
+import com.netcracker.skillstable.model.eav.Attribute;
+import com.netcracker.skillstable.model.eav.EAVObject;
+import com.netcracker.skillstable.model.eav.Parameter;
 import com.netcracker.skillstable.service.dto.TeamService;
 import com.netcracker.skillstable.service.dto.UserService;
+import com.netcracker.skillstable.service.eav.EAVService;
+import com.netcracker.skillstable.service.eav.MetamodelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +44,7 @@ public class DepartmentConverter {
         eavObj.addParameter(
                 new Parameter(
                         eavObj,
-                        metamodelService.updateEntTypeAttrMapping(Department.getEntTypeId(), Department.getAboutId()),
+                        metamodelService.updateEntTypeAttrMapping(OrgItem.getEntTypeId(), OrgItem.getAboutId()),
                         department.getAbout()
                 )
         );
@@ -53,7 +53,7 @@ public class DepartmentConverter {
             eavObj.addParameter(
                     new Parameter(
                             eavObj,
-                            metamodelService.updateEntTypeAttrMapping(Department.getEntTypeId(), Department.getLeaderRefId()),
+                            metamodelService.updateEntTypeAttrMapping(OrgItem.getEntTypeId(), OrgItem.getLeaderRefId()),
                             eavService.getEAVObjById(department.getLeader().getId())
                     )
             );
@@ -93,6 +93,7 @@ public class DepartmentConverter {
                 .collect(Collectors.toSet());
         department.setTeams(teams);
 
+        final User finalLeader = leader;
         Set<User> membersNoTeam = userService
                 .getAllUsers()
                 .stream()
@@ -100,7 +101,8 @@ public class DepartmentConverter {
                         user -> (user.getTeam() == null ||
                                 user.getTeam().getId() == null) &&
                                 user.getDepartment() != null &&
-                                departEavObj.getId().equals(user.getDepartment().getId())
+                                departEavObj.getId().equals(user.getDepartment().getId()) &&
+                                !user.equals(finalLeader)
                 )
                 .map(User::toUserNoRefs)
                 .collect(Collectors.toSet());

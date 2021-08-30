@@ -24,9 +24,9 @@ public class UserController {
     @PostMapping
     @PreAuthorize("hasAuthority('user:create') " +
             "or hasRole('TEAMLEAD') " +
-            "and @authorizeHelper.checkTeamIdentity(authentication.principal, #user.team) " +
+            "and @authorizeHelper.checkTeamLeader(authentication.principal, #user.team) " +
             "or hasRole('DEPARTLEAD') " +
-            "and @authorizeHelper.checkDepartIdentity(authentication.principal, #user.department)")
+            "and @authorizeHelper.checkDepartLeader(authentication.principal, #user.department)")
     public ResponseEntity<User> createUser(
             @RequestBody @Valid User user,
             BindingResult bindingResult
@@ -38,11 +38,11 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(user));
     }
 
-    @PostMapping("/{id}/skillLevels")
+    @PostMapping("/{userId}/skillLevels")
     @PreAuthorize("hasAuthority('user:update') or #userId == authentication.principal.id")
-    public ResponseEntity<SkillLevel> createSkillLevel(
+    public ResponseEntity<SkillLevel> createOrUpdateSkillLevel(
             @RequestBody @Valid SkillLevel skillLevel,
-            @PathVariable(value = "id") Integer userId,
+            @PathVariable(value = "userId") Integer userId,
             BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'CREATOR')")
+    @PreAuthorize("hasAuthority('user:read')")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
@@ -66,9 +66,9 @@ public class UserController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('user:update') or #userId == authentication.principal.id " +
             "or hasRole('TEAMLEAD') " +
-            "and @authorizeHelper.checkTeamIdentity(authentication.principal, #user.team) " +
+            "and @authorizeHelper.checkTeamLeader(authentication.principal, #user.team) " +
             "or hasRole('DEPARTLEAD') " +
-            "and @authorizeHelper.checkDepartIdentity(authentication.principal, #user.department)")
+            "and @authorizeHelper.checkDepartLeader(authentication.principal, #user.department)")
     public ResponseEntity<User> updateUser(
             @PathVariable(value = "id") Integer userId,
             @RequestBody @Valid User user,
@@ -91,11 +91,13 @@ public class UserController {
             @RequestBody SkillLevel skillLevel,
             BindingResult bindingResult
     ) {
+        if (!skillLevelId.equals(skillLevel.getId())) {
+            throw new ResourceNotFoundException("Wrong skill level id!");
+        }
         if (bindingResult.hasErrors()) {
             ValidationHelper.generateValidationException(bindingResult);
         }
 
-        skillLevel.setId(skillLevelId);
         return ResponseEntity.ok(userService.createOrUpdateSkillLevel(userId, skillLevel));
     }
 
@@ -109,7 +111,7 @@ public class UserController {
     @DeleteMapping("/{userId}/skillLevels/{levelId}")
     @PreAuthorize("hasAuthority('user:update') or #userId == authentication.principal.id")
     public ResponseEntity<Void> deleteSkillLevel(
-            @PathVariable(value = "levelId") Integer userId,
+            @PathVariable(value = "userId") Integer userId,
             @PathVariable(value = "levelId") Integer skillLevelId
     ) {
         userService.deleteSkillLevel(skillLevelId);

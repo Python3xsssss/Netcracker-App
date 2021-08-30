@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Leader {
-    String message() default "This user is not available as a leader";
+    String message() default "This user is already a leader";
 
     Class<?>[] groups() default {};
 

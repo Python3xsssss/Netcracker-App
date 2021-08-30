@@ -2,12 +2,11 @@ package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.exception.ResourceAlreadyExistsException;
 import com.netcracker.skillstable.exception.ResourceNotFoundException;
-import com.netcracker.skillstable.model.eav.EAVObject;
 import com.netcracker.skillstable.model.dto.Department;
 import com.netcracker.skillstable.model.dto.Team;
-import com.netcracker.skillstable.service.eav.EAVService;
-import com.netcracker.skillstable.service.eav.MetamodelService;
+import com.netcracker.skillstable.model.eav.EAVObject;
 import com.netcracker.skillstable.service.converter.DepartmentConverter;
+import com.netcracker.skillstable.service.eav.EAVService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,8 +20,6 @@ import java.util.stream.Collectors;
 public class DepartmentService {
     @Autowired
     private EAVService eavService;
-    @Autowired
-    private MetamodelService metamodelService;
     @Autowired
     private DepartmentConverter departmentConverter;
 
@@ -66,6 +63,8 @@ public class DepartmentService {
             );
         } catch (ResourceNotFoundException exception) {
             throw new ResourceNotFoundException("Department '" + department.getName() + "' not found!");
+        } catch (ResourceAlreadyExistsException exception) {
+            throw new ResourceAlreadyExistsException("Department '" + department.getName() + "' already exists!");
         }
 
         return departmentConverter.eavObjToDto(departEavObj);

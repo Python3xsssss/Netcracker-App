@@ -2,14 +2,12 @@ package com.netcracker.skillstable.service.dto;
 
 import com.netcracker.skillstable.exception.ResourceAlreadyExistsException;
 import com.netcracker.skillstable.exception.ResourceNotFoundException;
-import com.netcracker.skillstable.model.eav.EAVObject;
-import com.netcracker.skillstable.model.eav.Parameter;
 import com.netcracker.skillstable.model.dto.Skill;
 import com.netcracker.skillstable.model.dto.SkillLevel;
-import com.netcracker.skillstable.model.dto.User;
-import com.netcracker.skillstable.service.eav.EAVService;
-import com.netcracker.skillstable.service.eav.MetamodelService;
+import com.netcracker.skillstable.model.eav.EAVObject;
+import com.netcracker.skillstable.model.eav.Parameter;
 import com.netcracker.skillstable.service.converter.SkillConverter;
+import com.netcracker.skillstable.service.eav.EAVService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,10 +21,6 @@ import java.util.stream.Collectors;
 public class SkillService {
     @Autowired
     private EAVService eavService;
-    @Autowired
-    private MetamodelService metamodelService;
-    @Autowired
-    private UserService userService;
     @Autowired
     private SkillConverter skillConverter;
 
@@ -61,12 +55,14 @@ public class SkillService {
         return skillConverter.eavObjToDto(skillEavObj);
     }
 
-    public Skill updateSkill(Skill skill, Integer skillId) {
+    public Skill updateSkill(Skill skill) {
         EAVObject skillEavObj;
         try {
-            skillEavObj = eavService.updateEAVObj(skillConverter.dtoToEavObj(skill), skillId);
+            skillEavObj = eavService.updateEAVObj(skillConverter.dtoToEavObj(skill), skill.getId());
         } catch (ResourceNotFoundException exception) {
             throw new ResourceNotFoundException("Skill '" + skill.getName() + "' not found!");
+        } catch (ResourceAlreadyExistsException exception) {
+            throw new ResourceAlreadyExistsException("Skill '" + skill.getName() + "' already exists!");
         }
 
         return skillConverter.eavObjToDto(skillEavObj);

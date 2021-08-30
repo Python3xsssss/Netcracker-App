@@ -115,6 +115,8 @@ public class UserService {
             );
         } catch (ResourceNotFoundException exception) {
             throw new UsernameNotFoundException("User '" + user.getUsername() + "' not found!");
+        } catch (ResourceAlreadyExistsException exception) {
+            throw new ResourceAlreadyExistsException("User '" + user.getUsername() + "' already exists!");
         }
 
         return userConverter.eavObjToDto(updatedUser);
@@ -174,42 +176,51 @@ public class UserService {
             throw new AccessDeniedException("Role 'CREATOR' cannot be added!");
         }
 
-        EAVObject eavObj;
+        Role role = Role.valueOf(roleName);
+        User user;
         try {
-            eavObj = eavService.getEAVObjById(userId);
+            user = this.getUserById(userId);
         } catch (ResourceNotFoundException exception) {
             throw new ResourceNotFoundException("User not found!");
         }
 
-        final EntityType userEntityType = metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId());
-        eavObj.addParameters(new ArrayList<>(Collections.singletonList(new Parameter(
-                eavObj,
-                metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getRoleId()),
-                Role.valueOf(roleName).ordinal()
-        ))));
+        if (user.getRoles().contains(role)) {
+            return user;
+        }
 
-        return userConverter.eavObjToDto(eavService.updateEAVObj(eavObj, userId));
+        EAVObject userEavObj = userConverter.dtoToEavObj(user);
+        final EntityType userEntityType = metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId());
+        userEavObj.addParameter(new Parameter(
+                userEavObj,
+                metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getRoleId()),
+                role.ordinal()
+        ));
+        System.out.println("I'm here!");
+
+        return userConverter.eavObjToDto(eavService.updateEAVObj(userEavObj, userId));
     }
 
     public void deleteRole(Integer userId, String roleName) {
         if (roleName.equals(Role.CREATOR.name())) {
             throw new AccessDeniedException("Role 'CREATOR' cannot be deleted!");
         }
+
         Role role = Role.valueOf(roleName);
-        EAVObject eavObj;
+        EAVObject userEavObj;
         try {
-            eavObj = eavService.getEAVObjById(userId);
+            userEavObj = eavService.getEAVObjById(userId);
         } catch (ResourceNotFoundException exception) {
             throw new ResourceNotFoundException("User not found!");
         }
-        List<Parameter> roleParams = eavObj.getMultipleParametersByAttrId(User.getRoleId());
+
+        List<Parameter> roleParams = userEavObj.getMultipleParametersByAttrId(User.getRoleId());
         for (Parameter roleParam : roleParams) {
             if (User.getRoleId().equals(roleParam.getAttribute().getId()) && role.ordinal() == roleParam.getAttrValueInt()) {
-                eavObj.deleteParameter(roleParam);
+                userEavObj.deleteParameter(roleParam);
                 roleParams.remove(roleParam);
                 if (roleParams.isEmpty()) {
-                    eavObj.addParameter(new Parameter(
-                            eavObj,
+                    userEavObj.addParameter(new Parameter(
+                            userEavObj,
                             metamodelService.updateEntTypeAttrMapping(User.getEntTypeId(), User.getRoleId()),
                             Role.USER.ordinal()
                     ));
@@ -218,26 +229,26 @@ public class UserService {
             }
         }
 
-        eavService.updateEAVObj(eavObj, userId);
+        eavService.updateEAVObj(userEavObj, userId);
 
     }
 
     public void setCreator(User creator) {
-        EAVObject eavObject = userConverter.dtoToEavObj(creator);
+        EAVObject creatorEavObject = userConverter.dtoToEavObj(creator);
         final EntityType userEntityType = metamodelService.getEntityTypeByEntTypeId(User.getEntTypeId());
-        eavObject.deleteParameter(new Parameter(
-                eavObject,
+        creatorEavObject.deleteParameter(new Parameter(
+                creatorEavObject,
                 metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getRoleId()),
                 Role.USER.ordinal()
         ));
-        eavObject.addParameter(new Parameter(
-                eavObject,
+        creatorEavObject.addParameter(new Parameter(
+                creatorEavObject,
                 metamodelService.updateEntTypeAttrMapping(userEntityType.getId(), User.getRoleId()),
                 Role.CREATOR.ordinal()
         ));
 
         try {
-            eavService.createEAVObj(eavObject);
+            eavService.createEAVObj(creatorEavObject);
         } catch (ResourceAlreadyExistsException exception) {
             throw new ResourceAlreadyExistsException("Creator already exists!");
         }

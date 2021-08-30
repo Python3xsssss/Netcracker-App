@@ -28,15 +28,14 @@ import {AddUserComponent} from './view-controller/user/add-user/add-user.compone
 import {ListUserComponent} from './view-controller/user/list-user/list-user.component';
 import {FormDepartComponent} from './view-controller/department/form-depart/form-depart.component';
 import {ListDepartComponent} from './view-controller/department/list-depart/list-depart.component';
-import {AddTeamComponent} from "./view-controller/team/add-team/add-team.component";
+import {FormTeamComponent} from "./view-controller/team/form-team/form-team.component";
 import {ListTeamComponent} from "./view-controller/team/list-team/list-team.component";
-import {AddSkillComponent} from "./view-controller/skill/add-skill/add-skill.component";
+import {FormSkillComponent} from "./view-controller/skill/form-skill/form-skill.component";
 import {ListSkillComponent} from "./view-controller/skill/list-skill/list-skill.component";
 import {ShowTeamComponent} from "./view-controller/team/show-team/show-team.component";
 import {ShowUserComponent} from './view-controller/user/show-user/show-user.component';
 import {UpdateUserComponent} from './view-controller/user/update-user/update-user.component';
 import {LoginComponent} from './view-controller/login/login.component';
-import {UpdateDepartComponent} from './view-controller/department/update-depart/update-depart.component';
 import {ShowReportComponent} from './view-controller/team/show-report/show-report.component';
 import {AuthService} from "./service/auth.service";
 import {AuthInterceptor} from "./helper/auth.interceptor";
@@ -53,20 +52,23 @@ PlotlyViaCDNModule.setPlotlyBundle('basic'); // optional: can be null (for full)
   declarations: [
     AppComponent,
     HomeComponent,
+    LoginComponent,
+
     AddUserComponent,
-    FormDepartComponent,
-    AddTeamComponent,
-    AddSkillComponent,
     ListUserComponent,
-    ListDepartComponent,
-    ListTeamComponent,
-    ListSkillComponent,
-    ShowTeamComponent,
     ShowUserComponent,
     UpdateUserComponent,
-    LoginComponent,
-    UpdateDepartComponent,
+
+    FormDepartComponent,
+    ListDepartComponent,
+
+    FormTeamComponent,
+    ListTeamComponent,
+    ShowTeamComponent,
     ShowReportComponent,
+
+    FormSkillComponent,
+    ListSkillComponent,
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,4 @@
-.navbar-center
-{
+.navbar-center {
   position: absolute;
   width: 100%;
   left: 0;
@@ -10,5 +9,15 @@
 }
 
 nav {
-  margin-bottom: 20px;
+  margin-bottom: 2vh;
 }
+
+#user-dropdown {
+  margin-right: 0.5vw;
+}
+
+#user-dropdown-menu {
+  right: 0.5vw;
+}
+
+

@@ -15,7 +15,7 @@ public class SkillLevel {
     @Getter private static final Integer entTypeId = 7;
     private Integer id;
 
-    @NotEmpty(message = "Level should not be empty")
+    @NotNull(message = "Skill level should not be null")
     @Min(value = 0, message = "Skill level should be >= 0")
     @Max(value = 5, message = "Skill level should be <= 5")
     private Integer level;
