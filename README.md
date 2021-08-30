@@ -1,2 +1,2 @@
-# Netcracker App
+# Skills Table
 My first Netcracker Project
