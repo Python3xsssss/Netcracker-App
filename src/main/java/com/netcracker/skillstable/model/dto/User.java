@@ -33,10 +33,10 @@ public class User implements UserDetails {
     private static final Integer entTypeId = 1;
 
     @NotEmpty(message = "Username should not be empty")
-    @Size(min = 2, max = 15, message = "Username should be between 2 and 15 characters")
+    @Size(min = 2, max = 30, message = "Username should be between 2 and 30 characters")
     private String username;
 
-    @Size(min = 5, max = 20, message = "Password should be between 5 and 20 characters")
+    @Size(min = 5, max = 30, message = "Password should be between 5 and 30 characters")
     private String password;
     @Getter
     private static final Integer passwordId = 10;

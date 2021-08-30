@@ -43,7 +43,6 @@
         <div class="dropdown-menu" aria-labelledby="userDropdown"
              *ngIf="showUserList" (click)="showUserList=!showUserList">
           <button class="dropdown-item" routerLink="user/{{user?.id}}">Your profile</button>
-          <button class="dropdown-item" routerLink="team/{{user?.team?.id}}">Your team</button>
           <div class="dropdown-divider"></div>
           <button class="dropdown-item" (click)="signOut()">Sign out</button>
         </div>
