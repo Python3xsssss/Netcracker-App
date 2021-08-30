@@ -18,25 +18,39 @@ public class AuthorizeHelper {
     @Autowired
     private TeamService teamService;
 
-    public boolean checkTeamIdentity(User user, Integer teamId) {
-        Team team = teamService.getTeamById(teamId);
-        return (team != null) && team.equals(user.getTeam());
+    public boolean checkTeamIdentity(User user, Team team) {
+        if (team == null || team.getId() == null || user == null || user.getId() == null) {
+            return false;
+        }
+        Team fetchedTeam = teamService.getTeamById(team.getId());
+        User fetchedUser = userService.getUserById(user.getId());
+        return fetchedTeam.equals(fetchedUser.getTeam());
     }
 
-    public boolean checkDepartIdentity(User user, Integer departmentId) {
-        Department department = departService.getDepartmentById(departmentId);
-        return (department != null) && department.equals(user.getDepartment());
+    public boolean checkDepartIdentity(User user, Department department) {
+        if (department == null || department.getId() == null || user == null || user.getId() == null) {
+            return false;
+        }
+        Department fetchedDepartment = departService.getDepartmentById(department.getId());
+        User fetchedUser = userService.getUserById(user.getId());
+        return fetchedDepartment.equals(fetchedUser.getDepartment());
     }
 
-    public boolean checkTeamLeader(User user, Integer teamId) {
-        Team team = teamService.getTeamById(teamId);
-        return (team != null) && team.equals(user.getTeam()) && user.equals(team.getLeader());
+    public boolean checkTeamLeader(User user, Team team) {
+        if (team == null || team.getId() == null || user == null || user.getId() == null) {
+            return false;
+        }
+        Team fetchedTeam = teamService.getTeamById(team.getId());
+        User fetchedUser = userService.getUserById(user.getId());
+        return fetchedTeam.equals(fetchedUser.getTeam()) && fetchedUser.equals(fetchedTeam.getLeader());
     }
 
-    public boolean checkDepartLeader(User user, Integer departmentId) {
-        Department department = departService.getDepartmentById(departmentId);
-        return (department != null) && department.equals(user.getDepartment()) && user.equals(department.getLeader());
+    public boolean checkDepartLeader(User user, Department department) {
+        if (department == null || department.getId() == null || user == null || user.getId() == null) {
+            return false;
+        }
+        Department fetchedDepartment = departService.getDepartmentById(department.getId());
+        User fetchedUser = userService.getUserById(user.getId());
+        return fetchedDepartment.equals(fetchedUser.getDepartment()) && fetchedUser.equals(fetchedDepartment.getLeader());
     }
-
-
 }
