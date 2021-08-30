@@ -1,9 +1,8 @@
 package com.netcracker.skillstable.service.converter;
 
-import com.netcracker.skillstable.model.eav.EAVObject;
-import com.netcracker.skillstable.model.eav.EntityType;
-import com.netcracker.skillstable.model.eav.Parameter;
 import com.netcracker.skillstable.model.dto.Skill;
+import com.netcracker.skillstable.model.eav.EAVObject;
+import com.netcracker.skillstable.model.eav.Parameter;
 import com.netcracker.skillstable.service.eav.MetamodelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

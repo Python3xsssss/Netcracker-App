@@ -1,7 +1,6 @@
 package com.netcracker.skillstable.utils;
 
 import com.netcracker.skillstable.model.dto.Department;
-import com.netcracker.skillstable.model.dto.OrgItem;
 import com.netcracker.skillstable.model.dto.Team;
 import com.netcracker.skillstable.model.dto.User;
 import com.netcracker.skillstable.service.dto.DepartmentService;

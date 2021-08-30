@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity(name = "Parameter")
-@Table(name = "parameters")
+@Table(name = "values")
 @Getter
 @Setter
 public class Parameter {

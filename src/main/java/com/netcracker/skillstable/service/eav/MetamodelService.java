@@ -38,7 +38,8 @@ public class MetamodelService {
         return eavService.getEAVObjById(entId).getEntType();
     }
 
-    public AttrType getAttrTypeByAttrTypeId(Integer attrTypeId) throws ResourceNotFoundException {
+    public AttrType getAttrTypeByAttrTypeId(Integer attrTypeId)
+            throws ResourceNotFoundException {
         return attrTypeRepo.findById(attrTypeId).orElseThrow(
                 () -> new ResourceNotFoundException("The attribute type with id=" + attrTypeId + " not found!")
         );

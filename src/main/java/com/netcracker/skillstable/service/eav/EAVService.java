@@ -18,10 +18,6 @@ public class EAVService {
     private EAVObjectRepo eavRepo;
     @Autowired
     private ParameterRepo parameterRepo;
-    @Autowired
-    private MetamodelService metamodelService;
-
-    private static final Integer refTypeId = 3;
 
     public EAVObject createEAVObj(EAVObject eavObj) throws ResourceAlreadyExistsException {
         if (eavRepo.findByEntNameAndEntType(eavObj.getEntName(), eavObj.getEntType()).isPresent()) {
