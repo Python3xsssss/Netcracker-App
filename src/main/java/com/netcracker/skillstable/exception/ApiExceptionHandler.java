@@ -44,7 +44,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ApiResponse> handleValidationException(ValidationException exception) {
-        HttpStatus status = HttpStatus.CONFLICT;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         ApiResponse apiResponse = new ApiResponse(exception.getMessage(), status, ZonedDateTime.now());
         return new ResponseEntity<>(apiResponse, status);
     }

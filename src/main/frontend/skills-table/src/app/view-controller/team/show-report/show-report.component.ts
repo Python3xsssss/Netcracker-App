@@ -99,7 +99,10 @@ export class ShowReportComponent implements OnInit {
         x: usernames,
         y: skillLevels,
         name: 'Skill level',
-        type: 'bar'
+        type: 'bar',
+        marker: {
+          color: 'orange',
+        },
       };
       this.hist = [trace];
     }
